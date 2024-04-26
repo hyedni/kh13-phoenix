@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="users">
+	
+	<!-- 등록 -->
+	<insert id="input">
+		insert into users 
+		(user_id, user_pw, user_nick, user_name, user_contact, user_email, user_birth) 
+		values 
+		(#{userId}, #{userPw}, #{userNick}, #{userName}, #{userContact}, #{userEmail}, #{userBirth})
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="edit">
+		update users
+		<set>
+			<if test="userName != null">user_name = #{userName}</if>
+			<if test="userNick != null">user_nick = #{userNick}</if>
+			<if test="userContact != null">user_contact = #{userContact}</if>
+			<if test="userEmail !=null">user_email = #{userEmail}</if>
+			<if test="userBirth !=null">user_birth = #{userBirth}</if>
+		</set>
+		where user_id = #{userId}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete">
+		delete user where user_id = #{userNo}
+	</delete>
+	
+	
+	<!-- 검색 -->
+	
+	
+	
+</mapper>
