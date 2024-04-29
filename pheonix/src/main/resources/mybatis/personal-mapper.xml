@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="personal">
+	
+	<select id="sequence" resultType="int">
+		select personal_seq.nextval from dual
+	</select>
+	<insert id="save">
+		insert into personal(persnal_no, personal_id, personal_title, personal_content, personal_write, personal_edit, personal_delete)
+		values(
+			#{personalNo}, #{personalId}, #{personalTitle}, #{personalContent}, sysdate, null, #{personalDelete]
+		)
+	</insert>
+	
+	<select id="list" resultType="personalDto">
+		select * from  personal order by personal_no asc
+	</select>
+	<select id="find" resultType="personalDto">
+		select * from personal where personal_no = #{personalNo}
+	</select>
+	
+	<update id ="edit">
+		update personal
+			set
+				personal_id = #{personalId},
+				personal_title = #{personalTitle},
+				personal_content = #{personalContent}
+			where personal_no =  #{personalNo}
+	</update>
+
+	<update id="delete">
+		delete personal where personal_no = #{personalNo}
+	</update>
+	
+
+	
+</mapper>
