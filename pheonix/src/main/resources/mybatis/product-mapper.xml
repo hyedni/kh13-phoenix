@@ -26,5 +26,18 @@
 	<select id="productList" resultType="CartDto">
 		select * from product order by product no asc
 	</select>
+	
+	<!-- 복합 검색 -->
+	<!-- <select id="productComplex" resultType="CartDto">
+		select * from product
+		
+		조건
+		<where>
+			상품명 검색
+			<if test="productName != null"> and instr(product_name, #{productName}) > 0</if>
+			상품 타입
+			<if test="productType != null">and instr(product_type, #{productType}) > 0</if>		
+		</where>
+	</select> -->
 
 </mapper>
