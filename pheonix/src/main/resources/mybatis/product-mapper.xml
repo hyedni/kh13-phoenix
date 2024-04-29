@@ -23,12 +23,17 @@
 	
 	<!-- 데이터 조회 -->
 	<!-- 전체 조회 -->
-	<select id="productList" resultType="CartDto">
-		select * from product order by product no asc
+	<select id="productList" resultType="ProductDto">
+		select * from product order by product_no asc
+	</select>
+	
+	<!-- 종류별 조회 -->
+	<select id="productFind" resultType="ProductDto">
+		select * from product where product_type = #{productType}
 	</select>
 	
 	<!-- 복합 검색 -->
-	<!-- <select id="productComplex" resultType="CartDto">
+	<!-- <select id="productComplex" resultType="ProductDto">
 		select * from product
 		
 		조건
