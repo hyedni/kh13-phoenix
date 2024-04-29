@@ -28,7 +28,9 @@ public class UserDao {
 	}
 	
 	//검색
-	
+	public UserDto selectOne(String userId) {
+		return sqlSession.selectOne("user.find", userId);
+	}
 	
 }
   
