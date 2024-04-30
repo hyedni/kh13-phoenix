@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 public class ProductDto {
 	private int productNo; //상품번호
 	private String productName; //상품명
-	private String prodcutType; //상품종류
-	private int prodcutPrice; //상품가격
+	private String productType; //상품종류
+	private String productContent; //상품 내용
+	private int productPrice; //상품가격
 	private String productOrigin; //원산지
 }
