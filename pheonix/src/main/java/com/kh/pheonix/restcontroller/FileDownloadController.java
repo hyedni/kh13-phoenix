@@ -2,7 +2,7 @@ package com.kh.pheonix.restcontroller;
 
 import java.io.File;
 import java.io.IOException;
-
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 import org.springframework.core.io.ByteArrayResource;
@@ -10,7 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +57,11 @@ public class FileDownloadController {
 		// [3] 실제 파일을 불러온다 (apache commons io, apache commons fileupload)
 		File dir = new File (System.getProperty("user.home"), "upload");
 		File target = new File (dir, String.valueOf(attachDto.getAttachNo()));
+
+		byte[] data = FileUtils.readFileToByteArray(target); 
+		//파일을 읽어라 : apache commons 라이브러리가 있기 때문에 사용 가능 
+		ByteArrayResource resource = new ByteArrayResource(data); 
+		//포장 (데이터 래핑)
 		
 		if (!target.exists()) {
 	        return ResponseEntity.notFound().build();
@@ -72,23 +77,12 @@ public class FileDownloadController {
 	    }
 
 	    Resource fileAsResource = new UrlResource(target.toURI());
-	    System.out.println(fileAsResource);
+
 	    return ResponseEntity.ok()
 	        .contentType(mediaType)
-	        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + attachDto.getAttachName() + "\"")
+	        .header(HttpHeaders.CONTENT_DISPOSITION, attachDto.getAttachName())
 	        .body(fileAsResource);
-	    
-
-		
-//		return ResponseEntity.ok()
-//				.header(HttpHeaders.CONTENT_ENCODING, "UTF-8")
-//				.contentType(MediaType.APPLICATION_OCTET_STREAM)
-//				.contentLength(attachDto.getAttachSize())
-//				.header(HttpHeaders.CONTENT_DISPOSITION, 
-//						ContentDisposition.attachment()
-//						.filename(attachDto.getAttachName(), StandardCharsets.UTF_8)
-//						.build().toString())
-//				.body(resource);
+	   
 	}
 }
 
