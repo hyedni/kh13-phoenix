@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.UserDto;
 import com.kh.pheonix.service.JwtService;
-import com.kh.pheonix.vo.UserLoginVO;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @CrossOrigin
 @RestController
@@ -24,7 +26,7 @@ public class UserRestController {
 	private JwtService jwtService;
 	
 	@PostMapping("/login")
-	public ResponseEntity<userLoginVO>login(@RequestBody UserDto userDto){
+	public ResponseEntity<UserLoginVO>login(@RequestBody UserDto userDto){
 		UserDto findDto = userDao.selectOne(userDto.getUserId());
 		if(findDto == null) {
 			return ResponseEntity.notFound().build();
@@ -79,8 +81,4 @@ public class UserRestController {
 }
 	
 
-	
-	
-	
 
-}
