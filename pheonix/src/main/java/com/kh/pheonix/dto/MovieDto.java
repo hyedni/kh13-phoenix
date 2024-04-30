@@ -23,5 +23,6 @@ public class MovieDto {
 	private String movieScreenType;
 	private String movieDirector;
 	private String movieActor;
-	
+	private String movieImgLink;
+
 }
