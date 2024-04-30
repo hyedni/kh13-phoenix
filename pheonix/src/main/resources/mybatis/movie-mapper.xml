@@ -85,5 +85,9 @@
 	<insert id="connect">
 		insert into movie_attach (movie_no, attach_no) values (#{movieNo}, #{attachNo})
 	</insert>
+	
+	<select id="findAttach" resultType="int">
+		select attach_no from movie_attach where movie_no = #{movieNo}
+	</select>
 
 </mapper>

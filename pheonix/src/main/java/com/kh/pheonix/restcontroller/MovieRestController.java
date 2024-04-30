@@ -1,9 +1,11 @@
 package com.kh.pheonix.restcontroller;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -85,6 +87,19 @@ public class MovieRestController {
 		return ResponseEntity.ok().build();
 	}
 	
+	@GetMapping("/image/{movieNo}")
+	public ResponseEntity<Void> imageApply(@PathVariable int movieNo) {
+	    try {
+	        int attachNo = movieDao.findAttach(movieNo);
+	        return ResponseEntity.status(HttpStatus.FOUND)
+	                             .location(URI.create("/download?attachNo=" + attachNo))
+	                             .build();
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.FOUND) 
+	        						.location(URI.create("/image/attachNull.png"))
+	                             .build();
+	    }
+	}
 
 }
 
