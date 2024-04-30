@@ -32,17 +32,9 @@
 		select * from product where product_type = #{productType}
 	</select>
 	
-	<!-- 복합 검색 -->
-	<!-- <select id="productComplex" resultType="ProductDto">
-		select * from product
-		
-		조건
-		<where>
-			상품명 검색
-			<if test="productName != null"> and instr(product_name, #{productName}) > 0</if>
-			상품 타입
-			<if test="productType != null">and instr(product_type, #{productType}) > 0</if>		
-		</where>
-	</select> -->
+	<!-- 상세 조회 -->
+	<select id="productDetail" resultType="ProductDto">
+		select * from product where product_no = #{productNo}
+	</select>
 
 </mapper>

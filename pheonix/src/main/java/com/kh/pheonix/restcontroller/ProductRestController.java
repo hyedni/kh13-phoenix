@@ -28,7 +28,6 @@ public class ProductRestController {
 	@Autowired
 	private ProductDao productDao;
 	
-	//문서용 설정 추가
 	@Operation(
 		description = "종류별 상품 조회",
 		responses = {
@@ -66,4 +65,42 @@ public class ProductRestController {
 		}
 		return ResponseEntity.status(200).body(productDto);
 	}
+	
+	@Operation(
+			description = "상품 조회 상세",
+			responses = {
+				@ApiResponse(
+					responseCode = "200",
+					description = "조회 성공",
+					content = {
+						@Content(
+							mediaType = "application/json",
+							array = @ArraySchema( 
+								schema = @Schema(implementation = ProductDto.class)
+							)
+						)
+					}
+				),
+				@ApiResponse(
+					responseCode = "500",
+					description ="서버 오류",
+					content = {
+						@Content(
+							mediaType = "text/plain",
+							schema = @Schema(implementation = String.class),
+							examples = @ExampleObject("server error")
+						)
+					}
+				)
+			}
+		)
+		@GetMapping("/{productNo}")
+		public ResponseEntity<ProductDto> detail(@PathVariable int productNo) {
+			ProductDto productDto = productDao.selectOne(productNo);
+			
+			if(productDto == null) {
+				return ResponseEntity.status(404).build();
+			}
+			return ResponseEntity.status(200).body(productDto);
+		}
 }
