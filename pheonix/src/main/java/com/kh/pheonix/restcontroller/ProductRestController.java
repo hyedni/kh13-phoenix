@@ -94,7 +94,7 @@ public class ProductRestController {
 			)
 		}
 	)
-	@GetMapping("/{productNo}")
+	@GetMapping("/detail/{productNo}")
 	public ResponseEntity<ProductDto> detail(@PathVariable int productNo) {
 		ProductDto productDto = productDao.selectOne(productNo);
 		
