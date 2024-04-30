@@ -1,5 +1,7 @@
 package com.kh.pheonix.dto;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +16,9 @@ public class UserDto {
 	private String userContact;
 	private String userGrade;
 	private String userEmail;
-	private String userJoin;
-	private String userBirth;
-	private String userEdit;
-	private String userLogin;
+	private Date userJoin;
+	private Date userBirth;
+	private Date userEdit;
+	private Date userLogin;
 	private int userPoint;
 }

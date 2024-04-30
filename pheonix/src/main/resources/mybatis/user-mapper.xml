@@ -4,14 +4,14 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="users">
+<mapper namespace="user">
 
 	<!-- 등록 -->
 	<insert id="input">
 		insert into users 
-		(user_id, user_pw, user_nick, user_name, user_contact, user_email, user_birth) 
+		(user_id, user_pw, user_nick, user_name, user_contact, user_email) 
 		values 
-		(#{userId}, #{userPw}, #{userNick}, #{userName}, #{userContact}, #{userEmail}, #{userBirth})
+		(#{userId}, #{userPw}, #{userNick}, #{userName}, #{userContact}, #{userEmail})
 	</insert>
 
 	<!-- 수정 -->
@@ -29,12 +29,148 @@
 
 	<!-- 삭제 -->
 	<delete id="delete">
-		delete user where user_id = #{userNo}
+		delete users where user_id = #{userId}
 	</delete>
-
-
-	<!-- 검색 -->
 	
+	<!-- 아이디 검색 -->
+	<select id="find" resultType="userDto">
+		select * from users where user_id = #{userId}
+	</select>
 
+
+	<!-- 복잡한 검색 -->
+	<select id="complex" resultType="UserDto">
+		<include refid="top-n-header"></include>
+		select * from users
+		
+		<where>
+			<!-- 아이디(시작검사) -->
+			<if test="userId != null">
+			and user_id like #{userId} || '%'
+			</if>
+			<!-- 닉네임(포함검사) -->
+			<if test="userName != null">
+				and instr(user_name, #{userName}) > 0
+			</if>
+			<!-- 연락처(일치검사) -->
+			<if test="userContact != null">
+				and user_contact = #{userContact}
+			</if>
+			<!-- 포인트(구간검사) -->
+			<choose>
+				<when test="minPoint != null and maxPoint != null">
+					and user_point between #{minPoint} and #{maxPoint}
+				</when>
+				<when test="minPoint != null">
+					<!-- 
+					XML에서 불가능한 글자를 사용할 경우 
+					CDATA 
+					영역을 만들어 해결 
+					-->
+					<![CDATA[
+					and user_point >= #{minPoint}
+					]]>
+				</when>
+				<when test="maxPoint != null">
+					<![CDATA[
+					and user_point <= #{maxPoint}
+					]]>
+				</when>
+			</choose>
+			
+			<!-- 
+			(Q) YYYY-MM-DD 형식의 날짜로 
+			가입일 검색 (memberJoin) 
+			-->
+			<if test="userJoin != null">
+				and to_char(user_join, 'YYYY-MM-DD') = #{userJoin}
+			</if>
+			
+			<!-- 
+			(Q) YYYY-MM-DD 형식의 날짜 2개로 
+			로그인 일자 검색 (minLoginDate, maxLoginDate)
+			* minLoginDate는 0시 0분 0초로 설정해야 하고
+			* maxLoginDate는 23시 59분 59초로 설정해야 한다 
+			-->
+			<choose>
+				<when test="minLoginDate != null and maxLoginDate != null">
+				and user_login is not null 
+				and
+				user_login between 
+				to_date(#{minLoginDate} || ' ' || '00:00:00', 'YYYY-MM-DD HH24:MI:SS') 
+				and 
+				to_date(#{maxLoginDate} || ' ' || '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+				</when>
+				<when test="minLoginDate != null">
+				<![CDATA[
+				and user_login is not null
+				and user_login >=
+				to_date(#{minLoginDate} || ' ' || '00:00:00', 'YYYY-MM-DD HH24:MI:SS')
+				]]>
+				</when>
+				<when test="maxLoginDate != null">
+				<![CDATA[
+				and user_login is not null
+				and user_login <= 
+				to_date(#{maxLoginDate} || ' ' || '23:59:59', 'YYYY-MM-DD HH24:MI:SS')
+				]]> 
+				</when>
+			</choose>
+			
+			<!-- 회원등급 - 여러 개 선택 가능하도록 구현 (userGradeList) -->
+			<if test="userGradeList != null and userGradeList.size() > 0">
+			and user_grade in 
+			<foreach collection="userGradeList" item="userGrade"
+						open="(" separator="," close=")">
+				#{userGrade}
+			</foreach>			
+			</if>		
+		</where>
+		
+		<!-- 
+			정렬
+			- 사용자가 원하는 순서에 맞게 정렬하도록 구현
+			- 여러개 있을 수 있다는 전제조건 하에 구현
+			- 넘어오는 데이터의 이름은 orderList로 설정
+			- List.of("member_id asc", "member_nick desc", ...)
+		-->
+		<choose>
+			<when test="orderList != null and orderList.size() > 0">
+				order by 
+				<foreach collection="orderList" item="orderItem"
+								separator=",">
+					${orderItem}
+				</foreach>
+			</when>
+			<otherwise>
+				order by user_id asc
+			</otherwise>
+		</choose>
+		
+			<!-- top n query footer 삽입 -->
+		<include refid="top-n-footer"></include>
+	</select>
+	
+	<!-- 
+		Top N Query 적용
+		- 결국 홈페이지의 목록에는 페이징이라는 개념이 포함된다
+		- 어떻게 구현하느냐에 따라서 네비게이터나 무한스크롤 형태가 됨
+		- 모든 조회에 똑같이 들어가는 구문이므로 어딘가에 보관해두고 불러온다면?
+	 -->
+	<!-- 상단 -->
+	<sql id="top-n-header">
+		<if test="beginRow != null and endRow != null">
+		select * from (
+			select rownum rn, TMP.* from (
+		</if>
+	</sql>
+	
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+		<if test="beginRow != null and endRow != null">
+			)TMP
+		) where rn between #{beginRow} and #{endRow}
+		</if>
+	</sql>
 
 </mapper>
