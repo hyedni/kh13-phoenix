@@ -67,7 +67,7 @@ public class UserRestController {
 	        return ResponseEntity.ok("인증 성공");
 	    } else {
 	        return ResponseEntity.badRequest().body("유효하지 않은 인증번호입니다.");
-	    }
+	    } 
 	}
 	
 	
