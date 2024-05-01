@@ -13,11 +13,11 @@
 	<insert id="productAdd">
 		insert into product(
 			product_no, product_name, product_type,
-			product_content, product_price, product_origin
+			product_content, product_price, product_origin, product_discount
 		)
 		values(
 			#{productNo}, #{productName}, #{productType},
-			#{productContent}, #{productPrice}, #{productOrigin}
+			#{productContent}, #{productPrice}, #{productOrigin}, #{productDiscount}
 		)
 	</insert>
 	
