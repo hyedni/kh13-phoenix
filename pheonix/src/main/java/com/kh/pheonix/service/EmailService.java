@@ -71,7 +71,7 @@ public class EmailService {
 		sender.send(message);
 		
 		//인증번호 저장 - 기존 내역 삭제 후 저장
-		userCertDao.deleteExpiredCert(certEmail); // 기존의 모든 만료된 인증번호를 삭제합니다.
+		userCertDao.delete(certEmail); // 기존의 모든 만료된 인증번호를 삭제합니다.
 		UserCertDto userCertDto = new UserCertDto();
 		userCertDto.setCertEmail(certEmail);
 		userCertDto.setCertCode(fmt.format(number)); // 새로운 인증번호를 설정합니다.

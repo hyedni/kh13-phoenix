@@ -28,15 +28,16 @@ public class UserCertDao {
 		return sqlSession.selectOne("userCert.selectOne", certEmail);
 	}
 	
-	//전송된 이메일 확인
+	//전송된 인증번호 확인
 	public boolean checkValid(UserCertDto userCertDto) {
-	    Integer count = sqlSession.selectOne("userCert.checkValid", userCertDto);
-	    return count != null && count > 0;
+	UserCertDto result = sqlSession.selectOne("userCert.checkValid", userCertDto);
+	   boolean isValid =  result != null;
+	   return isValid;
 	}
 	
 	//5분 지난거 삭제
-	public boolean deleteExpiredCert(String certEmail) {
-	    return sqlSession.delete("userCert.deleteExpiredCert", certEmail) > 0;
+	public boolean deleteExpiredCert() {
+	    return sqlSession.delete("userCert.deleteExpiredCert") > 0;
 	}
 
 	

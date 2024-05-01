@@ -3,7 +3,6 @@ package com.kh.pheonix.restcontroller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -34,6 +33,8 @@ public class UserRestController {
 	private UserService userService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private UserCertDao userCertDao;
 	
 	//회원가입
 	@PostMapping("/join")
@@ -48,27 +49,26 @@ public class UserRestController {
 	    }
 	}
 	
+	//메일보내기
 	@PostMapping("/sendCert")
     public void sendCert(@RequestParam String certEmail) {
         UserDto userDto = userDao.selectOne(certEmail);//memberEmail에 있는지 찾기 없으면 null이 뜰것임
         if (userDto == null) {
             // 중복된 이메일이 없는 경우에만 이메일을 보내기
-            emailService.sendCert(certEmail);           
-        }   
+            emailService.sendCert(certEmail); 
+        }  
     }
-
-	@Autowired
-	private UserCertDao userCertDao;
 	
-	//메일 인증
 	@PostMapping("/checkCert")
-	public boolean checkCert(@ModelAttribute UserCertDto userCertDto) {
-		boolean isValid = userCertDao.checkValid(userCertDto);
-		 if(isValid) { // 인증 성공 시 인증번호 삭제
-		        userCertDao.delete(userCertDto.getCertEmail());
-		    }
-		    return isValid;
-	}	
+	public ResponseEntity<String> checkCert(@RequestBody UserCertDto userCertDto) {
+	    boolean isValid = userCertDao.checkValid(userCertDto);
+	    if (isValid) { // 인증 성공 시 인증번호 삭제
+	        userCertDao.delete(userCertDto.getCertEmail());
+	        return ResponseEntity.ok("인증 성공");
+	    } else {
+	        return ResponseEntity.badRequest().body("유효하지 않은 인증번호입니다.");
+	    }
+	}
 	
 	
 	
