@@ -1,4 +1,4 @@
-package com.kh.pheonix.vo;
+package com.kh.pheonix.Vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

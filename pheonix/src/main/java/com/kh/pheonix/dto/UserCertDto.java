@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class UserCertDto {
 	private String certEmail;
-	private int certCode;
+	private String certCode;
 	private String certTime;
 	private boolean cert;
 	private String certCreate;

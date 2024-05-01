@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.service.AttachService;
+import com.kh.pheonix.service.ImageService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.extern.slf4j.Slf4j;
@@ -31,64 +32,64 @@ public class MovieRestController {
 
 	@Autowired
 	private MovieDao movieDao;
-	
+
 	@Autowired
 	private AttachService attachService;
 	
-	//전체조회
+	@Autowired
+	private ImageService imageService;
+
+	// 전체조회
 	@GetMapping("/")
-	public List<MovieDto> list () {
-		return movieDao.list();
+	public List<MovieDto> list() {
+		List<MovieDto> list = movieDao.list();
+	    List<MovieDto> imageSetUpList = imageService.moviePhotoUrlSetUp(list);
+		return imageSetUpList;
 	}
-	
-	//등록
+
+	// 등록
 	@PostMapping("/")
-	public MovieDto insert (@RequestBody MovieDto movieDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+	public MovieDto insert(@RequestBody MovieDto movieDto, @RequestParam MultipartFile attach)
+			throws IllegalStateException, IOException {
 		int sequence = movieDao.sequence();
 		movieDto.setMovieNo(sequence);
 		movieDao.insert(movieDto);
-		
+
 		if (!attach.isEmpty()) {
 			int attachNo = attachService.save(attach);
 			movieDao.connect(movieDto.getMovieNo(), attachNo);
 		}
 		return movieDao.find(sequence);
 	}
-	
-	//1건조회
+
+	// 1건조회
 	@GetMapping("/{movieNo}")
-	public ResponseEntity<MovieDto> find (@PathVariable int movieNo) {
+	public ResponseEntity<MovieDto> find(@PathVariable int movieNo) {
 		MovieDto movieDto = movieDao.find(movieNo);
 		if (movieDto == null) {
 			return ResponseEntity.status(404).build();
 		}
 		return ResponseEntity.ok().body(movieDto);
 	}
-	
-	//수정
+
+	// 수정
 	@PatchMapping("/")
-	public ResponseEntity<?> edit (@RequestBody MovieDto movieDto) {
+	public ResponseEntity<?> edit(@RequestBody MovieDto movieDto) {
 		boolean result = movieDao.edit(movieDto);
 		if (result == false) {
 			return ResponseEntity.status(404).build();
 		}
 		return ResponseEntity.ok().build();
 	}
-	
-	//삭제
+
+	// 삭제
 	@DeleteMapping("/{movieNo}")
-	public ResponseEntity<?> delete (@PathVariable int movieNo) {
+	public ResponseEntity<?> delete(@PathVariable int movieNo) {
 		boolean result = movieDao.delete(movieNo);
 		if (result == false) {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok().build();
 	}
-	
 
 }
-
-
-
-
-

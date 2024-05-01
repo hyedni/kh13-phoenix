@@ -46,6 +46,9 @@ public class MovieDao {
 		sqlSession.insert("movie.connect", data);
 	}
 	
+	public int findAttach (int movieNo) {
+		return sqlSession.selectOne("movie.findAttach", movieNo);
+	}
 }
 
 
