@@ -35,7 +35,7 @@ public class MovieRestController {
 
 	@Autowired
 	private AttachService attachService;
-	
+
 	@Autowired
 	private ImageService imageService;
 
@@ -43,7 +43,7 @@ public class MovieRestController {
 	@GetMapping("/")
 	public List<MovieDto> list() {
 		List<MovieDto> list = movieDao.list();
-	    List<MovieDto> imageSetUpList = imageService.moviePhotoUrlSetUp(list);
+		List<MovieDto> imageSetUpList = imageService.moviePhotoUrlSetUp(list);
 		return imageSetUpList;
 	}
 
@@ -66,10 +66,11 @@ public class MovieRestController {
 	@GetMapping("/{movieNo}")
 	public ResponseEntity<MovieDto> find(@PathVariable int movieNo) {
 		MovieDto movieDto = movieDao.find(movieNo);
+		MovieDto urlDto = imageService.moviePhotoUrlbyOne(movieDto);
 		if (movieDto == null) {
 			return ResponseEntity.status(404).build();
 		}
-		return ResponseEntity.ok().body(movieDto);
+		return ResponseEntity.ok().body(urlDto);
 	}
 
 	// 수정
@@ -86,10 +87,9 @@ public class MovieRestController {
 	@DeleteMapping("/{movieNo}")
 	public ResponseEntity<?> delete(@PathVariable int movieNo) {
 		boolean result = movieDao.delete(movieNo);
-		if (result == false) {
-			return ResponseEntity.notFound().build();
+		if (!result) {
+			return ResponseEntity.status(404).build();
 		}
 		return ResponseEntity.ok().build();
 	}
-
 }

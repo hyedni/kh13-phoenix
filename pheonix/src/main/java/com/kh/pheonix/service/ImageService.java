@@ -14,6 +14,7 @@ public class ImageService {
 	@Autowired
 	private MovieDao movieDao;
 
+	//이미지에 url주소 부여 
 	public String getMovieImgLink(int movieNo) {
 		try {
 			int attachNo = movieDao.findAttach(movieNo);
@@ -23,6 +24,7 @@ public class ImageService {
 		}
 	}
 
+	//전체조회시 이미지 출력하기
 	public List<MovieDto> moviePhotoUrlSetUp(List<MovieDto> movieDto) {
 		List<MovieDto> list = movieDto;
 
@@ -31,6 +33,14 @@ public class ImageService {
 			dto.setMovieImgLink(movieImgLink);
 		}
 		return list;
+	}
+	
+	//1건 상세조회시 해당 이미지 출력하기
+	public MovieDto moviePhotoUrlbyOne (MovieDto movieDto) {
+		MovieDto dto = movieDto;
+		String movieImgLink = getMovieImgLink(movieDto.getMovieNo());
+		dto.setMovieImgLink(movieImgLink);
+		return dto;
 	}
 
 }
