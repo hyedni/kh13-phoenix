@@ -23,4 +23,14 @@ public class CartDao {
 	public List<CartDto> selectList(String userId){
 		return sqlSession.selectList("cart.cartFind", userId);
 	}
+	
+	//상품 조회
+	public boolean findProductNo(int productNo) {
+		return sqlSession.selectOne("cart.productFind", productNo);
+	}
+	
+	//상품 수량 업데이트
+	public boolean updateQty(CartDto cartDto) {
+		return sqlSession.update("cart.qtyEdit", cartDto) > 0;
+	}
 }

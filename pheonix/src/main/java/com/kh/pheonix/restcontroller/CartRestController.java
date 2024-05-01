@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.pheonix.dao.CartDao;
 import com.kh.pheonix.dto.CartDto;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/cart")
@@ -26,7 +23,13 @@ public class CartRestController {
 	//등록 - 장바구니 담기
 	@PostMapping("/add/")
 	public List<CartDto> insert(@RequestBody CartDto cartDto) {
-		cartDao.insert(cartDto);//장바구니 담기
+		boolean isValid = cartDao.findProductNo(cartDto.getCartProductNo());
+		if(isValid) { //장바구니에 기존 상품이 있으면
+			cartDao.updateQty(cartDto);
+		}
+		else {
+			cartDao.insert(cartDto);//장바구니 담기			
+		}
 		return cartDao.selectList(cartDto.getCartUserId());
 	}
 }
