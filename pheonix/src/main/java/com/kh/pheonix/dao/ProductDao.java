@@ -44,7 +44,9 @@ public class ProductDao {
 	
 	//상품 삭제
 	//이미지도 같이 삭제되도록
-	
+	public boolean delete(int productNo) {
+		return sqlSession.delete("product.delete", productNo) > 0;
+	}
 	
 	//연결테이블에 데이터 삽입
 	public void connect(int productNo, int attachNo) {
@@ -58,4 +60,6 @@ public class ProductDao {
 	public int findAttach (int productNo) {
 		return sqlSession.selectOne("product.findAttach", productNo);
 	}
+
+	
 }

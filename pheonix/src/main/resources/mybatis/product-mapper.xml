@@ -63,6 +63,10 @@
 		where product_no = #{productNo}
 	</update>
 	
+	<!-- 상품 삭제 -->
+	<delete id="delete">
+		delete product where product_no = #{productNo}
+	</delete>
 	
 	<insert id="connect">
 		insert into product_attach (product_no, attach_no) values (#{productNo}, #{attachNo})

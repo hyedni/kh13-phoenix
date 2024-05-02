@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,11 +83,11 @@ public class ProductRestController {
 	@GetMapping("/{productType}")
 	public ResponseEntity<List<ProductDto>> find(@PathVariable String productType) {
 		List<ProductDto> productDto = productDao.selectList(productType);
-		
+		List<ProductDto> urlDto = imageService.productPhotoUrlSetUp(productDto);
 		if(productDto == null) {
 			return ResponseEntity.status(404).build();
 		}
-		return ResponseEntity.status(200).body(productDto);
+		return ResponseEntity.status(200).body(urlDto);
 	}
 	
 	@Operation(
@@ -120,16 +121,17 @@ public class ProductRestController {
 	@GetMapping("/detail/{productNo}")
 	public ResponseEntity<ProductDto> detail(@PathVariable int productNo) {
 		ProductDto productDto = productDao.selectOne(productNo);
-		
+		ProductDto urlDto = imageService.productPhotoUrlbyOne(productDto);
 		if(productDto == null) {
 			return ResponseEntity.status(404).build();
 		}
-		return ResponseEntity.status(200).body(productDto);
+		return ResponseEntity.status(200).body(urlDto);
 	}
 
 	//상품 등록
 	@PostMapping("/")
-	public ProductDto insert(@RequestBody ProductDto productDto, @RequestParam MultipartFile attach) throws IllegalStateException, IOException {
+	public ProductDto insert(@RequestBody ProductDto productDto, @RequestParam MultipartFile attach) 
+			throws IllegalStateException, IOException {
 		int sequence = productDao.sequence();
 		productDto.setProductNo(sequence);
 		productDao.insert(productDto);//상품 테이블에 데이터 삽입
@@ -144,7 +146,7 @@ public class ProductRestController {
 	
 	//상품 수정
 	@PatchMapping("/")
-	public ResponseEntity<?> edit(@RequestBody ProductDto productDto) {
+	public ResponseEntity<?> edit (@RequestBody ProductDto productDto) {
 		boolean result = productDao.edit(productDto);
 		if (result == false) {
 			return ResponseEntity.status(404).build();
@@ -153,4 +155,12 @@ public class ProductRestController {
 	}
 	
 	//상품 삭제
+	@DeleteMapping("/{productNo}")
+	public ResponseEntity<?> delete(@PathVariable int productNo) {
+		boolean result = productDao.delete(productNo);
+		if(!result) {
+			return ResponseEntity.status(404).build();
+		}
+		return ResponseEntity.ok().build();
+	}
 }
