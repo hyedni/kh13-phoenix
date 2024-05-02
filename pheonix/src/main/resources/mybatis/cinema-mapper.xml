@@ -24,7 +24,15 @@
 	</select>
 	
 	<select id="find" resultType="CinemaDto">
+		select * from cinema where cinema_name = #{cinemaName}
+	</select>
+	
+	<select id="findByNo" resultType="CinemaDto">
 		select * from cinema where cinema_no = #{cinemaNo}
+	</select>
+	
+	<select id="list" resultType="CinemaDto">
+		select * from cinema order by cinema_name asc
 	</select>
 	
 	<update id="edit">
@@ -40,19 +48,19 @@
 				cinema_region = #{cinemaRegion},
 			</if>
 			<if test="cinemaPost != null">
-				cinema_post = #{cinemaPost}
+				cinema_post = #{cinemaPost},
 			</if>
 			<if test="cinemaAddress1 != null">
-				cinema_address1 = #{cinemaAddress1}
+				cinema_address1 = #{cinemaAddress1},
 			</if>
 			<if test="cinemaAddress2 != null">
-				cinema_address2 = #{cinemaAddress2}
+				cinema_address2 = #{cinemaAddress2},
 			</if>
 			<if test="cinemaManager != null">
-				cinema_manager = #{cinemaManager}
+				cinema_manager = #{cinemaManager},
 			</if>
 			<if test="cinemaManagerCall != null">
-				cinema_manager_call = #{cinemaManagerCall}
+				cinema_manager_call = #{cinemaManagerCall},
 			</if>
 			<if test="cinemaCall != null">
 				cinema_call = #{cinemaCall}
