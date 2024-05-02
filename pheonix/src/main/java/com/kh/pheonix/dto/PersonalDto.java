@@ -10,12 +10,11 @@ import lombok.NoArgsConstructor;
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class PersonalDto {
 	private int personalNo;
-	private String persnalId;
+	private String personalId;
 	private String personalTitle;
 	private String personalContent;
 	private Date personalWrite;
 	private Date personalEdit;
-	private String personalDelete;
 	
 
 }
