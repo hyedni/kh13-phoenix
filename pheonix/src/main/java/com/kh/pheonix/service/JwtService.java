@@ -65,8 +65,8 @@ public class JwtService {
 					.issuedAt(now)//발행시각
 					.expiration(expire)//만료시각
 					.signWith(key)//서명
-					.claim("UserId", userDto.getUserId())//사용자에게 보낼 내용(key=value)
-					.claim("UserGrade", userDto.getUserGrade())//사용자에게 보낼 내용(key=value)
+					.claim("userId", userDto.getUserId())//사용자에게 보낼 내용(key=value)
+					.claim("userGrade", userDto.getUserGrade())//사용자에게 보낼 내용(key=value)
 				.compact();
 		
 		return token;
