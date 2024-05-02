@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -130,7 +131,7 @@ public class ProductRestController {
 
 	//상품 등록
 	@PostMapping("/")
-	public ProductDto insert(@RequestBody ProductDto productDto, @RequestParam MultipartFile attach) 
+	public ProductDto insert(@ModelAttribute ProductDto productDto, @RequestParam("attach") MultipartFile attach) 
 			throws IllegalStateException, IOException {
 		int sequence = productDao.sequence();
 		productDto.setProductNo(sequence);
@@ -143,6 +144,7 @@ public class ProductRestController {
 		}
 		return productDao.selectOne(sequence);
 	}
+	
 	
 	//상품 수정
 	@PatchMapping("/")
