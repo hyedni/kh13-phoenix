@@ -61,7 +61,8 @@ public class UserRestController {
 	
 	@PostMapping("/checkCert")
 	public ResponseEntity<String> checkCert(@RequestBody UserCertDto userCertDto) {
-	    boolean isValid = userCertDao.checkValid(userCertDto);
+		System.out.println(userCertDto);
+	    boolean isValid = userCertDao.checkValid(userCertDto.getCertEmail(), userCertDto.getCertCode());
 	    if (isValid) { // 인증 성공 시 인증번호 삭제
 	        userCertDao.delete(userCertDto.getCertEmail());
 	        return ResponseEntity.ok("인증 성공");
@@ -77,7 +78,7 @@ public class UserRestController {
 	public ResponseEntity<UserLoginVO>login(@RequestBody UserDto userDto){
 		UserDto findDto = userDao.selectOne(userDto.getUserId());
 		if(findDto == null) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.status(404).build();
 		}
 		
 		boolean isValid = findDto.getUserPw().equals(userDto.getUserPw());
@@ -95,7 +96,7 @@ public class UserRestController {
 		}
 		else {
 				return ResponseEntity.status(401).build();
-			}		
+			}		  
 	}
 	
 	@PostMapping("/refresh")

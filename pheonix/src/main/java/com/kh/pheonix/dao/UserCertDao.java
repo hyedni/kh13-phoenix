@@ -1,5 +1,8 @@
 package com.kh.pheonix.dao;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,13 +30,17 @@ public class UserCertDao {
 	public UserDto selectOne(String certEmail) {
 		return sqlSession.selectOne("userCert.selectOne", certEmail);
 	}
-	
+
 	//전송된 인증번호 확인
-	public boolean checkValid(UserCertDto userCertDto) {
-	UserCertDto result = sqlSession.selectOne("userCert.checkValid", userCertDto);
-	   boolean isValid =  result != null;
-	   return isValid;
-	}
+		public boolean checkValid(String certEmail, String certCode) {
+			Map<String, String> params = new HashMap<>();
+		    params.put("certEmail", certEmail);
+		    params.put("certCode", certCode);
+		    
+		UserCertDto result = sqlSession.selectOne("userCert.checkValid", params);
+		   boolean isValid =  result != null;
+		   return isValid;
+		}
 	
 	//5분 지난거 삭제
 	public boolean deleteExpiredCert() {

@@ -20,9 +20,9 @@
 
    <select id="checkValid" resultType="UserCertDto">
 	    select * from user_cert where
-	    cert_email = #{certEmail} and 
-	    cert_code = #{certCode} and 
-	    cert_time <![CDATA[ > ]]>= SYSDATE
+	    cert_email = #{certEmail}
+	    and cert_code = #{certCode}
+	    and cert_time <![CDATA[ > ]]>= SYSDATE
 	</select>
 
     <delete id="deleteExpiredCert">
