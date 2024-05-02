@@ -26,7 +26,12 @@ public class CartDao {
 	
 	//상품 조회
 	public boolean findProductNo(int productNo) {
-		return sqlSession.selectOne("cart.productFind", productNo);
+		CartDto result = sqlSession.selectOne("cart.productFind", productNo);
+		
+		if(result == null) {
+			return false;
+		}
+		return true;
 	}
 	
 	//상품 수량 업데이트
