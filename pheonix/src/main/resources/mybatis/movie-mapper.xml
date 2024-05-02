@@ -32,9 +32,7 @@
 	<update id="edit">
 		update movie
 		<set>
-			<if test="movieTitle != null">
-				movie_title = #{movieTitle},
-			</if>
+			<if test="movieTitle != null">movie_title = #{movieTitle},</if>
 			<if test="movieGenre != null">
 				movie_genre = #{movieGenre},
 			</if>
@@ -42,40 +40,40 @@
 				movie_running_time = #{movieRunningTime},
 			</if>
 			<if test="movieYear != null">
-				movie_year = #{movieYear}
+				movie_year = #{movieYear},
 			</if>
 			<if test="movieOpenDate != null">
-				movie_open_date = #{movieOpenDate}
+				movie_open_date = #{movieOpenDate},
 			</if>
 			<if test="movieCloseDate != null">
-				movie_close_date = #{movieCloseDate}
+				movie_close_date = #{movieCloseDate},
 			</if>
 			<if test="movieAge != null">
-				movie_age = #{movieAge}
+				movie_age = #{movieAge},
 			</if>
 			<if test="movieOrigin != null">
-				movie_origin = #{movieOrigin}
+				movie_origin = #{movieOrigin},
 			</if>
 			<if test="movieOn != null">
-				movie_on = #{movieOn}
+				movie_on = #{movieOn},
 			</if>
 			<if test="movieSummary != null">
-				movie_summary = #{movieSummary}
+				movie_summary = #{movieSummary},
 			</if>
 			<if test="movieTranslation != null">
-				movie_translation = #{movieTranslation}
+				movie_translation = #{movieTranslation},
 			</if>
 			<if test="movieScreenType != null">
-				movie_screen_type = #{movieScreenType}
+				movie_screen_type = #{movieScreenType},
 			</if>
 			<if test="movieDirector != null">
-				movie_director = #{movieDirector}
+				movie_director = #{movieDirector},
 			</if>
 			<if test="movieActor != null">
 				movie_actor = #{movieActor}
 			</if>
 		</set>
-		where movie_no = #{movieNo}	
+		where movie_no = #{movieNo}
 	</update>
 	
 	<delete id="delete">

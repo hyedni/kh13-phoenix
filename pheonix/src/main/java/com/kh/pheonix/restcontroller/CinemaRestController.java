@@ -26,11 +26,16 @@ public class CinemaRestController {
 	@Autowired
 	private CinemaDao cinemaDao;
 	
-	//영화관명 리스트 
-	@GetMapping("/{cinemaRegion}")
-	public List<String> nameList (@PathVariable String cinemaRegion) {
-		System.out.println(cinemaDao.names(cinemaRegion));
-		return cinemaDao.names(cinemaRegion);
+//	//영화관명 리스트 
+//	@GetMapping("/{cinemaRegion}")
+//	public List<String> nameList (@PathVariable String cinemaRegion) {
+//		System.out.println(cinemaDao.names(cinemaRegion));
+//		return cinemaDao.names(cinemaRegion);
+//	}
+	
+	@GetMapping("/")
+	public List<CinemaDto> list () {
+		return cinemaDao.list();
 	}
 	
 	//영화관등록
@@ -39,13 +44,23 @@ public class CinemaRestController {
 		int seq = cinemaDao.sequence();
 		cinemaDto.setCinemaNo(seq);
 		cinemaDao.insert(cinemaDto);
-		return cinemaDao.find(seq);
+		return cinemaDao.findByNo(seq);
 	}
+	
+	//영화관 상세조회
+//	@GetMapping("/{cinemaName}")
+//	public ResponseEntity<CinemaDto> find (@PathVariable String cinemaName) {
+//		CinemaDto cinemaDto = cinemaDao.find(cinemaName);
+//		if (cinemaDto == null) {
+//			return ResponseEntity.status(404).build();
+//		}
+//		return ResponseEntity.status(200).body(cinemaDto);
+//	}
 	
 	//영화관 상세조회
 	@GetMapping("/{cinemaNo}")
 	public ResponseEntity<CinemaDto> find (@PathVariable int cinemaNo) {
-		CinemaDto cinemaDto = cinemaDao.find(cinemaNo);
+		CinemaDto cinemaDto = cinemaDao.findByNo(cinemaNo);
 		if (cinemaDto == null) {
 			return ResponseEntity.status(404).build();
 		}
@@ -63,7 +78,7 @@ public class CinemaRestController {
 	}
 	
 	//삭제
-	@DeleteMapping("/{movieNo}")
+	@DeleteMapping("/{cinemaNo}")
 	public ResponseEntity<?> delete (@PathVariable int cinemaNo) {
 		boolean result = cinemaDao.delete(cinemaNo);
 		if (!result) {

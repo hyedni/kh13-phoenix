@@ -15,27 +15,35 @@ public class CinemaDao {
 	private SqlSession sqlSession;
 	
 	public int sequence () {
-		return sqlSession.selectOne("cinema, sequence");
+		return sqlSession.selectOne("cinema.sequence");
 	}
 	
 	public void insert (CinemaDto cinemaDto) {
-		sqlSession.insert("cinema, insert", cinemaDto);
+		sqlSession.insert("cinema.insert", cinemaDto);
 	}
 	
 	public List<String> names (String cinemaRegion) {
-		return sqlSession.selectList("cinema, findName", cinemaRegion);
+		return sqlSession.selectList("cinema.findName", cinemaRegion);
 	}
 	
-	public CinemaDto find (int cinemaNo) {
-		return sqlSession.selectOne("cinema, find", cinemaNo);
+	public List<CinemaDto> list () {
+		return sqlSession.selectList("cinema.list");
+	}
+	
+	public CinemaDto find (String cinemaName) {
+		return sqlSession.selectOne("cinema.find", cinemaName);
+	}
+	
+	public CinemaDto findByNo (int cinemaNo) {
+		return sqlSession.selectOne("cinema.findByNo", cinemaNo);
 	}
 	
 	public boolean edit (CinemaDto cinemaDto) {
-		return sqlSession.update("cinema, edit", cinemaDto) > 0;
+		return sqlSession.update("cinema.edit", cinemaDto) > 0;
 	}
 	
 	public boolean delete (int cinemaNo) {
-		return sqlSession.delete("cinema, delete", cinemaNo) > 0;
+		return sqlSession.delete("cinema.delete", cinemaNo) > 0;
 	}
 
 	
