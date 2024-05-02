@@ -63,6 +63,7 @@ public class MovieRestController {
 		}
 		return movieDao.find(sequence);
 	}
+	
 
 	// 1건조회
 	@GetMapping("/{movieNo}")
