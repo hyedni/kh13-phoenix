@@ -17,6 +17,10 @@ public class ProductDao {
 	private SqlSession sqlSession;
 	
 	//종류별 조회
+	public List<ProductDto> selectListAll(){
+		return sqlSession.selectList("product.productList");
+	}
+	
 	public List<ProductDto> selectList(String productType) {
 		return sqlSession.selectList("product.productFind", productType);
 	}

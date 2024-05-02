@@ -43,6 +43,14 @@ public class ProductRestController {
 	private ImageService imageService;
 	
 	//상품 전체 조회
+	@GetMapping("/")
+	public List<ProductDto> list() {
+		List<ProductDto> list = productDao.selectListAll();
+		List<ProductDto> imageSetUpList = imageService.productPhotoUrlSetUp(list);//사진 주소 설정
+		return imageSetUpList;
+	}
+	
+	//상품 상세 조회
 	@Operation(
 		description = "종류별 상품 조회",
 		responses = {
@@ -81,7 +89,6 @@ public class ProductRestController {
 		return ResponseEntity.status(200).body(productDto);
 	}
 	
-	//상품 상세 조회
 	@Operation(
 		description = "상품 조회 상세",
 		responses = {
