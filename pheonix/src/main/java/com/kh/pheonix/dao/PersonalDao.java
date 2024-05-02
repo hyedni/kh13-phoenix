@@ -1,6 +1,8 @@
 package com.kh.pheonix.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,10 @@ public class PersonalDao {
 
 	@Autowired 
 	private SqlSession sqlSession;
+	
+	public int sequence () {
+		return sqlSession.selectOne("personal.sequence");
+	}
 	
 	//조회
 	public List<PersonalDto> selectList() {
@@ -37,4 +43,7 @@ public class PersonalDao {
 	public PersonalDto selectOne(int personalNo) {
 		return sqlSession.selectOne("personal.find", personalNo);
 	}
-}
+	
+
+	}
+
