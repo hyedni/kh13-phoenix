@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dto.MovieDto;
+import com.kh.pheonix.dto.ProductDto;
 import com.kh.pheonix.service.AttachService;
 import com.kh.pheonix.service.ImageService;
 
@@ -49,7 +51,7 @@ public class MovieRestController {
 
 	// 등록
 	@PostMapping("/")
-	public MovieDto insert(@RequestBody MovieDto movieDto, @RequestParam MultipartFile attach)
+	public MovieDto insert(@ModelAttribute MovieDto movieDto, @RequestParam("attach") MultipartFile attach)
 			throws IllegalStateException, IOException {
 		int sequence = movieDao.sequence();
 		movieDto.setMovieNo(sequence);
