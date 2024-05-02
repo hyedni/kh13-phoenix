@@ -7,10 +7,10 @@
 <mapper namespace="product">
 
 	<!-- 데이터 삽입 -->
-	<select id="productSequence" resultType="int">
+	<select id="sequence" resultType="int">
 		select product_seq.nextval from dual
 	</select>
-	<insert id="productAdd">
+	<insert id="insert">
 		insert into product(
 			product_no, product_name, product_type,
 			product_content, product_price, product_origin, product_discount
@@ -35,6 +35,47 @@
 	<!-- 상세 조회 -->
 	<select id="productDetail" resultType="ProductDto">
 		select * from product where product_no = #{productNo}
+	</select>
+	
+	<!-- 상품 수정 -->
+	<update id="edit">
+		update product
+		<set>
+			<if test="productName != null">
+				product_name = #{productName},
+			</if>
+			<if test="productType != null">
+				product_type = #{productType},
+			</if>
+			<if test="productContent != null">
+				product_content = #{productContent},
+			</if>
+			<if test="productPrice != null">
+				product_price = #{productPrice},
+			</if>
+			<if test="productOrigin != null">
+				product_origin = #{productOrigin},
+			</if>
+			<if test="productDiscount != null">
+				product_discount = #{productDiscount},
+			</if>
+		</set>
+		where product_no = #{productNo}
+	</update>
+	
+	<!-- 상품 삭제 -->
+	<delete id="delete">
+		delete product where product_no = #{productNo}
+	</delete>
+	
+	<insert id="connect">
+		insert into product_attach (product_no, attach_no) values (#{productNo}, #{attachNo})
+	</insert>
+	
+	<!-- 이미지 -->
+	<!-- 첨부파일 번호 찾기 -->
+	<select id="findAttach" resultType="int">
+		select attach_no from attach where product_no = #{productNo}
 	</select>
 
 </mapper>

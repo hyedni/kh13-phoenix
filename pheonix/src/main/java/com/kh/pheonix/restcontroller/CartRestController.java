@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +24,19 @@ public class CartRestController {
 	
 	//등록 - 장바구니 담기
 	@PostMapping("/add/")
-	public List<CartDto> insert(@RequestBody CartDto cartDto) {
+	public void insert(@RequestBody CartDto cartDto) {
 		boolean isValid = cartDao.findProductNo(cartDto.getCartProductNo());
 		if(isValid) { //장바구니에 기존 상품이 있으면
 			cartDao.updateQty(cartDto);
 		}
 		else {
 			cartDao.insert(cartDto);//장바구니 담기			
-		}
-		return cartDao.selectList(cartDto.getCartUserId());
+		}	
+	}
+	
+	//회원별 조회
+	@GetMapping("/list/{userId}") 
+	public List<CartDto> listByUserId(@PathVariable String userId){
+		return cartDao.selectList(userId);
 	}
 }

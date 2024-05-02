@@ -11,7 +11,9 @@ public class ProductDto {
 	private String productName; //상품명
 	private String productType; //상품종류
 	private String productContent; //상품 내용
-	private int productPrice; //상품가격
+	private Integer productPrice; //상품가격
 	private String productOrigin; //원산지
-	private int productDiscount; //할인율
+	private Integer productDiscount; //할인율
+	
+	private String productImgLink; //이미지 링크를 위한 변수
 }
