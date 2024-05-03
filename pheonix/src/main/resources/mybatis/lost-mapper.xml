@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="lost">
 	
 	<select id="sequence" resultType="int">
-		select lost_seq.nextval from dual
+		select lost_seq.NEXTVAL from dual
 	</select>
 	
 	<insert id="save">
-    insert into lost(lost_no, lost_title, lost_content)
-    values (lost_seq.NEXTVAL, #{lostTitle}, #{lostContent})
-</insert>
+    	insert into lost(lost_no, lost_title, lost_content)
+    	values (#{lostNo}, #{lostTitle}, #{lostContent})
+	</insert>
 
-	
 	<select id="list" resultType="lostDto">
 		select * from  lost order by lost_no asc
 	</select>
-<select id="find" resultType="lostDto">
-    select * from lost where lost_no = #{lostNo}
-</select>
 	
-<update id="edit">
-    update lost
-  <set>
-  	<if test="lostTitle !=null">lost_title = #{lostTitle},</if>
-  	 	<if test="lostContent !=null">lost_content = #{lostContent}</if>
-  </set>
-  where lost_no = #{lostNo}
-</update>
+	<select id="find" resultType="lostDto">
+    	select * from lost where lost_no = #{lostNo}
+	</select>
+	
+	<update id="edit">
+    	update lost
+    	<set>
+        	<if test="lostTitle !=null">lost_title = #{lostTitle},</if>
+        	<if test="lostContent !=null">lost_content = #{lostContent},</if>
+    	</set>
+    	where lost_no = #{lostNo}
+	</update>
 
 	<update id="delete">
 		delete lost where lost_no = #{lostNo}
 	</update>
 	
-<insert id="connect">
-	insert into lost_attach (lost_no, attach_no) values (#{lostNo}, #{attachNo})
-</insert>
+	<insert id="connect">
+		insert into lost_attach (lost_no, attach_no) values (#{lostNo}, #{attachNo})
+	</insert>
 
-	
+	<!-- 이미지 -->
+	<select id="findAttach" resultType="int">
+		select attach_no from lost_attach where lost_no = #{lostNo}
+	</select>
 </mapper>

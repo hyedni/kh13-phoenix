@@ -13,8 +13,8 @@ public class PersonalDto {
 	private String personalId;
 	private String personalTitle;
 	private String personalContent;
-	private Date personalWrite;
-	private Date personalEdit;
+	private String personalWrite;
+	private String personalEdit;
+		
 	
-
 }

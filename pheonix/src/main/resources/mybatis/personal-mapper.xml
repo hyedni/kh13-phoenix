@@ -34,6 +34,11 @@
 		delete personal where personal_no = #{personalNo}
 	</update>
 	
+	<update id="reply">
+		insert into personal(personal_no, personal_id, personal_title, personal_content)
+    values (personal_seq.NEXTVAL, #{personalId}, #{personalTitle}, #{personalContent})
+	</update>
+	
 
 	
 </mapper>
