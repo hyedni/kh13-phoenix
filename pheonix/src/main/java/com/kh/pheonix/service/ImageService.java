@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.pheonix.Vo.CartProductVO;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dao.ProductDao;
 import com.kh.pheonix.dto.MovieDto;
@@ -77,5 +78,37 @@ public class ImageService {
 		dto.setProductImgLink(productImgLink);
 		return dto;
 	}
+	
+	
+	//장바구니
+	//장바구니 리스트 뽑을 때 필요한 이미지 리스트
+	public String getCartProductImgLink(int productNo) {
+		try {
+			int attachNo = productDao.findAttach(productNo);
+			return "http://localhost:8080/download?attachNo=" + attachNo;
+		} catch (Exception e) {
+			return "http://localhost:8080/image/productNullImg.png";
+		}
+	}
+	
+	public List<CartProductVO> cartProductPhotoUrlSetUp(List<CartProductVO> cartProductVO) {
+		List<CartProductVO> list = cartProductVO;
+		
+		for (CartProductVO vo : list) {
+			String productImgLink = getCartProductImgLink(vo.getProductNo());
+			vo.setProductImgLink(productImgLink);
+		}
+		return list;
+	} 
+	
+//	public List<CartProductVO> cartPhotoUrlbyOne(List<CartProductVO> cartProductVO) {
+//		List<CartProductVO> list = cartProductVO;
+//		
+//		for(CartProductVO vo : list) {
+//			String productImgLink = getCartProductImgLink(vo.getProductNo());
+//			vo.setProductImgLink(productImgLink);
+//		}
+//		return list;
+//	}
 	
 }
