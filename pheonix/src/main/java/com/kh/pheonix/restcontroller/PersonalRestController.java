@@ -50,4 +50,11 @@ public class PersonalRestController {
 		PersonalDto personalDto = personalDao.selectOne(personalNo);
 		return personalDto;
 	}
+	
+	@PostMapping("/reply/{personalNo}")//답글 조회
+	public List<PersonalDto> reply() {
+		return personalDao.selectList();
+		
+	}
+	
 }
