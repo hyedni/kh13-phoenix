@@ -63,7 +63,7 @@
 				cinema_manager_call = #{cinemaManagerCall},
 			</if>
 			<if test="cinemaCall != null">
-				cinema_call = #{cinemaCall}
+				cinema_call = #{cinemaCall},
 			</if>
 		</set>
 		where cinema_no = #{cinemaNo}	
