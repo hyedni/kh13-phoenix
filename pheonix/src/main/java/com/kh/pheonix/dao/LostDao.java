@@ -20,6 +20,7 @@ public class LostDao {
 		return sqlSession.selectOne("lost.sequence");
 	}
 	
+	
 	//조회
 	public List<LostDto> selectList() {
 		return sqlSession.selectList("lost.list");
@@ -55,6 +56,10 @@ public class LostDao {
 		data.put("lostNo", lostNo);
 		data.put("attachNo", attachNo);
 		sqlSession.insert("lost.connect", data);
+	}
+
+	public int findAttach(int lostNo) {
+		return sqlSession.selectOne("lost.findAttach", lostNo);
 	}
 
 

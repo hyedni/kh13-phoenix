@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.pheonix.Vo.CartProductVO;
+import com.kh.pheonix.dao.LostDao;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dao.ProductDao;
+import com.kh.pheonix.dto.LostDto;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.ProductDto;
 
@@ -19,6 +21,9 @@ public class ImageService {
 	
 	@Autowired
 	private ProductDao productDao;
+	
+	@Autowired
+	private LostDao lostDao;
 	
 	//영화
 	//이미지에 url주소 부여 
@@ -111,4 +116,33 @@ public class ImageService {
 //		return list;
 //	}
 	
+	//분실물
+	//이미지에 url주소부여
+	public String getLostImgLink(int lostNo) {
+		try {
+			int attachNo = lostDao.findAttach(lostNo);
+			return "http://localhost:8080/download?attachNo=" + attachNo;
+		} catch (Exception e) {
+			return "http://localhost:8080/image/lostNullImg.png";
+		}
+	}
+	
+	//전체 조회 시 상품 이미지 출력
+	public List<LostDto> lostPhotoUrlSetUp(List<LostDto> lostDto) {
+		List<LostDto> list = lostDto;
+		
+		for (LostDto dto : list) {
+			String lostImgLink = getLostImgLink(dto.getLostNo());
+			dto.setLostImgLink(lostImgLink);
+		}
+		return list;
+	} 
+	
+	//1건 상세 조회 시 해당 상품 이미지 출력 (이미지 단일 조회)
+	public LostDto lostPhotoUrlbyOne(LostDto lostDto) {
+		LostDto dto = lostDto;
+		String lostImgLink = getLostImgLink(dto.getLostNo());
+		dto.setLostImgLink(lostImgLink);
+		return dto;
+	}
 }

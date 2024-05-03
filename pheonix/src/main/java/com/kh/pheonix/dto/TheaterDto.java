@@ -6,10 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class LostDto {
-	private int lostNo;
-	private String lostTitle;
-	private String lostContent;
+public class TheaterDto {
+
+	private int theaterNo;
+	private int cinemaNo;
+	private String theaterName;
+	private Integer theaterTotalSeats;
 	
-	private String lostImgLink;//이미지 링크를 위한 변수
 }
