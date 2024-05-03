@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.pheonix.Vo.CartProductVO;
 import com.kh.pheonix.dao.LostDao;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dao.ProductDao;
@@ -83,6 +84,38 @@ public class ImageService {
 		return dto;
 	}
 	
+	
+	//장바구니
+	//장바구니 리스트 뽑을 때 필요한 이미지 리스트
+	public String getCartProductImgLink(int productNo) {
+		try {
+			int attachNo = productDao.findAttach(productNo);
+			return "http://localhost:8080/download?attachNo=" + attachNo;
+		} catch (Exception e) {
+			return "http://localhost:8080/image/productNullImg.png";
+		}
+	}
+	
+	public List<CartProductVO> cartProductPhotoUrlSetUp(List<CartProductVO> cartProductVO) {
+		List<CartProductVO> list = cartProductVO;
+		
+		for (CartProductVO vo : list) {
+			String productImgLink = getCartProductImgLink(vo.getProductNo());
+			vo.setProductImgLink(productImgLink);
+		}
+		return list;
+	} 
+	
+//	public List<CartProductVO> cartPhotoUrlbyOne(List<CartProductVO> cartProductVO) {
+//		List<CartProductVO> list = cartProductVO;
+//		
+//		for(CartProductVO vo : list) {
+//			String productImgLink = getCartProductImgLink(vo.getProductNo());
+//			vo.setProductImgLink(productImgLink);
+//		}
+//		return list;
+//	}
+	
 	//분실물
 	//이미지에 url주소부여
 	public String getLostImgLink(int lostNo) {
@@ -106,10 +139,10 @@ public class ImageService {
 	} 
 	
 	//1건 상세 조회 시 해당 상품 이미지 출력 (이미지 단일 조회)
-		public LostDto lostPhotoUrlbyOne(LostDto lostDto) {
-			LostDto dto = lostDto;
-			String lostImgLink = getLostImgLink(dto.getLostNo());
-			dto.setLostImgLink(lostImgLink);
-			return dto;
-		}
+	public LostDto lostPhotoUrlbyOne(LostDto lostDto) {
+		LostDto dto = lostDto;
+		String lostImgLink = getLostImgLink(dto.getLostNo());
+		dto.setLostImgLink(lostImgLink);
+		return dto;
+	}
 }

@@ -1,12 +1,16 @@
 package com.kh.pheonix.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.pheonix.Vo.CartProductVO;
 import com.kh.pheonix.dto.CartDto;
+import com.kh.pheonix.dto.ProductDto;
 
 @Repository
 public class CartDao {
@@ -24,7 +28,7 @@ public class CartDao {
 		return sqlSession.selectList("cart.cartFind", userId);
 	}
 	
-	//상품 조회
+	//장바구니에 있는 상품 조회
 	public boolean findProductNo(int productNo) {
 		CartDto result = sqlSession.selectOne("cart.productFind", productNo);
 		
@@ -34,8 +38,27 @@ public class CartDao {
 		return true;
 	}
 	
+	//로그인한 사용자의 카트+상품 조회
+	public List<CartProductVO> cartProductList(String userId) {
+		return sqlSession.selectList("cart.joinCartProduct", userId);	
+	}
+	
+	//상품에 대한 정보 조회
+	public List<ProductDto> findProductInfo(int cartProductNo) {
+		return sqlSession.selectList("cart.productInfo", cartProductNo);
+	}
+	
 	//상품 수량 업데이트
 	public boolean updateQty(CartDto cartDto) {
 		return sqlSession.update("cart.qtyEdit", cartDto) > 0;
 	}
+	
+	//장바구니 내용 삭제
+	public boolean delete(int productNo, String userId) {
+		Map<String, Object> info = new HashMap<>();
+		info.put("productNo", productNo);
+		info.put("userId", userId);
+		return sqlSession.delete("cart.delete", info) > 0;
+	}
+	
 }

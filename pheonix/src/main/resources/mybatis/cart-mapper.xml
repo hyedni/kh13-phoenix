@@ -38,5 +38,26 @@
 	<select id="productFind" resultType="CartDto">
 		select * from cart where cart_product_no = #{cartProductNo}
 	</select>
+	
+	<!-- 상품 번호로 상품 정보 조회 -->
+	<select id="productInfo" resultType="ProductDto">
+		select * from product where product_no = #{cartProductNo}
+	</select>
+	
+	<!-- 장바구니 정보 + 상품 정보(join) -->
+	<select id="joinCartProduct" resultType="CartProductVO">
+		select * from cart inner join product 
+			on cart.CART_PRODUCT_NO = product.PRODUCT_NO 
+				and cart.CART_USER_ID = #{cartUserId}	
+	</select>
+	
+	
+	<!-- 데이터 삭제 -->
+	<delete id="delete">
+		delete cart where cart_product_no = #{cartProductNo} and cart_user_id = #{CartUserId}
+	</delete>
+	<!-- <delete id="deleteByTime">
+		
+	</delete> -->
 
 </mapper>

@@ -75,7 +75,7 @@
 	<!-- 이미지 -->
 	<!-- 첨부파일 번호 찾기 -->
 	<select id="findAttach" resultType="int">
-		select attach_no from attach where product_no = #{productNo}
+		select attach_no from product_attach where product_no = #{productNo}
 	</select>
 
 </mapper>
