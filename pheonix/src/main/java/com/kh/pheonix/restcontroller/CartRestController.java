@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.CartProductVO;
@@ -73,9 +74,20 @@ public class CartRestController {
 		return ResponseEntity.ok().build();
 	}
 	
+	//상품 삭제
 	@DeleteMapping("/")
-	public ResponseEntity<?> delete(@RequestBody CartDto cartDto){
-		boolean result = cartDao.delete(cartDto.getCartProductNo(), cartDto.getCartUserId());
+	public ResponseEntity<?> delete(@RequestParam String userId, @RequestParam int productNo){
+		boolean result = cartDao.delete(productNo, userId);
+		if(result == false) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().build();
+	}
+	
+	//30일이 지난 값 삭제 
+	@DeleteMapping("/deleteByTime/{userId}")
+	public ResponseEntity<?> deleteByTime(@PathVariable String userId){
+		boolean result = cartDao.delete(userId);
 		if(result == false) {
 			return ResponseEntity.notFound().build();
 		}

@@ -56,9 +56,14 @@ public class CartDao {
 	//장바구니 내용 삭제
 	public boolean delete(int productNo, String userId) {
 		Map<String, Object> info = new HashMap<>();
-		info.put("productNo", productNo);
-		info.put("userId", userId);
+		info.put("cartProductNo", productNo);
+		info.put("cartUserId", userId);
 		return sqlSession.delete("cart.delete", info) > 0;
 	}
+	
+	//장바구니 조회 시 30일 지난 데이터 삭제
+	public boolean delete(String userId) {
+		return sqlSession.delete("cart.deleteByTime", userId) > 0;
+	} 
 	
 }
