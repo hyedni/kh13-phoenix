@@ -54,10 +54,12 @@
 	
 	<!-- 데이터 삭제 -->
 	<delete id="delete">
-		delete cart where cart_product_no = #{cartProductNo} and cart_user_id = #{CartUserId}
+		delete cart where cart_product_no = #{cartProductNo} and cart_user_id = #{cartUserId}
 	</delete>
-	<!-- <delete id="deleteByTime">
-		
-	</delete> -->
+	<delete id="deleteByTime">
+		delete cart where cart_user_Id = #{cartUserId} 
+					<![CDATA[	and 
+						cart_date < SYSDATE - 30 ]]>
+	</delete>
 
 </mapper>
