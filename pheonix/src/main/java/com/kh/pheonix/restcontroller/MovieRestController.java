@@ -85,6 +85,19 @@ public class MovieRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+	
+	//첨부파일수정
+	@PostMapping("/{movieNo}")
+	public ResponseEntity<?> editPoster(@PathVariable int movieNo, @RequestParam("attach") MultipartFile attach) throws IllegalStateException, IOException {
+		if (!attach.isEmpty()) {
+			int attachNo = movieDao.findAttach(movieNo);
+			attachService.remove(attachNo);
+			int editAttachNo = attachService.save(attach);
+			movieDao.connect(movieNo, editAttachNo);
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.status(404).build();
+	}
 
 	// 삭제
 	@DeleteMapping("/{movieNo}")
