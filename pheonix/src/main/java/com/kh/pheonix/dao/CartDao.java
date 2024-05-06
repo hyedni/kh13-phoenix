@@ -53,7 +53,7 @@ public class CartDao {
 		return sqlSession.update("cart.qtyEdit", cartDto) > 0;
 	}
 	
-	//장바구니 내용 삭제
+	//장바구니 내용 삭제(단일)
 	public boolean delete(int productNo, String userId) {
 		Map<String, Object> info = new HashMap<>();
 		info.put("cartProductNo", productNo);
@@ -65,5 +65,7 @@ public class CartDao {
 	public boolean delete(String userId) {
 		return sqlSession.delete("cart.deleteByTime", userId) > 0;
 	} 
+	
+	
 	
 }
