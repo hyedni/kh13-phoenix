@@ -19,9 +19,16 @@
 	</insert>
 	
 	<!-- 이미 담긴 상품에 대하여 상태 수정 -->
+	<!-- 이미 담긴 상품을 하나 더 추가할 때 -->
 	<update id="qtyEdit">
 		update cart
 		set cart_qty = cart_qty + #{cartQty}
+		where cart_product_no = #{cartProductNo}
+	</update>
+	<!-- 장바구니에서 수량을 변경할 때 -->
+	<update id="qtyCartEdit">
+		update cart
+		set cart_qty = #{cartQty}
 		where cart_product_no = #{cartProductNo}
 	</update>
 	
