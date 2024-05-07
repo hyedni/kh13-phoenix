@@ -23,5 +23,17 @@
 		</set>
 		where theater_no = #{theaterNo}
 	</update>
+	
+	<select id="list" resultType="TheaterDto">
+		select * from theater order by theater_no asc
+	</select>
+	
+	<select id="find" resultType="TheaterDto">
+		select * from theater where cinema_no = #{cinemaNo}
+	</select>
+	
+	<delete id="delete">
+		delete theater where theater_no = #{theaterNo}
+	</delete>
 
 </mapper>
