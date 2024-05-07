@@ -15,10 +15,11 @@ public class WebSocketServerConfiguration implements WebSocketConfigurer {
 	@Autowired
 	private ChatbotWebSocketServer chatbotWebSocketServer;
 
-	@Override
-	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		registry.addHandler(chatbotWebSocketServer, "/ws/chatbot")
-		.withSockJS();
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(chatbotWebSocketServer, "/ws/chatbot")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
 	}
 	
 	

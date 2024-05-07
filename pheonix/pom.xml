@@ -107,7 +107,7 @@
 			</dependency>
 			
 			<!--웹소켓 의존성!-->
-			<dependency>
+		<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
