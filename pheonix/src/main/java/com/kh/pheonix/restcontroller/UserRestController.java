@@ -100,7 +100,7 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/refresh")
-	public ResponseEntity<UserLoginVO>refreash(@RequestHeader("Autorization") String refreshToken){
+	public ResponseEntity<UserLoginVO>refreash(@RequestHeader("Authorization") String refreshToken){
 		try {
 			UserLoginVO loginVO = jwtService.parse(refreshToken);
 			UserDto userDto = userDao.selectOne(loginVO.getUserId());
