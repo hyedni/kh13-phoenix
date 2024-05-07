@@ -35,6 +35,7 @@ public class CinemaRestController {
 //		return cinemaDao.names(cinemaRegion);
 //	}
 	
+	
 	@GetMapping("/")
 	public List<CinemaDto> list () {
 		return cinemaDao.list();

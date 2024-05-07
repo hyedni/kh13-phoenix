@@ -12,4 +12,5 @@ public class SeatStatus {
 
 	private int seatTypesNo;
 	
+	
 }
