@@ -73,6 +73,14 @@ public class CartRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+	@PatchMapping("/combine")
+	public ResponseEntity<?> cartProductQtyEdit(@RequestBody CartProductVO cartProductVO) {
+		boolean result = cartDao.updateQty(cartProductVO);
+		if (result == false) {
+			return ResponseEntity.status(404).build();
+		}
+		return ResponseEntity.ok().build();
+	}
 	
 	//상품 삭제
 	@DeleteMapping("/")

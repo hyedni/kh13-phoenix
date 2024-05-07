@@ -52,6 +52,10 @@ public class CartDao {
 	public boolean updateQty(CartDto cartDto) {
 		return sqlSession.update("cart.qtyEdit", cartDto) > 0;
 	}
+	public boolean updateQty(CartProductVO cartProductVO) {
+		return sqlSession.update("cart.qtyCartEdit", cartProductVO) > 0;
+	}
+	
 	
 	//장바구니 내용 삭제(단일)
 	public boolean delete(int productNo, String userId) {

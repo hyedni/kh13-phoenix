@@ -3,6 +3,8 @@ package com.kh.pheonix.restcontroller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -35,6 +37,12 @@ public class UserRestController {
 	private EmailService emailService;
 	@Autowired
 	private UserCertDao userCertDao;
+	
+	//회원별 회원정보 검색
+	@GetMapping("/{userId}")
+	public UserDto complex(@PathVariable String userId) {
+		return userDao.selectOne(userId);
+	}
 	
 	//회원가입
 	@PostMapping("/join")
@@ -100,7 +108,7 @@ public class UserRestController {
 	}
 	
 	@PostMapping("/refresh")
-	public ResponseEntity<UserLoginVO>refreash(@RequestHeader("Autorization") String refreshToken){
+	public ResponseEntity<UserLoginVO>refreash(@RequestHeader("Authorization") String refreshToken){
 		try {
 			UserLoginVO loginVO = jwtService.parse(refreshToken);
 			UserDto userDto = userDao.selectOne(loginVO.getUserId());
