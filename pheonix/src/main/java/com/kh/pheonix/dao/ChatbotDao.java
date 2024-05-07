@@ -14,10 +14,32 @@ public class ChatbotDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<ChatbotDto> selectList() {
+	//시퀀스
+	public int sequence() {
+		return sqlSession.selectOne("chatbot.sequence");
+	}
+	//등록
+	public void insert(ChatbotDto chatbotDto) {
+		sqlSession.insert("chatbot.insert", chatbotDto);
+	}
+	//조회
+	public List<ChatbotDto> selectList(){
 		return sqlSession.selectList("chatbot.list");
 	}
+	//상세
 	public ChatbotDto selectOne(int chatbotNo) {
-		return sqlSession.selectOne("chatbot.find", chatbotNo);
+		return sqlSession.selectOne("chatbot.find",chatbotNo);
+	}
+	//전체 수정
+	public boolean editAll(ChatbotDto chatbotDto) {
+		return sqlSession.update("chatbot.editAll", chatbotDto) > 0;
+	}
+	//일부 수정
+	public boolean edit(ChatbotDto chatbotDto) {
+		return sqlSession.update("chatbot.edit", chatbotDto) > 0;
+	}
+	//삭제
+	public boolean delete(int chatbotNo) {
+		return sqlSession.delete("chatbot.delete", chatbotNo) > 0;
 	}
 }
