@@ -3,6 +3,7 @@ package com.kh.pheonix.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.pheonix.dao.SocialUserDao;
 import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.UserDto;
 
@@ -11,6 +12,8 @@ public class UserService {
     
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private SocialUserDao socialUserDao;
 
 	public boolean registerUser(UserDto userDto) {
 		// 필수 항목이 누락되었는지 확인
@@ -33,5 +36,6 @@ public class UserService {
         
         return true;
     }
+
     
 }

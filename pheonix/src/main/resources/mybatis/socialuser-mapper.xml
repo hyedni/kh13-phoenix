@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="socialUser">
+	
+	<insert id="insert">
+		insert into social_user(social_email, social_name, social_accessToken)
+		values (#{socialEmail}, #{socialName}, #{socialAccessToken})
+	</insert>
+	
+	<!-- 이메일 검색 -->
+	<select id="selectOne" resultType="SocialUserDto">
+		select * from social_user where social_email = #{socialEmail}
+	</select>
+	<!-- 토큰 검색 -->
+	<select id="find" resultType="SocialUserDto">
+		select * from social_user where social_access_token = #{socialAccessToken}
+	</select>
+	
+	
+	<update id="edit">
+		update social_user 
+		<set>
+			<if test="socialName != null">social_name = #{socialName}</if>
+		</set>
+		where social_email = #{socialEmail}
+	</update>
+	
+	<delete id="delete">
+		delete social_user where social_email = #{socialEmail}
+	</delete>
+
+</mapper>
