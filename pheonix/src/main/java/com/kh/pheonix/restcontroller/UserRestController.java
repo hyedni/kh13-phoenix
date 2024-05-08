@@ -128,6 +128,14 @@ public class UserRestController {
 		
 	}
 	
+//	@PostMapping("/socialLogins")
+//	public ResponseEntity<UserLoginVO> socialLogin(@RequestBody SocialLoginRequest socialLoginRequest){
+//		//토큰 받아 
+//		String socialToken = socialLoginRequest.getSocialToken();
+//		
+//		//사용자 정보
+//	}
+	
 	
 }
 	
