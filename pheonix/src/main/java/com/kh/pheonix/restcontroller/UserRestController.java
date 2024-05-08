@@ -3,8 +3,6 @@ package com.kh.pheonix.restcontroller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -38,12 +36,7 @@ public class UserRestController {
 	@Autowired
 	private UserCertDao userCertDao;
 	
-	//회원별 회원정보 검색
-	@GetMapping("/{userId}")
-	public UserDto complex(@PathVariable String userId) {
-		return userDao.selectOne(userId);
-	}
-	
+
 	//회원가입
 	@PostMapping("/join")
 	public ResponseEntity<String> join(@RequestBody UserDto userDto) {
@@ -135,14 +128,6 @@ public class UserRestController {
 		}
 		
 	}
-	
-//	@PostMapping("/socialLogins")
-//	public ResponseEntity<UserLoginVO> socialLogin(@RequestBody SocialLoginRequest socialLoginRequest){
-//		//토큰 받아 
-//		String socialToken = socialLoginRequest.getSocialToken();
-//		
-//		//사용자 정보
-//	}
 	
 	
 }
