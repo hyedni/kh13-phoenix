@@ -43,8 +43,22 @@ public class MovieRestController {
 
 	// 전체조회
 	@GetMapping("/")
-	public List<MovieDto> list() {
+	public List<MovieDto> list () {
 		List<MovieDto> list = movieDao.list();
+		List<MovieDto> imageSetUpList = imageService.moviePhotoUrlSetUp(list);
+		return imageSetUpList;
+	}
+	
+	@GetMapping("/on")
+	public List<MovieDto> onList () {
+		List<MovieDto> list = movieDao.onList();
+		List<MovieDto> imageSetUpList = imageService.moviePhotoUrlSetUp(list);
+		return imageSetUpList;
+	}
+	
+	@GetMapping("/all")
+	public List<MovieDto> allList () {
+		List<MovieDto> list = movieDao.allList();
 		List<MovieDto> imageSetUpList = imageService.moviePhotoUrlSetUp(list);
 		return imageSetUpList;
 	}
