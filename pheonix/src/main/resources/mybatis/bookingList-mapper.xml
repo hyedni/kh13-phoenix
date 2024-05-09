@@ -71,7 +71,7 @@
 			t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
 		where 
 			m.movie_no= #{movieNo} and cinema_name = #{cinemaName} and start_date = #{startDate}
-		order by m.movie_title asc
+		order by start_time asc
 	</select>
 	
 	<select id="movieTitle" resultType="MovieListVo">
