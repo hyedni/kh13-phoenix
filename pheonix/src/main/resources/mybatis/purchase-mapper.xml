@@ -13,14 +13,14 @@
 	<insert id="purchaseAdd">
 		insert into purchase(
 			purchase_no, purchase_name, purchase_qty,
-			purchase_price, purchase_total_price, 
+			purchase_total_price, 
 			purchase_status, purchase_payment, 
 			purchase_used_point, purchase_cash_pay,
 			purchase_expire
 		)
 		values(
 			#{purchaseNo}, #{purchaseName}, #{purchaseQty},
-			#{purchasePrice}, #{purchaseTotalPrice},
+			#{purchaseTotalPrice},
 			#{purchaseStatus}, #{purchasePayment},
 			#{purchaseUsedPoint}, #{purchaseCashPay},
 			#{purchaseExpire}
