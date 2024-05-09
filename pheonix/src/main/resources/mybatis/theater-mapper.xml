@@ -3,18 +3,20 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="theater">
-	
+
 	<select id="sequence" resultType="int">
-		select theater_seq.nextval from dual
+		select theater_seq.nextval from
+		dual
 	</select>
-	
+
 	<insert id="insert">
-		insert into theater (theater_no, cinema_no, theater_name, theater_total_seats) 
-		values (#{theaterNo}, #{cinemaNo}, #{theaterName}, #{theaterTotalSeats})
+		insert into theater (theater_no, cinema_no,
+		theater_name)
+		values (#{theaterNo}, #{cinemaNo}, #{theaterName})
 	</insert>
-	
+
 	<update id="update">
 		update theater
 		<set>
@@ -23,17 +25,32 @@
 		</set>
 		where theater_no = #{theaterNo}
 	</update>
-	
+
 	<select id="list" resultType="TheaterDto">
-		select * from theater order by theater_no asc
+		select * from theater order by
+		theater_no asc
 	</select>
-	
+
 	<select id="find" resultType="TheaterDto">
-		select * from theater where cinema_no = #{cinemaNo}
+		select * from theater where
+		cinema_no = #{cinemaNo}
 	</select>
-	
+
 	<delete id="delete">
 		delete theater where theater_no = #{theaterNo}
 	</delete>
+
+	<select id="totalSeats" resultType="int">
+		SELECT COUNT(*)
+		FROM seat_types
+		WHERE theater_no = #{theaterNo}
+		AND seat_active
+		= '활성화'
+	</select>
+	
+	<update id="totalSeatsUpdate">
+	update theater set theater_total_seats = #{totalSeats}
+	 where theater_no = #{theaterNo}
+	</update>
 
 </mapper>
