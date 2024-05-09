@@ -1,4 +1,4 @@
-package com.kh.pheonix.Vo;
+package com.kh.pheonix.kakaoPayVO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

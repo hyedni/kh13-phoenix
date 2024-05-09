@@ -1,4 +1,4 @@
-package com.kh.pheonix.Vo;
+package com.kh.pheonix.kakaoPayVO;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

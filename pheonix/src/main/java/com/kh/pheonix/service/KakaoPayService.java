@@ -3,6 +3,7 @@ package com.kh.pheonix.service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,22 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.kh.pheonix.Vo.KakaoPayApproveRequestVO;
-import com.kh.pheonix.Vo.KakaoPayApproveResponseVO;
-import com.kh.pheonix.Vo.KakaoPayCancelRequestVO;
-import com.kh.pheonix.Vo.KakaoPayCancelResponseVO;
-import com.kh.pheonix.Vo.KakaoPayOrderRequestVO;
-import com.kh.pheonix.Vo.KakaoPayOrderResponseVO;
-import com.kh.pheonix.Vo.KakaoPayReadyRequestVO;
-import com.kh.pheonix.Vo.KakaoPayReadyResponseVO;
-import com.kh.pheonix.Vo.PurchaseListVO;
-import com.kh.pheonix.Vo.PurchaseVO;
 import com.kh.pheonix.configuration.KakaoPayProperties;
 import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
 import com.kh.pheonix.dto.PaymentDetailDto;
 import com.kh.pheonix.dto.PaymentDto;
 import com.kh.pheonix.dto.ProductDto;
+import com.kh.pheonix.kakaoPayVO.KakaoPayApproveRequestVO;
+import com.kh.pheonix.kakaoPayVO.KakaoPayApproveResponseVO;
+import com.kh.pheonix.kakaoPayVO.KakaoPayCancelRequestVO;
+import com.kh.pheonix.kakaoPayVO.KakaoPayCancelResponseVO;
+import com.kh.pheonix.kakaoPayVO.KakaoPayOrderRequestVO;
+import com.kh.pheonix.kakaoPayVO.KakaoPayOrderResponseVO;
+import com.kh.pheonix.kakaoPayVO.KakaoPayReadyRequestVO;
+import com.kh.pheonix.kakaoPayVO.KakaoPayReadyResponseVO;
+import com.kh.pheonix.kakaoPayVO.PurchaseVO;
 
 @Service //카카오페이 서비스를 진행할 남은 부분들... 
 public class KakaoPayService {
@@ -61,12 +61,13 @@ public class KakaoPayService {
 		body.put("tax_free_amount", "0");
 		
 		//구매페이지 주소의 뒤에 /success, /cancel, /fail을 붙여서 처리하도록 구현
-		String page = ServletUriComponentsBuilder
-								.fromCurrentRequestUri().build().toUriString();//현재페이지 구하기
+		//String page = ServletUriComponentsBuilder
+		//						.fromCurrentRequestUri().build().toUriString();//현재페이지 구하기
 		//현재페이지에 주소를 붙여 결제 결과에 따른 페이지를 각각 만들 수 있음.
-		body.put("approval_url", page+"/success");
-		body.put("cancel_url", page+"/cancel");
-		body.put("fail_url", page+"/fail");
+		String page = "http://localhost:3000/#/purchase/";
+		body.put("approval_url", page + "success");
+		body.put("cancel_url", page + "cancel");
+		body.put("fail_url", page + "fail");
 		
 		//통신 요청
 		HttpEntity entity = new HttpEntity(body, header);//헤더+바디
@@ -97,7 +98,7 @@ public class KakaoPayService {
 	//여러 번의 등록 과정이 모두 성공하거나 모두 실패해야 한다
 	// → 하나의 트랜잭션(transaction)으로 관리되어야 한다 (작업단위 설정)
 	@Transactional
-	public void insertPayment(PurchaseListVO vo,
+	public void insertPayment(List<PurchaseVO> list,
 						KakaoPayApproveResponseVO responseVO) {
 		//DB에 결제 완료된 내역을 저장
 		//- 결제 대표 정보(payment) = 번호생성 후 등록
@@ -113,7 +114,7 @@ public class KakaoPayService {
 		paymentDao.insertPayment(paymentDto);
 		
 		//- 결제 상세 내역(payment_detail) - 목록 개수만큼 반복적으로 등록
-		for(PurchaseVO purchaseVO : vo.getPurchase()) {
+		for(PurchaseVO purchaseVO : list) {
 			ProductDto productDto = productDao.selectOne(purchaseVO.getNo());//상품정보 조회
 			
 			int paymentDetailNo = paymentDao.paymentDetailSequence();

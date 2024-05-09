@@ -1,4 +1,4 @@
-package com.kh.pheonix.Vo;
+package com.kh.pheonix.kakaoPayVO;
 
 import java.sql.Date;
 
