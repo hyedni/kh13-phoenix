@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.UserLoginVO;
+import com.kh.pheonix.dao.SocialUserDao;
 import com.kh.pheonix.dao.UserCertDao;
 import com.kh.pheonix.dao.UserDao;
+import com.kh.pheonix.dto.SocialUserDto;
 import com.kh.pheonix.dto.UserCertDto;
 import com.kh.pheonix.dto.UserDto;
 import com.kh.pheonix.service.EmailService;
@@ -37,13 +38,10 @@ public class UserRestController {
 	private EmailService emailService;
 	@Autowired
 	private UserCertDao userCertDao;
-	
-	//회원별 회원정보 검색
-	@GetMapping("/{userId}")
-	public UserDto complex(@PathVariable String userId) {
-		return userDao.selectOne(userId);
-	}
-	
+	@Autowired
+	private SocialUserDao socialUserDao;
+
+
 	//회원가입
 	@PostMapping("/join")
 	public ResponseEntity<String> join(@RequestBody UserDto userDto) {
@@ -136,13 +134,53 @@ public class UserRestController {
 		
 	}
 	
-//	@PostMapping("/socialLogins")
-//	public ResponseEntity<UserLoginVO> socialLogin(@RequestBody SocialLoginRequest socialLoginRequest){
-//		//토큰 받아 
-//		String socialToken = socialLoginRequest.getSocialToken();
-//		
-//		//사용자 정보
-//	}
+	
+	@GetMapping("/socialLogin")
+    public ResponseEntity<UserLoginVO> socialLogin(@RequestBody SocialUserDto socialUserDto){
+		System.out.print(socialUserDto);
+		
+		//회원한테 받은 socialEmail ==null이면 false
+		if(socialUserDto.getSocialEmail() == null) {
+			return ResponseEntity.status(401).build();
+		}
+		else {// !=null이면 판정 1. userEmail에 저장된건지
+			UserDto userDto = new UserDto(); // UserDto의 인스턴스를 생성
+			String userEmail = userDto.getUserEmail();
+			
+			boolean isValid = socialUserDto.getSocialEmail().equals(userEmail);
+			//2. userEmail에 저장됐으면 == 이미 가입된 회원
+			
+			if(!isValid) {//3. 저장된게 없으면 social에 저장된건지
+				//찾기
+				SocialUserDto emailFind = socialUserDao.selectOne(socialUserDto.getSocialEmail());
+				
+				//찾았는데 없어
+				if(emailFind != null) {
+					
+				socialUserDao.insert(socialUserDto);	
+				}
+				
+				//jwt토큰 발급
+				SocialUserDto findDto = socialUserDao.selectOne(socialUserDto.getSocialEmail());
+				
+				String accessToken = jwtService.createSocialAccessToken(findDto);
+				String refreashToken = jwtService.createSocialRefreshToken(findDto);
+				
+				return ResponseEntity.ok().body(UserLoginVO.builder()
+							.userId(findDto.getSocialEmail())
+							.userGrade(findDto.getSocialName())
+							.accessToken(accessToken)
+							.refreshToken(refreashToken)
+						.build());//200
+
+			}
+				
+		}
+		return null;
+	
+    }
+	
+	
 	
 	
 }
