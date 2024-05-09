@@ -44,6 +44,7 @@ public class ProductRestController {
 	@Autowired
 	private ImageService imageService;
 	
+	
 	//상품 전체 조회
 	@GetMapping("/")
 	public List<ProductDto> list() {
@@ -145,7 +146,6 @@ public class ProductRestController {
 		return productDao.selectOne(sequence);
 	}
 	
-	
 	//상품 수정
 	@PatchMapping("/")
 	public ResponseEntity<?> edit (@RequestBody ProductDto productDto) {
@@ -165,4 +165,8 @@ public class ProductRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+
+	
+	
+	
 }
