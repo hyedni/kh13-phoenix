@@ -44,6 +44,7 @@ public class ProductRestController {
 	@Autowired
 	private ImageService imageService;
 	
+	
 	//상품 전체 조회
 	@GetMapping("/")
 	public List<ProductDto> list() {
@@ -131,20 +132,19 @@ public class ProductRestController {
 
 	//상품 등록
 	@PostMapping("/")
-	public ProductDto insert(@ModelAttribute ProductDto productDto, @RequestParam("attach") MultipartFile attach) 
+	public ProductDto insert(@ModelAttribute ProductDto productDto
+			,@RequestParam(value = "attach", required = false) MultipartFile attach) 
 			throws IllegalStateException, IOException {
 		int sequence = productDao.sequence();
 		productDto.setProductNo(sequence);
 		productDao.insert(productDto);//상품 테이블에 데이터 삽입
-		
 		//이미지 정보 삽입
-		if(!attach.isEmpty()) {
+		if(attach != null && !attach.isEmpty()) {
 			int attachNo = attachService.save(attach);
 			productDao.connect(productDto.getProductNo(), attachNo);
 		}
 		return productDao.selectOne(sequence);
 	}
-	
 	
 	//상품 수정
 	@PatchMapping("/")
@@ -165,4 +165,8 @@ public class ProductRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+
+	
+	
+	
 }

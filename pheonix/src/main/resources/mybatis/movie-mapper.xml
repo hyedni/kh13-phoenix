@@ -22,6 +22,14 @@
 	</insert>
 
 	<select id="list" resultType="MovieDto">
+		select * from movie where movie_on = 'Y' order by movie_open_date asc
+	</select>
+	
+	<select id="onList" resultType="MovieDto">
+		select * from movie where movie_on = 'N' order by movie_open_date asc
+	</select>
+	
+	<select id="allList" resultType="MovieDto">
 		select * from movie order by movie_open_date asc
 	</select>
 
@@ -87,5 +95,9 @@
 	<select id="findAttach" resultType="int">
 		select attach_no from movie_attach where movie_no = #{movieNo}
 	</select>
+	
+	<update id="updateMovieOn">
+		update movie set movie_on = 'Y' where movie_open_date = #{movieOpenDate}
+	</update>
 
 </mapper>

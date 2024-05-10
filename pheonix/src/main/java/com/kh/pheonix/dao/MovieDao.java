@@ -27,6 +27,14 @@ public class MovieDao {
 		return sqlSession.selectList("movie.list");
 	}
 	
+	public List<MovieDto> onList() {
+		return sqlSession.selectList("movie.onList");
+	}
+	
+	public List<MovieDto> allList() {
+		return sqlSession.selectList("movie.allList");
+	}
+	
 	public MovieDto find (int movieNo) {
 		return sqlSession.selectOne("movie.find", movieNo);
 	}
@@ -48,6 +56,10 @@ public class MovieDao {
 	
 	public int findAttach (int movieNo) {
 		return sqlSession.selectOne("movie.findAttach", movieNo);
+	}
+	
+	public void updateMovieOn (String movieOpenDate) {
+		sqlSession.update("movie.updateMovieOn", movieOpenDate);
 	}
 }
 

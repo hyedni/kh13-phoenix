@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.pheonix.Vo.CartProductVO;
 import com.kh.pheonix.dto.CartDto;
 import com.kh.pheonix.dto.ProductDto;
+import com.kh.pheonix.dto.UserDto;
 
 @Repository
 public class CartDao {
@@ -46,6 +47,11 @@ public class CartDao {
 	//상품에 대한 정보 조회
 	public List<ProductDto> findProductInfo(int cartProductNo) {
 		return sqlSession.selectList("cart.productInfo", cartProductNo);
+	}
+	
+	//회원정보 검색
+	public UserDto selectOneUser(String userId) {
+		return sqlSession.selectOne("cart.findUser", userId);
 	}
 	
 	//상품 수량 업데이트

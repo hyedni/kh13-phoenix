@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="review">
+	
+	<select id="sequence" resultType="int">
+		select review_seq.nextval from dual
+	</select>
+	<insert id="insert">
+		insert into review (
+			review_no, review_content, review_writer, 
+			review_date, review_user_booking_no, review_reputation
+		) values (
+			#{reviewNo}, #{reviewContent}, #{reviewWriter}, 
+			#{reviewDate}, #{reviewUserBookingNo}, #{reviewReputation}
+		)
+	</insert>
+	
+	<!-- 영화에 따른 리뷰 목록 -->
+	<select id="reviewListByMovie" resultType="ReviewDto">
+		select review
+		from review
+		where 
+	</select>
+
+	<delete id="delete">
+		delete review where review_no = #{reviewNo}
+	</delete>
+</mapper>

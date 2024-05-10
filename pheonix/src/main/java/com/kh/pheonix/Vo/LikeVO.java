@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @AllArgsConstructor @NoArgsConstructor
-public class MovieListVo {
-
-	private String movieTitle;
-	private int movieNo;
-	private String movieAge;
+public class LikeVO { //리뷰 좋아요
+	private boolean state;
+	private int count;
 }

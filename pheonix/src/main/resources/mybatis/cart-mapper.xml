@@ -24,12 +24,14 @@
 		update cart
 		set cart_qty = cart_qty + #{cartQty}
 		where cart_product_no = #{cartProductNo}
+		and cart_user_id = #{cartUserId}
 	</update>
 	<!-- 장바구니에서 수량을 변경할 때 -->
 	<update id="qtyCartEdit">
 		update cart
 		set cart_qty = #{cartQty}
 		where cart_product_no = #{cartProductNo}
+		and cart_user_id = #{cartUserId}
 	</update>
 	
 	<!-- 데이터 조회 -->
@@ -58,6 +60,10 @@
 				and cart.CART_USER_ID = #{cartUserId}	
 	</select>
 	
+	<!-- 회원 정보 조회 -->
+	<select id="findUser" resultType="userDto">
+		select * from users where user_id = #{userId}
+	</select>
 	
 	<!-- 데이터 삭제 -->
 	<delete id="delete">
