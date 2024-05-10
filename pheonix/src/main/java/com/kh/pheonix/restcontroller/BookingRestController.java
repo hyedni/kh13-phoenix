@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.BookingListByDateVo;
 import com.kh.pheonix.Vo.BookingListVo;
+import com.kh.pheonix.Vo.BookingTheaterVo;
 import com.kh.pheonix.Vo.MovieListVo;
 import com.kh.pheonix.dao.BookingListDao;
 
@@ -48,14 +49,19 @@ public class BookingRestController {
 		return bookingListDao.theaterList(movieNo);
 	}
 	
-	@GetMapping("/cinema")
-	public List<BookingListVo> listByCinema (@RequestBody BookingListVo vo) {
-		return bookingListDao.listByCinema(vo.getMovieNo(), vo.getCinemaName());
+	@PostMapping("/count")
+	public int count (@RequestBody BookingListVo vo) {
+		return bookingListDao.count(vo.getMovieNo(), vo.getCinemaName());
 	}
 	
 	@PostMapping("/date")
 	public List<BookingListVo> listByDate (@RequestBody BookingListVo vo) {
 		return bookingListDao.listByDate(vo.getMovieNo(), vo.getCinemaName(), vo.getStartDate());
+	}
+	
+	@GetMapping("/theaterdistinct/{cinemaName}" )
+	public List<BookingTheaterVo> theaterDistinct (@PathVariable String cinemaName) {
+		return bookingListDao.theaterDistinct(cinemaName);
 	}
 
 }

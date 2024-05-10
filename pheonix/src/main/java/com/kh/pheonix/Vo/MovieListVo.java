@@ -10,4 +10,5 @@ public class MovieListVo {
 
 	private String movieTitle;
 	private int movieNo;
+	private String movieAge;
 }

@@ -31,6 +31,7 @@ public class ScheduleService {
 		LocalDate today = LocalDate.now();
         String formattedDate = today.format(DateTimeFormatter.ISO_LOCAL_DATE); // yyyy-MM-dd 형태로 포맷
 		movieDao.updateMovieOn(formattedDate);
+		System.out.println(formattedDate + "상영중 업뎃완료");
 	}
 	
 }
