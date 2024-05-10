@@ -11,7 +11,7 @@
 	</select>
 	<insert id="save">
 		 insert into write(write_no, personal_no, write_id, write_title, write_content)
-    values (write_seq.NEXTVAL, #{personalNo}, #{writeId}, #{writeTitle}, #{writeContent})
+    values (#{writeNo}, #{personalNo}, #{writeId}, #{writeTitle}, #{writeContent})
 	</insert>
 	
 <select id="list" resultType="writeDto">
@@ -39,6 +39,14 @@
     insert into write(write_no, personal_no, write_id, write_title, write_content)
     values (write_seq.NEXTVAL, #{personalNo}, #{writeId}, #{writeTitle}, #{writeContent})
 </insert>
+
+<!-- 1:1 문의게시판과 답글 정보(join) -->
+<select id="joinPersonalWrite" resultType="PersonalWriteVO">
+    select * from personal 
+    join write on personal.personal_no = write.personal_no
+    where personal.personal_id = 'personal_id'
+</select>
+
 
 
 
