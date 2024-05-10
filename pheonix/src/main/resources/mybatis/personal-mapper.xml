@@ -11,7 +11,7 @@
     
     <insert id="save">
         insert into personal(personal_no, personal_id, personal_title, personal_content)
-        values (personal_seq.NEXTVAL, #{personalId}, #{personalTitle}, #{personalContent})
+        values (#{personalNo}, #{personalId}, #{personalTitle}, #{personalContent})
     </insert>
     
     <select id="list" resultType="personalDto">

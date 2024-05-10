@@ -15,4 +15,6 @@ public class WriteDto {
 	private String writeDay;
 	private String writeEdit;
 	
+	
+	
 }
