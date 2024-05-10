@@ -93,5 +93,14 @@
 		where m.movie_no = #{movieNo}  
 		ORDER BY c.cinema_name ASC
 	</select>
+	
+	
+	
+	
+	
+	
+	<select id="seatTypes" resultType="SeatTypesDto">
+	SELECT * FROM seat_types WHERE theater_no = #{aaa}
+	</select>
 
 </mapper>
