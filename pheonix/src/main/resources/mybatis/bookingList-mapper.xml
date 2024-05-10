@@ -103,10 +103,21 @@
 		ORDER BY c.cinema_name ASC
 	</select>
 	
+
+	
+	
+	
+	
+	
+	<select id="seatTypes" resultType="SeatTypesDto">
+	SELECT * FROM seat_types WHERE theater_no = #{aaa}
+	</select>
+
 	<select id="theaterDistinct" resultType="BookingTheaterVo">
 		select t.theater_no, t.theater_name 
 		from theater t join cinema c on c.cinema_no = t.cinema_no 
 		where c.cinema_name = #{cinemaName}
+
 	</select>
 
 </mapper>
