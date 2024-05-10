@@ -12,9 +12,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.kh.pheonix.configuration.KakaoPayProperties;
+import com.kh.pheonix.dao.CartDao;
 import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
 import com.kh.pheonix.dto.PaymentDetailDto;
@@ -43,6 +43,8 @@ public class KakaoPayService {
 	private ProductDao productDao;
 	@Autowired
 	private PaymentDao paymentDao;
+	@Autowired
+	private CartDao cartDao;
 	
 	//준비요청 메소드(Ready)
 	public KakaoPayReadyResponseVO ready(KakaoPayReadyRequestVO requestVO) throws URISyntaxException {
@@ -129,6 +131,13 @@ public class KakaoPayService {
 					.build();
 			paymentDao.insertPaymentDetail(paymentDetailDto);//등록
 		}
+		
+		for (PurchaseVO purchaseVO : list) {
+			System.out.println(list);
+			System.out.println(purchaseVO.getNo());
+			System.out.println(responseVO.getPartnerUserId());
+	        cartDao.delete(purchaseVO.getNo(), responseVO.getPartnerUserId());
+	    }
 	}
 	
 	//주문조회(상세조회 메소드)

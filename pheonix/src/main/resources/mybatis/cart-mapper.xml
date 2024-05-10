@@ -24,12 +24,14 @@
 		update cart
 		set cart_qty = cart_qty + #{cartQty}
 		where cart_product_no = #{cartProductNo}
+		and cart_user_id = #{cartUserId}
 	</update>
 	<!-- 장바구니에서 수량을 변경할 때 -->
 	<update id="qtyCartEdit">
 		update cart
 		set cart_qty = #{cartQty}
 		where cart_product_no = #{cartProductNo}
+		and cart_user_id = #{cartUserId}
 	</update>
 	
 	<!-- 데이터 조회 -->

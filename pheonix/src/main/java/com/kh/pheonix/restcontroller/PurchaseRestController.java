@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.UserLoginVO;
+import com.kh.pheonix.dao.CartDao;
 import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
-import com.kh.pheonix.dao.PurchaseDao;
 import com.kh.pheonix.dto.ProductDto;
-import com.kh.pheonix.dto.PurchaseDto;
 import com.kh.pheonix.kakaoPayVO.FlashInfoRequestVO;
 import com.kh.pheonix.kakaoPayVO.FlashInfoVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayApproveRequestVO;
@@ -49,7 +48,8 @@ public class PurchaseRestController {
 	private JwtService jwtService;
 	
 	@Autowired
-	private PurchaseDao purchaseDao;
+	private CartDao cartDao;
+	
 
 ///////////////구매(QR 화면 띄우기 및 정보 전달)
 	@PostMapping("/")
@@ -123,7 +123,14 @@ public class PurchaseRestController {
 
 		//DB에 결제 완료된 내역을 저장(모듈화)
 		kakaoPayService.insertPayment(list, responseVO);
-
+		
+		//장바구니에 담긴 내역 삭제
+		//flashInfoRequestVO.getCartPartnerUserId()랑 list.getNo()로 검색해서 삭제
+//		for (PurchaseVO purchaseVO : list) {
+//	        cartDao.delete(purchaseVO.getNo(), flashInfoRequestVO.getCartPartnerUserId());
+//	    }
+		
+		
 		return true;
 	}
 }

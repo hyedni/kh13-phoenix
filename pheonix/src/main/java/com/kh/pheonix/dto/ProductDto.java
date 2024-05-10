@@ -14,6 +14,7 @@ public class ProductDto {
 	private Integer productPrice; //상품가격
 	private String productOrigin; //원산지
 	private Integer productDiscount; //할인율
+//	private MultipartFile attach;
 	
 	private String productImgLink; //이미지 링크를 위한 변수
 }
