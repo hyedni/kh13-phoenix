@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="comments">
+    
+    <select id="sequence" resultType="int">
+        select comments_seq.nextval from dual
+    </select>
+    
+    <insert id="save">
+        insert into comments(comments_id, personal_no, comments_content, comments_writer)
+        values (#{commentsId}, #{personalNo}, #{commentsContent}, #{commentsWriter})
+    </insert>
+    
+    <select id="list" resultType="commentsDto">
+        select * from comments order by comments_id asc
+    </select>
+    
+    <select id="find" resultType="commentsDto">
+        select * from comments where comments_id = #{commentsId}
+    </select>
+    
+    <update id ="edit">
+        update comments
+            set
+                commnets_content = #{commentsContent},
+                comments_writer = #{commentsWriter},
+            where comments_id =  #{commentsId}
+    </update>
+
+    <delete id="delete">
+        delete comments where comments_id = #{commentsId}
+    </delete>
+    
+    
+</mapper>
