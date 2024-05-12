@@ -50,18 +50,17 @@ public class BookingRestController {
 	public List<String> listByMovie (@PathVariable int movieNo) {
 		return bookingListDao.theaterList(movieNo);
 	}
-	
-	@PostMapping("/count")
-	public int count (@RequestBody BookingListVo vo) {
-		return bookingListDao.count(vo.getMovieNo(), vo.getCinemaName());
-	}
-	
+		
 	@PostMapping("/date")
 	public List<BookingListVo> listByDate (@RequestBody BookingListVo vo) {
 		return bookingListDao.listByDate(vo.getMovieNo(), vo.getCinemaName(), vo.getStartDate());
 	}
 	
-
+	@GetMapping("/detail/{scheduleNo}")
+	public BookingListVo scheduleDetail (@PathVariable int scheduleNo) {
+		return bookingListDao.scheduleDetail(scheduleNo);
+	}
+	
 	//김민구 임시사용
 	@GetMapping("/seatReservationStatus/{movieScheduleNo}")
 	public List<SeatTypesDto> asd(@PathVariable int movieScheduleNo){

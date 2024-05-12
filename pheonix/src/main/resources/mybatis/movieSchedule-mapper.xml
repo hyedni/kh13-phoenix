@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="movieSchedule">
+
+	<select id="list" resultType="MovieScheduleVo">
+		<include refid="top-n-header"></include>
+		select
+		m.movie_no, m.movie_title, m.MOVIE_RUNNING_TIME, m.MOVIE_OPEN_DATE ,
+		m.MOVIE_CLOSE_DATE ,
+		m.MOVIE_AGE ,m.MOVIE_ON, m.MOVIE_SCREEN_TYPE,
+		ms.MOVIE_SCHEDULE_NO ,ms.START_DATE , ms.END_DATE , ms.START_TIME , ms.END_TIME ,
+		ms.REMAINING_SEATS , ms.MOVIE_SCHEDULE_DATE_DISC ,
+		ms.MOVIE_SCHEDULE_TIME_DISC ,
+		c.CINEMA_NAME, c.CINEMA_NO ,
+		t.THEATER_NO , t.THEATER_NAME , t.THEATER_TOTAL_SEATS
+		from movie_schedule ms
+		join
+		theater t on ms.theater_no = t.theater_no join cinema c on
+		t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
+		<where>
+			<if test="cinemaName != null">
+				and instr(cinema_name, #{cinemaName}) > 0
+			</if>
+			<if test="movieTitle != null">
+				and instr(movie_title, #{movieTitle}) > 0
+			</if>
+			<if test="startDate != null">
+				and instr(start_date, #{startDate}) > 0
+			</if>
+		</where>
+		order by
+		c.cinema_name asc , m.MOVIE_OPEN_DATE asc, ms.MOVIE_SCHEDULE_NO asc
+	 <include refid="top-n-footer"></include>
+	</select>
+	
+	<select id="movieList" resultType="map">
+		select movie_title, MOVIE_NO  from movie where movie_on = 'Y' order by movie_title asc
+	</select>
+	
+	<select id="cinemaList" resultType="map">
+		select cinema_name, cinema_no from cinema order by cinema_name asc
+	</select>
+	
+	<select id="theaterList" resultType="map">
+		select theater_name, theater_no from theater where cinema_no = #{cinemaNo}
+		order by theater_name asc 
+	</select>
+	
+	<select id="seats" resultType="int">
+		select theater_total_seats from theater where theater_no = #{theaterNo}
+	</select>
+	
+	
+
+	<!-- 상단 -->
+	<sql id="top-n-header">
+		<if test="beginRow !=null and endRow !=null">
+			select * from (
+			select rownum rn, TMP.* from (
+		</if>
+	</sql>
+
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+		<if test="beginRow !=null and endRow !=null">
+			)TMP
+			) where rn between #{beginRow} and #{endRow}
+		</if>
+	</sql>
+
+
+</mapper>

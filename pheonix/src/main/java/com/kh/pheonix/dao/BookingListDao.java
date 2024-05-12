@@ -50,6 +50,10 @@ public class BookingListDao {
 	public List<String> theaterList (int movieNo) {
 		return sqlSession.selectList("bookingList.theaterList", movieNo);
 	}
+	
+	public BookingListVo scheduleDetail (int scheduleNo) {
+		return sqlSession.selectOne("bookingList.scheduleDetail", scheduleNo);
+	}
 
 	//김민구 임시사용
 	public List<SeatTypesDto> seatTypes(int aaa) {
