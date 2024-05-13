@@ -14,4 +14,6 @@ public class CommentsDto {
 	private String commentsContent;
 	private String commentsWriter;
 	private String commentsWritten;
+
+	
 }
