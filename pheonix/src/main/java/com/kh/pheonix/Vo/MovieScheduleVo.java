@@ -30,7 +30,7 @@ public class MovieScheduleVo {
 	private String theaterName;
 	private int theaterTotalSeats;
 	private int page = 1;
-	private int size = 5;
+	private int size = 10;
 	
 	public int getBeginRow() {
 		return page * size - (size - 1);

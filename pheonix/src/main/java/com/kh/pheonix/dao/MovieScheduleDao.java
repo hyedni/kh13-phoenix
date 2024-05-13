@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.pheonix.Vo.MovieScheduleVo;
+import com.kh.pheonix.dto.MovieScheduleDto;
 
 @Repository
 public class MovieScheduleDao {
@@ -34,7 +35,33 @@ public class MovieScheduleDao {
 	public int seats (int theaterNo) {
 		return sqlSession.selectOne("movieSchedule.seats", theaterNo);
 	}
-
 	
+	public int seq () {
+		return sqlSession.selectOne("movieSchedule.seq");
+	}
+	
+	public void insert (MovieScheduleDto dto) {
+		sqlSession.insert("movieSchedule.insert", dto);
+	}
+	
+	public int getRunningTime (int movieNo) {
+		return sqlSession.selectOne("movieSchedule.getRunningTime", movieNo);
+	}
+	
+	public boolean delete (int movieScheduleNo) {
+		return sqlSession.delete("movieSchedule.delete", movieScheduleNo) > 0;
+	}
+	
+	public boolean edit (MovieScheduleDto dto) {
+		return sqlSession.update("movieSchedule.edit", dto) > 0;
+	}
+	
+	public MovieScheduleDto find (int movieScheduleNo) {
+		return sqlSession.selectOne("movieSchedule.find", movieScheduleNo);
+	}
+	
+	public MovieScheduleVo scheduleFind (int movieScheduleNo) {
+		return sqlSession.selectOne("movieSchedule.scheduleFind", movieScheduleNo);
+	}
 	
 }
