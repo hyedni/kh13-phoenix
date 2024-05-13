@@ -12,20 +12,31 @@
 	<insert id="insert">
 		insert into review (
 			review_no, review_content, review_writer, 
-			review_date, review_user_booking_no, review_reputation
+			review_date, user_booking_no, review_reputation
 		) values (
 			#{reviewNo}, #{reviewContent}, #{reviewWriter}, 
-			#{reviewDate}, #{reviewUserBookingNo}, #{reviewReputation}
+			#{reviewDate}, #{userBookingNo}, #{reviewReputation}
 		)
 	</insert>
 	
-	<!-- 영화에 따른 리뷰 목록 -->
-	<select id="reviewListByMovie" resultType="ReviewDto">
-		select review
-		from review
-		where 
+	<!-- 리뷰 작성여부 검색 -->
+	<select id="findReview" resultType="ReviewDto">
+		select * from review
+		where user_booking_no = #{userBookinNo}
+	</select>
+	
+	<!-- 영화에 따른 리뷰 목록 + 회원 정보 -->
+	<select id="reviewListByMovie" resultType="UserReviewVO">
+		SELECT r.*, u.* 
+		FROM review r
+		LEFT OUTER JOIN USER_BOOKING ub ON ub.USER_BOOKING_NO = r.USER_BOOKING_NO
+		LEFT OUTER JOIN MOVIE_SCHEDULE ms ON ms.MOVIE_SCHEDULE_NO = ub.MOVIE_SEHCEDULE_NO
+		LEFT OUTER JOIN users u ON r.REVIEW_WRITER = u.USER_ID
+		LEFT OUTER JOIN movie m ON ms.movie_no = m.movie_no
+		where ms.MOVIE_NO = #{movieNo}
 	</select>
 
+	<!-- 삭제 -->
 	<delete id="delete">
 		delete review where review_no = #{reviewNo}
 	</delete>
