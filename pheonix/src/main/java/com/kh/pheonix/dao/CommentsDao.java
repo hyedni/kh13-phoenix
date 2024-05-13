@@ -14,13 +14,14 @@ public class CommentsDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public int sequence () {
-		return sqlSession.selectOne("comments.sequence");
+	public int sequence() {
+	    return sqlSession.selectOne("comments.sequence");
 	}
+
 	
-	//조회
-	public List<CommentsDto> selectList() {
-		return sqlSession.selectList("comments.list");
+	// 조회
+	public List<CommentsDto> selectList(int personalNo) {
+	    return sqlSession.selectList("comments.selectList", personalNo);
 	}
 	
 	//등록
@@ -36,5 +37,8 @@ public class CommentsDao {
 	public boolean delete(int commentsId) {
 		return sqlSession.delete("comments.delete", commentsId) > 0;
 	}
-	}
+}
+
+
+	
 
