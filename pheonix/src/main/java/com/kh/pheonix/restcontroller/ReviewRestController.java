@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.pheonix.Vo.UserReviewVO;
 import com.kh.pheonix.dao.ReviewDao;
 import com.kh.pheonix.dto.ReviewDto;
+import com.kh.pheonix.service.ImageService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -25,6 +26,9 @@ public class ReviewRestController {
 	
 	@Autowired
 	private ReviewDao reviewDao;
+	
+	@Autowired
+	private ImageService imageService;
 	
 	//리뷰등록
 	@PostMapping("/")
@@ -42,7 +46,10 @@ public class ReviewRestController {
 	//영화별 리뷰 및 회원 정보
 	@GetMapping("/{movieNo}")
 	public List<UserReviewVO> reviewListByMovie(@PathVariable int movieNo) {
-		return reviewDao.listByMovie(movieNo);
+		List<UserReviewVO> list = reviewDao.listByMovie(movieNo);
+//		List<UserReviewVO> imageSetUpList = imageService.userReviewPhotoUrlSetUp(list);
+//		return imageSetUpList;
+		return list;
 	}
 	
 	//리뷰 삭제
