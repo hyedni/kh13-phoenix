@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.pheonix.Vo.CartProductVO;
+import com.kh.pheonix.Vo.UserReviewVO;
 import com.kh.pheonix.dao.LostDao;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dao.ProductDao;
@@ -145,4 +146,17 @@ public class ImageService {
 		dto.setLostImgLink(lostImgLink);
 		return dto;
 	}
+	
+	
+	//리뷰 게시판
+	//회원 프로필 뽑기 (유정이 코드 들어오면 추가 수정)
+//	public List<UserReviewVO> userReviewPhotoUrlSetUp(List<UserReviewVO> userReviewVO) {
+//		List<UserReviewVO> list = userReviewVO;
+//		
+//		for (UserReviewVO vo : list) {
+//			String userReviewImgLink = getUserImgLink(vo.getUserId());
+//			vo.setUserImgLink(userReviewImgLink);
+//		}
+//		return list;
+//	}
 }
