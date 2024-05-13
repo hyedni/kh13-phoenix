@@ -52,11 +52,11 @@
 		delete review_like where user_id = #{userId} and review_no = #{reviewNo}
 	</delete>
 	<!-- 좋아요 여부 확인 -->
-	<select id="likeCheck">
+	<select id="likeCheck" resultType="int">
 		select count(*) from review_like where user_id = #{userId} and review_no = #{reviewNo}
 	</select>
 	<!-- 특정 리뷰에 대한 좋아요 개수 확인 -->
-	<select id="likeCount">
+	<select id="likeCount" resultType="int">
 		select count(*) from review_like where review_no = #{reviewNo}
 	</select>
 	

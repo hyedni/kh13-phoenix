@@ -1,6 +1,7 @@
 package com.kh.pheonix.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -34,8 +35,11 @@ public class ReviewLikeDao {
 		Map<String, Object> data = new HashMap<>();
 		data.put("userId", userId);
 		data.put("reviewNo", reviewNo);
-		return sqlSession.selectOne("review.likeCheck", data);
+		int isValid = sqlSession.selectOne("review.likeCheck", data);
+		if(isValid >= 1) return true;
+		return false;
 	}
+	
 	
 	//특정 리뷰의 좋아요 개수 확인
 	public int count(int reviewNo) {

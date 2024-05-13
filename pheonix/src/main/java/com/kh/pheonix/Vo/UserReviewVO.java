@@ -20,4 +20,7 @@ public class UserReviewVO {
 	private String userNick;
 	
 	private String userImgLink;
+	
+	private boolean state;
+	private int count;
 }

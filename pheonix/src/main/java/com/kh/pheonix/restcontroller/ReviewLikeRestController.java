@@ -19,16 +19,9 @@ public class ReviewLikeRestController {
 	
 	@Autowired
 	private ReviewLikeDao reviewLikeDao;
+		
 	
 	@GetMapping("/")
-	public LikeVO check (@RequestBody LikeInfoVO info) {
-		LikeVO likeVO = new LikeVO();
-		likeVO.setState(reviewLikeDao.check(info.getUserId(), info.getReviewNo()));
-		likeVO.setCount(reviewLikeDao.count(info.getReviewNo()));
-		return likeVO;
-	}
-	
-	@GetMapping("/toggle")
 	public LikeVO toggle(@RequestBody LikeInfoVO info) {
 		LikeVO likeVO = new LikeVO();
 		

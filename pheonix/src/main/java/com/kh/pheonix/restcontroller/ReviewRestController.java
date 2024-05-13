@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.UserReviewVO;
 import com.kh.pheonix.dao.ReviewDao;
+import com.kh.pheonix.dao.ReviewLikeDao;
 import com.kh.pheonix.dto.ReviewDto;
 import com.kh.pheonix.service.ImageService;
+import com.kh.pheonix.service.LikeService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -28,7 +30,13 @@ public class ReviewRestController {
 	private ReviewDao reviewDao;
 	
 	@Autowired
+	private ReviewLikeDao reviewLikeDao;
+	
+	@Autowired
 	private ImageService imageService;
+	
+	@Autowired
+	private LikeService likeService;
 	
 	//리뷰등록
 	@PostMapping("/")
@@ -49,7 +57,9 @@ public class ReviewRestController {
 		List<UserReviewVO> list = reviewDao.listByMovie(movieNo);
 //		List<UserReviewVO> imageSetUpList = imageService.userReviewPhotoUrlSetUp(list);
 //		return imageSetUpList;
-		return list;
+		
+		List<UserReviewVO> fin = likeService.check(list);
+		return fin;
 	}
 	
 	//리뷰 삭제
