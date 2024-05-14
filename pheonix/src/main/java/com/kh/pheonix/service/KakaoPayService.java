@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,6 +19,7 @@ import com.kh.pheonix.configuration.KakaoPayProperties;
 import com.kh.pheonix.dao.CartDao;
 import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
+import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.PaymentDetailDto;
 import com.kh.pheonix.dto.PaymentDto;
 import com.kh.pheonix.dto.ProductDto;
@@ -45,6 +48,8 @@ public class KakaoPayService {
 	private PaymentDao paymentDao;
 	@Autowired
 	private CartDao cartDao;
+	@Autowired
+	private UserDao userDao;
 	
 	//준비요청 메소드(Ready)
 	public KakaoPayReadyResponseVO ready(KakaoPayReadyRequestVO requestVO) throws URISyntaxException {
@@ -132,12 +137,22 @@ public class KakaoPayService {
 			paymentDao.insertPaymentDetail(paymentDetailDto);//등록
 		}
 		
+		//장바구니 비우기 및 포인트인 경우 충전
+		Pattern pattern = Pattern.compile("\\d+");
 		for (PurchaseVO purchaseVO : list) {
-			System.out.println(list);
-			System.out.println(purchaseVO.getNo());
-			System.out.println(responseVO.getPartnerUserId());
+			ProductDto productDto = productDao.selectOne(purchaseVO.getNo());//상품정보 조회
+			if(productDto.getProductType().equals("포인트")) {
+				Matcher matcher = pattern.matcher(productDto.getProductContent());
+				int number = 0;
+				while (matcher.find()) {
+					String numberStr = matcher.group(); // 매칭된 숫자 문자열
+		            number = Integer.parseInt(numberStr); // 문자열을 정수로 변환
+		        }
+				userDao.editPoint(number, responseVO.getPartnerUserId());
+			}
 	        cartDao.delete(purchaseVO.getNo(), responseVO.getPartnerUserId());
 	    }
+		
 	}
 	
 	//단건 처리
@@ -172,11 +187,18 @@ public class KakaoPayService {
 				.build();
 		paymentDao.insertPaymentDetail(paymentDetailDto);//등록
 	
-		
-		System.out.println(list);
-		System.out.println(list.getNo());
-		System.out.println(responseVO.getPartnerUserId());
-        cartDao.delete(list.getNo(), responseVO.getPartnerUserId());
+		//장바구니 비우기 및 포인트인 경우 충전
+		Pattern pattern = Pattern.compile("\\d+");
+		if(productDto.getProductType().equals("포인트")) {
+			Matcher matcher = pattern.matcher(productDto.getProductContent());
+			int number = 0;
+			while (matcher.find()) {
+				String numberStr = matcher.group(); // 매칭된 숫자 문자열
+	            number = Integer.parseInt(numberStr); // 문자열을 정수로 변환
+	        }
+			userDao.editPoint(number, responseVO.getPartnerUserId());
+		}
+	    
 	}
 	
 	//주문조회(상세조회 메소드)

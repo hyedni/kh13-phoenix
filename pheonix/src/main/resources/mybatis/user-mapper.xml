@@ -26,6 +26,13 @@
 		</set>
 		where user_id = #{userId}
 	</update>
+	
+	<!-- 포인트 충전 -->
+	<update id="editPoint">
+		update users
+		set user_point = user_point + #{userPoint}
+		where user_id = #{userId}
+	</update>
 
 	<!-- 삭제 -->
 	<delete id="delete">
