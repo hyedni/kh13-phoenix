@@ -167,6 +167,17 @@ public class ImageService {
 			findDto.setUserImgLink(userImgLink);
 			return findDto;
 		}
-	
+		
+		//리뷰 게시판
+		//회원 프로필 뽑기 (유정이 코드 들어오면 추가 수정)
+//		public List<UserReviewVO> userReviewPhotoUrlSetUp(List<UserReviewVO> userReviewVO) {
+//			List<UserReviewVO> list = userReviewVO;
+//			
+//			for (UserReviewVO vo : list) {
+//				String userReviewImgLink = getUserImgLink(vo.getUserId());
+//				vo.setUserImgLink(userReviewImgLink);
+//			}
+//			return list;
+//		}
 	
 }
