@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.pheonix.Vo.UserLoginVO;
+import com.kh.pheonix.dao.NonUserAuthorizationDao;
 import com.kh.pheonix.dao.NonUserCertDao;
 import com.kh.pheonix.dao.NonUserDao;
 import com.kh.pheonix.dao.SocialUserDao;
 import com.kh.pheonix.dao.UserCertDao;
 import com.kh.pheonix.dao.UserDao;
+import com.kh.pheonix.dto.NonUserAuthorizationDto;
 import com.kh.pheonix.dto.NonUserCertDto;
 import com.kh.pheonix.dto.NonUserDto;
 import com.kh.pheonix.dto.UserCertDto;
@@ -30,6 +32,7 @@ import com.kh.pheonix.service.AttachService;
 import com.kh.pheonix.service.EmailService;
 import com.kh.pheonix.service.ImageService;
 import com.kh.pheonix.service.JwtService;
+import com.kh.pheonix.service.NonUserTokenService;
 import com.kh.pheonix.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -183,15 +186,45 @@ public class UserRestController {
 	private NonUserDao nonUserDao;
 	@Autowired
 	private NonUserCertDao nonUserCertDao;
+	@Autowired
+    private NonUserTokenService tokenService;
+	@Autowired
+	private NonUserAuthorizationDao nonUserAuthorizationDao;
 	
 	@PostMapping("/nonUserJoin")
 	public ResponseEntity<String> nonUserJoin(@RequestBody NonUserDto nonUserDto) {
-	    // 비회원 정보 저장
+		// 비회원 정보 저장
 	    nonUserDao.insert(nonUserDto);
-	    nonUserDao.selectOne(nonUserDto.getNonUserEmail());
-	     
+		
+	    //토큰 생성
+	    String token = tokenService.generateRandomToken(); // 랜덤 토큰 생성
+	    NonUserAuthorizationDto nonUserAuthorizationDto = new NonUserAuthorizationDto();
+		nonUserAuthorizationDto.setToken(token);
+		nonUserAuthorizationDto.setNonUserId(nonUserDto.getNonUserEmail()); // 생성된 non_user_id 설정
+		System.out.print("의심병 = " + nonUserAuthorizationDto);
+		nonUserAuthorizationDao.insert(nonUserAuthorizationDto);
+
 	    return ResponseEntity.ok("비회원 정보가 저장되었습니다.");
 	    
+	}
+	
+	@PostMapping("/verifyToken")
+	public ResponseEntity<String> verifyToken(@RequestBody NonUserAuthorizationDto nonUserAuthorizationDto) {
+	    // NonUserAuthorizationDto에 저장된 나의 email이 있는지
+	    NonUserAuthorizationDto check = nonUserAuthorizationDao.selectOne(nonUserAuthorizationDto.getNonUserId());
+	    System.out.print("의심병2 = " + check.getNonUserId());
+	    
+	    
+	    // 비회원 정보 조회
+        NonUserDto nonUserDto = nonUserDao.selectOne(check.getNonUserId());
+        
+	    System.out.print("의심병3 = " + nonUserDto.getNonUserEmail());
+	    // 비회원 이메일과 저장된 이메일이 일치하는지 확인
+	    if (check != null && check.getNonUserId().equals(nonUserDto.getNonUserEmail())) {
+	        return ResponseEntity.ok("성공");
+	    } else {
+	        return ResponseEntity.status(401).body("실패");
+	    }
 	}
 	
 	@PostMapping("/nonUserSend")
