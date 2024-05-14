@@ -25,7 +25,6 @@
 	</select>
 
 	<select id="list" resultType="MovieScheduleVo">
-		<include refid="top-n-header"></include>
 		select
 		m.movie_no, m.movie_title, m.MOVIE_RUNNING_TIME, m.MOVIE_OPEN_DATE ,
 		m.MOVIE_CLOSE_DATE ,
@@ -52,7 +51,6 @@
 		</where>
 		order by
 		c.cinema_name asc , m.MOVIE_OPEN_DATE asc, ms.MOVIE_SCHEDULE_NO asc
-	 <include refid="top-n-footer"></include>
 	</select>
 	
 	<select id="movieList" resultType="map">

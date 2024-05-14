@@ -31,6 +31,9 @@ public class MovieScheduleVo {
 	private int theaterTotalSeats;
 	private int page = 1;
 	private int size = 10;
+	private int beginRow;
+	private int endRow;
+	
 	
 	public int getBeginRow() {
 		return page * size - (size - 1);
