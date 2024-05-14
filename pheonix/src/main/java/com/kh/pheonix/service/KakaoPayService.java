@@ -140,6 +140,45 @@ public class KakaoPayService {
 	    }
 	}
 	
+	//단건 처리
+	@Transactional
+	public void insertOnePayment(PurchaseVO list,
+						KakaoPayApproveResponseVO responseVO) {
+		//DB에 결제 완료된 내역을 저장
+		//- 결제 대표 정보(payment) = 번호생성 후 등록
+		int paymentNo = paymentDao.paymentSequence();//번호생성
+		PaymentDto paymentDto = PaymentDto.builder()
+					.paymentNo(paymentNo)//시퀀스
+					.paymentName(responseVO.getItemName())//대표결제명
+					.paymentTotal(responseVO.getAmount().getTotal())//결제총금액
+					.paymentRemain(responseVO.getAmount().getTotal())//잔여금액 - 결제총금액과 동일(첫 구매엔 취소가 없음.)
+					.memberId(responseVO.getPartnerUserId())//구매자ID
+					.paymentTid(responseVO.getTid())//거래번호
+				.build();
+		paymentDao.insertPayment(paymentDto);
+		
+		//- 결제 상세 내역(payment_detail) - 목록 개수만큼 반복적으로 등록
+		ProductDto productDto = productDao.selectOne(list.getNo());//상품정보 조회
+		
+		int paymentDetailNo = paymentDao.paymentDetailSequence();
+		PaymentDetailDto paymentDetailDto = PaymentDetailDto.builder()
+					.paymentDetailNo(paymentDetailNo)//시퀀스
+					.paymentDetailProduct(productDto.getProductNo())//상품번호
+					.paymentDetailQty(list.getQty())//수량
+					.paymentDetailName(productDto.getProductName())//상품명
+					.paymentDetailPrice(productDto.getProductPrice())//상품가격
+					.paymentDetailStatus("승인")//결제상태
+					.paymentNo(paymentNo)//결제대표번호
+				.build();
+		paymentDao.insertPaymentDetail(paymentDetailDto);//등록
+	
+		
+		System.out.println(list);
+		System.out.println(list.getNo());
+		System.out.println(responseVO.getPartnerUserId());
+        cartDao.delete(list.getNo(), responseVO.getPartnerUserId());
+	}
+	
 	//주문조회(상세조회 메소드)
 	public KakaoPayOrderResponseVO order(KakaoPayOrderRequestVO requestVO) throws URISyntaxException {
 		URI uri = new URI("https://open-api.kakaopay.com/online/v1/payment/order");//조회요청주소

@@ -17,6 +17,8 @@ import com.kh.pheonix.dao.ProductDao;
 import com.kh.pheonix.dto.ProductDto;
 import com.kh.pheonix.kakaoPayVO.FlashInfoRequestVO;
 import com.kh.pheonix.kakaoPayVO.FlashInfoVO;
+import com.kh.pheonix.kakaoPayVO.FlashOneInfoRequestVO;
+import com.kh.pheonix.kakaoPayVO.FlashOneInfoVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayApproveRequestVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayApproveResponseVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayReadyRequestVO;
@@ -96,6 +98,50 @@ public class PurchaseRestController {
 		return flashInfoVO;//원래 flash Attribute에 담는 정보를 프론트로 반환해줌.
 	}
 
+	
+	//단건 구매
+	@PostMapping("/one")
+	public FlashOneInfoVO purchase(@RequestBody PurchaseVO list, @RequestHeader("Authorization") String refreshToken)
+			throws URISyntaxException {
+		UserLoginVO loginVO = jwtService.parse(refreshToken);
+
+		log.debug("size = {}", list);
+		log.debug("list = {}", list);
+		//vo의 purchase 목록을 이용하여 결제 정보를 생성하는 코드
+		StringBuffer itemName = new StringBuffer();
+		int totalAmount = 0;
+
+			ProductDto productDto = productDao.selectOne(list.getNo());// 상품정보 조회
+
+				itemName.append(productDto.getProductName());// 이름(한 번만, i==0)
+		
+			totalAmount += (productDto.getProductPrice() 
+					- Math.ceil( productDto.getProductPrice() * productDto.getProductDiscount() / 100) 
+					) * list.getQty(); // total += 이 상품에 대한 구매 금액(가격*수량)
+			
+
+		log.debug("결제 이름 = {}", itemName);
+		log.debug("결제금액 = {}", totalAmount);
+
+		//결제 준비 요청 - KakaoPayReadyRequestVO, kakaoPayReadyResponseVO
+		KakaoPayReadyRequestVO requestVO = KakaoPayReadyRequestVO.builder()
+					.partnerOrderId(UUID.randomUUID().toString())
+					.partnerUserId(loginVO.getUserId())
+					.itemName(itemName.toString())
+					.totalAmount(totalAmount)
+				.build();
+		KakaoPayReadyResponseVO responseVO = kakaoPayService.ready(requestVO);
+
+		//flash Attribute 정보..
+		FlashOneInfoVO flashOneInfoVO = new FlashOneInfoVO();
+		flashOneInfoVO.setNextRedirectPcUrl(responseVO.getNextRedirectPcUrl());
+		flashOneInfoVO.setPartnerOrderId(requestVO.getPartnerOrderId());
+		flashOneInfoVO.setPartnerUserId(requestVO.getPartnerUserId());
+		flashOneInfoVO.setTid(responseVO.getTid());
+		flashOneInfoVO.setVo(list);
+
+		return flashOneInfoVO;//원래 flash Attribute에 담는 정보를 프론트로 반환해줌.
+	}
 		
 	@PostMapping("/success")
 	public boolean success(@RequestBody FlashInfoRequestVO flashInfoRequestVO) throws URISyntaxException {
@@ -115,6 +161,36 @@ public class PurchaseRestController {
 
 		//DB에 결제 완료된 내역을 저장(모듈화)
 		kakaoPayService.insertPayment(list, responseVO);
+		
+		//장바구니에 담긴 내역 삭제
+		//flashInfoRequestVO.getCartPartnerUserId()랑 list.getNo()로 검색해서 삭제
+//		for (PurchaseVO purchaseVO : list) {
+//	        cartDao.delete(purchaseVO.getNo(), flashInfoRequestVO.getCartPartnerUserId());
+//	    }
+		
+		
+		return true;
+	}
+	
+	//단건 구매 승인
+	@PostMapping("/success/one")
+	public boolean successOne(@RequestBody FlashOneInfoRequestVO flashOneInfoRequestVO) throws URISyntaxException {
+		
+		KakaoPayApproveRequestVO requestVO = 
+				KakaoPayApproveRequestVO.builder()
+					.partnerOrderId(flashOneInfoRequestVO.getCartPartnerOrderId())
+					.partnerUserId(flashOneInfoRequestVO.getCartPartnerUserId())
+					.tid(flashOneInfoRequestVO.getCartTid())
+					.pgToken(flashOneInfoRequestVO.getPgToken())
+				.build();
+
+		KakaoPayApproveResponseVO responseVO = kakaoPayService.approve(requestVO);
+		
+		//세션에 전송된 vo(구매목록)을 꺼내서 DB에 저장할 때 활용
+		PurchaseVO list = flashOneInfoRequestVO.getPurchaseList();
+
+		//DB에 결제 완료된 내역을 저장(모듈화)
+		kakaoPayService.insertOnePayment(list, responseVO);
 		
 		//장바구니에 담긴 내역 삭제
 		//flashInfoRequestVO.getCartPartnerUserId()랑 list.getNo()로 검색해서 삭제
