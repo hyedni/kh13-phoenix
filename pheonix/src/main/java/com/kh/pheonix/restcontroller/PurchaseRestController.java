@@ -24,6 +24,7 @@ import com.kh.pheonix.kakaoPayVO.KakaoPayApproveRequestVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayApproveResponseVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayReadyRequestVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayReadyResponseVO;
+import com.kh.pheonix.kakaoPayVO.PurchaseOnePointVO;
 import com.kh.pheonix.kakaoPayVO.PurchasePointVO;
 import com.kh.pheonix.kakaoPayVO.PurchaseVO;
 import com.kh.pheonix.service.JwtService;
@@ -57,8 +58,6 @@ public class PurchaseRestController {
 		UserLoginVO loginVO = jwtService.parse(refreshToken);
 
 		List<PurchaseVO> list = purchasePointVO.getVo();
-		log.debug("size = {}", list.size());
-		log.debug("list = {}", list);
 		//vo의 purchase 목록을 이용하여 결제 정보를 생성하는 코드
 		StringBuffer itemName = new StringBuffer();
 		int totalAmount = 0;
@@ -110,27 +109,26 @@ public class PurchaseRestController {
 	
 	//단건 구매
 	@PostMapping("/one")
-	public FlashOneInfoVO purchase(@RequestBody PurchaseVO list, @RequestHeader("Authorization") String refreshToken)
+	public FlashOneInfoVO purchase(@RequestBody PurchaseOnePointVO vo, @RequestHeader("Authorization") String refreshToken)
 			throws URISyntaxException {
 		UserLoginVO loginVO = jwtService.parse(refreshToken);
 
-		log.debug("size = {}", list);
-		log.debug("list = {}", list);
+		PurchaseVO list = vo.getVo();
+		
 		//vo의 purchase 목록을 이용하여 결제 정보를 생성하는 코드
 		StringBuffer itemName = new StringBuffer();
 		int totalAmount = 0;
 
 		ProductDto productDto = productDao.selectOne(list.getNo());// 상품정보 조회
 
-			itemName.append(productDto.getProductName());// 이름(한 번만, i==0)
+		itemName.append(productDto.getProductName());// 이름(한 번만, i==0)
 	
 		totalAmount += (productDto.getProductPrice() 
 				- Math.ceil( productDto.getProductPrice() * productDto.getProductDiscount() / 100) 
-				) * list.getQty(); // total += 이 상품에 대한 구매 금액(가격*수량)
-			
-
-		log.debug("결제 이름 = {}", itemName);
-		log.debug("결제금액 = {}", totalAmount);
+				) * list.getQty() - vo.getUsedPoint(); // total += 이 상품에 대한 구매 금액(가격*수량)
+		
+		//사용포인트 차감
+		userDao.usedPoint(loginVO.getUserId(), vo.getUsedPoint());
 
 		//결제 준비 요청 - KakaoPayReadyRequestVO, kakaoPayReadyResponseVO
 		KakaoPayReadyRequestVO requestVO = KakaoPayReadyRequestVO.builder()
