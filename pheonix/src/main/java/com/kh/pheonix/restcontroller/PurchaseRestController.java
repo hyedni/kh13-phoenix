@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.UserLoginVO;
-import com.kh.pheonix.dao.CartDao;
-import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
 import com.kh.pheonix.dto.ProductDto;
 import com.kh.pheonix.kakaoPayVO.FlashInfoRequestVO;
@@ -42,13 +40,7 @@ public class PurchaseRestController {
 	private ProductDao productDao;
 	
 	@Autowired
-	private PaymentDao paymentDao;
-
-	@Autowired
 	private JwtService jwtService;
-	
-	@Autowired
-	private CartDao cartDao;
 	
 
 ///////////////구매(QR 화면 띄우기 및 정보 전달)
