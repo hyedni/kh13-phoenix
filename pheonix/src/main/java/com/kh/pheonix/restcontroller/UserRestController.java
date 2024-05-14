@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,14 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.pheonix.Vo.UserLoginVO;
+import com.kh.pheonix.dao.NonUserCertDao;
+import com.kh.pheonix.dao.NonUserDao;
 import com.kh.pheonix.dao.SocialUserDao;
 import com.kh.pheonix.dao.UserCertDao;
 import com.kh.pheonix.dao.UserDao;
-import com.kh.pheonix.dto.SocialUserDto;
+import com.kh.pheonix.dto.NonUserCertDto;
+import com.kh.pheonix.dto.NonUserDto;
 import com.kh.pheonix.dto.UserCertDto;
 import com.kh.pheonix.dto.UserDto;
 import com.kh.pheonix.service.AttachService;
 import com.kh.pheonix.service.EmailService;
+import com.kh.pheonix.service.ImageService;
 import com.kh.pheonix.service.JwtService;
 import com.kh.pheonix.service.UserService;
 
@@ -48,31 +53,34 @@ public class UserRestController {
 	private SocialUserDao socialUserDao;
 	@Autowired
 	private AttachService attachService;
+	@Autowired
+	private ImageService imageService;
 
 	// 회원가입
 	@PostMapping("/join")
 	public ResponseEntity<String> join(@ModelAttribute UserDto userDto, 
-		@RequestParam("attach") MultipartFile attach)
+		@RequestParam(value = "attach", required = false) MultipartFile attach)
 		throws IllegalStateException, IOException {
-		
-		boolean isRegistered = userService.registerUser(userDto);
-		
+
+		boolean isRegistered = userService.registerUser(userDto);//저장됨
 		System.out.println(userDto);
+		
 		// 회원으로부터 첨부파일을 받으면 attach 파일에 저장해
 		if (attach != null && !attach.isEmpty()) {
 			int attachNo = attachService.save(attach); // 파일저장 + DB저장
-			System.out.print("의심병1 ="+attachNo);
-			System.out.print("의심병2 ="+userDto.getUserId());
-			
+			System.out.print("의심병1 =" + attachNo);
+			System.out.print("의심병2 =" + userDto.getUserId());
+
 			userDao.connect(userDto.getUserId(), attachNo); // 연결
-			
+
 		}
-	
-		if (isRegistered) {
+		
+		if (isRegistered) {	
 			return ResponseEntity.ok().body("회원가입이 완료되었습니다.");
 		} else {
 			return ResponseEntity.badRequest().body("회원가입에 실패하였습니다.");
 		}
+	
 	}
 
 	// 메일보내기
@@ -147,49 +155,73 @@ public class UserRestController {
 	// 조회
 	@GetMapping("/mypage")
 	public UserDto find(@RequestParam String userId) {
-		return userDao.selectOne(userId);
+		UserDto userDto = userDao.selectOne(userId);
+		UserDto urlDto = imageService.UserImgbyOne(userDto);
+		return userDto;
 	}
 	
-
-	@GetMapping("/socialLogin")
-	public ResponseEntity<UserLoginVO> socialLogin(@RequestParam SocialUserDto socialUserDto) {
-		System.out.print(socialUserDto);
-
-		// 회원한테 받은 socialEmail ==null이면 false
-		if (socialUserDto.getSocialEmail() == null) {
-			return ResponseEntity.status(401).build();
-		} else {// !=null이면 판정 1. userEmail에 저장된건지
-			UserDto userDto = new UserDto(); // UserDto의 인스턴스를 생성
-			String userEmail = userDto.getUserEmail();
-
-			boolean isValid = socialUserDto.getSocialEmail().equals(userEmail);
-			// 2. userEmail에 저장됐으면 == 이미 가입된 회원
-
-			if (!isValid) {// 3. 저장된게 없으면 social에 저장된건지
-				// 찾기
-				SocialUserDto emailFind = socialUserDao.selectOne(socialUserDto.getSocialEmail());
-
-				// 찾았는데 없어
-				if (emailFind != null) {
-
-					socialUserDao.insert(socialUserDto);
-				}
-
-				// jwt토큰 발급
-				SocialUserDto findDto = socialUserDao.selectOne(socialUserDto.getSocialEmail());
-
-				String accessToken = jwtService.createSocialAccessToken(findDto);
-				String refreashToken = jwtService.createSocialRefreshToken(findDto);
-
-				return ResponseEntity.ok()
-						.body(UserLoginVO.builder().userId(findDto.getSocialEmail()).userGrade(findDto.getSocialName())
-								.accessToken(accessToken).refreshToken(refreashToken).build());// 200
-
-			}
-
-		}
-		return null;
-
+	
+	//변경
+	@PatchMapping("/mypage")
+	public boolean edit(UserDto userDto) {
+		boolean result = userDao.edit(userDto);
+		return result;
 	}
+	
+//	@Autowired
+//	private SocialLoginDao socialLoginDao;
+	
+//	//토큰 저장
+//	@GetMapping("/saveToken")
+//	public ResponseEntity<?> saveToken(@RequestBody GoogleInfResponse googleResponse) {
+//		//클라이언트부터 값이 들어오면 저장
+//		socialLoginDao.insert(googleResponse);
+//	ㅁㅁㅁ
+//	}
+	
+	@Autowired
+	private NonUserDao nonUserDao;
+	@Autowired
+	private NonUserCertDao nonUserCertDao;
+	
+	@PostMapping("/nonUserJoin")
+	public ResponseEntity<String> nonUserJoin(@RequestBody NonUserDto nonUserDto) {
+	    // 비회원 정보 저장
+	    nonUserDao.insert(nonUserDto);
+	    nonUserDao.selectOne(nonUserDto.getNonUserEmail());
+	     
+	    return ResponseEntity.ok("비회원 정보가 저장되었습니다.");
+	    
+	}
+	
+	@PostMapping("/nonUserSend")
+	public void nonUserSend(@RequestParam String nonUserCertEmail) {
+		NonUserDto nonUserDto = nonUserDao.selectOne(nonUserCertEmail);
+		if(nonUserDto == null) {
+			//중복된거 없으면
+			emailService.nonUserSendCert(nonUserCertEmail);
+		}
+	}
+	@PostMapping("/nonUserCheck")
+	public ResponseEntity<String> nonUserCheck(@RequestBody NonUserCertDto nonUserCertDto){
+		System.out.println(nonUserCertDto);
+		boolean isValid = nonUserCertDao.checkValid(nonUserCertDto.getNonUserCertEmail(), nonUserCertDto.getNonUserCertCode());
+		if(isValid) {
+			nonUserCertDao.delete(nonUserCertDto.getNonUserCertEmail());
+			return ResponseEntity.ok("인증 성공");
+		} else {
+			return ResponseEntity.badRequest().body("유효하지 않은 인증번호입니다.");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
