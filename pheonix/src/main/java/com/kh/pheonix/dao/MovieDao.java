@@ -1,5 +1,6 @@
 package com.kh.pheonix.dao;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.pheonix.dto.MovieDto;
+import com.kh.pheonix.dto.ReserveStatsDto;
+import com.kh.pheonix.dto.ReserveStatsStringDto;
 
 @Repository
 public class MovieDao {
@@ -60,6 +63,17 @@ public class MovieDao {
 	
 	public void updateMovieOn (String movieOpenDate) {
 		sqlSession.update("movie.updateMovieOn", movieOpenDate);
+	}
+	
+	public boolean updateMovieOff (String movieCloseDate) {
+		return sqlSession.update("movie.updateMovieOff", movieCloseDate) > 0 ;
+	}
+	
+	public ReserveStatsStringDto reserveStats (int movieNo, String reserveStatsDate) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("reserveStatsDate", reserveStatsDate);
+		data.put("movieNo", movieNo);
+		return sqlSession.selectOne("movie.findReserveStats", data);
 	}
 }
 

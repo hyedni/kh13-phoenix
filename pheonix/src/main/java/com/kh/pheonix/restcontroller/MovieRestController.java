@@ -20,7 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dto.MovieDto;
-import com.kh.pheonix.dto.ProductDto;
+import com.kh.pheonix.dto.ReserveStatsDto;
+import com.kh.pheonix.dto.ReserveStatsStringDto;
 import com.kh.pheonix.service.AttachService;
 import com.kh.pheonix.service.ImageService;
 
@@ -121,5 +122,14 @@ public class MovieRestController {
 			return ResponseEntity.status(404).build();
 		}
 		return ResponseEntity.ok().build();
+	}
+	
+	//예매율조회
+	@PostMapping("/stats")
+	public ReserveStatsStringDto reserveStats (@RequestBody ReserveStatsStringDto dto) {
+		System.out.println("dto.getMovieNo() : " + dto.getMovieNo());
+		System.out.println("dto.getReserveStatsDate() : " + dto.getReserveStatsDate());
+		System.out.println("결과" + movieDao.reserveStats(dto.getMovieNo(), dto.getReserveStatsDate()));
+		return movieDao.reserveStats(dto.getMovieNo(), dto.getReserveStatsDate());
 	}
 }
