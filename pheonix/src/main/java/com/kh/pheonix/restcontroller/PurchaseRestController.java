@@ -111,13 +111,13 @@ public class PurchaseRestController {
 		StringBuffer itemName = new StringBuffer();
 		int totalAmount = 0;
 
-			ProductDto productDto = productDao.selectOne(list.getNo());// 상품정보 조회
+		ProductDto productDto = productDao.selectOne(list.getNo());// 상품정보 조회
 
-				itemName.append(productDto.getProductName());// 이름(한 번만, i==0)
-		
-			totalAmount += (productDto.getProductPrice() 
-					- Math.ceil( productDto.getProductPrice() * productDto.getProductDiscount() / 100) 
-					) * list.getQty(); // total += 이 상품에 대한 구매 금액(가격*수량)
+			itemName.append(productDto.getProductName());// 이름(한 번만, i==0)
+	
+		totalAmount += (productDto.getProductPrice() 
+				- Math.ceil( productDto.getProductPrice() * productDto.getProductDiscount() / 100) 
+				) * list.getQty(); // total += 이 상품에 대한 구매 금액(가격*수량)
 			
 
 		log.debug("결제 이름 = {}", itemName);
