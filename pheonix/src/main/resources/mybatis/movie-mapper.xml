@@ -99,5 +99,13 @@
 	<update id="updateMovieOn">
 		update movie set movie_on = 'Y' where movie_open_date = #{movieOpenDate}
 	</update>
+	
+	<update id="updateMovieOff">
+		update movie set movie_on = 'N' where movie_close_date = #{movieCloseDate}
+	</update>
+	
+	<select id="findReserveStats" resultType="ReserveStatsStringDto">
+		select * from reserve_stats where to_char(reserve_stats_date, 'YYYY-MM-DD') = #{reserveStatsDate} and movie_no = #{movieNo}
+	</select>
 
 </mapper>

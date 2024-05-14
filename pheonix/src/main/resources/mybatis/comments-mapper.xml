@@ -15,7 +15,7 @@
     </insert>
     
 <select id="selectList" resultType="CommentsDto" >
-    select personal_no from comments order by comments_id asc
+    select * from comments where personal_no = #{personalNo} order by comments_id asc
 </select>
 
 <select id="find" resultType="CommentsDto">
