@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="reserveStats">
+
+	<!--상영중인 영화번호들-->
+	<select id="movieNo" resultType="int">
+		select movie_no from movie where movie_on ='Y'
+	</select>
+	
+	<!--특정영화 예매건수-->
+	<select id="reserveCntByMovie" resultType="int">
+		select count(*) from reservation r 
+		join MOVIE_SCHEDULE ms on r.MOVIE_SCHEDULE_NO = ms.MOVIE_SCHEDULE_NO
+		join movie m on m.MOVIE_NO = ms.MOVIE_NO where m.MOVIE_NO = #{movieNo}
+	</select>
+	
+	<!--전체 예매건수 -->
+	<select id="reserveCntAll" resultType="int">
+		select count(*) from reservation where payment_status = '결제완료'
+	</select>
+	
+	<!--집계결과 등록-->
+	<insert id="insert">
+		insert into reserve_stats (reserve_stats_no, movie_no, reserve_stats_movie, 
+			reserve_stats_all, 	reserve_stats_rate)
+		values (reserve_stats_seq.nextval, #{movieNo}, #{reserveStatsMovie},
+			#{reserveStatsAll}, #{reserveStatsRate})
+	</insert>
+	
+	<select id="sequence" resultType="int">
+		select reserve_stats_seq.nextval from dual
+	</select>
+	
+	<!-- 예매통계 리스트 -->
+	<select id="list" resultType="ReserveStatsListVo">
+		SELECT 
+	    rs.*,
+	    m.movie_title,
+	    m.MOVIE_OPEN_DATE,
+	    ROW_NUMBER() OVER (ORDER BY reserve_stats_rate DESC) AS rank
+	FROM 
+	    reserve_stats rs JOIN movie m ON m.movie_no = rs.movie_no 
+	WHERE 
+	    TO_CHAR(reserve_stats_date, 'YYYY-MM-DD') = #{reserveStatsDate}
+	ORDER BY 
+	    reserve_stats_rate DESC
+	</select>
+	
+	
+	
+</mapper>
