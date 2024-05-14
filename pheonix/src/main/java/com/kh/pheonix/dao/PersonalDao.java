@@ -11,6 +11,8 @@ import com.kh.pheonix.dto.PersonalDto;
 @Repository
 public class PersonalDao {
 
+	private static final char[] PersonalDto = null;
+	private static final char[] UserDto = null;
 	@Autowired 
 	private SqlSession sqlSession;
 	
@@ -45,5 +47,13 @@ public class PersonalDao {
 	public List<PersonalDto> replyList() {
 		return sqlSession.selectList("personal.reply");
 	}
+	
+	
+//마이페이지 나의문의내역
+	public List<PersonalDto> myPersonal(String personalId) {
+		return sqlSession.selectList("personal.mypersonal", personalId);
+	}
+
+
 	}
 

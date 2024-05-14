@@ -17,8 +17,10 @@ public class UserDto {
 	private String userGrade;
 	private String userEmail;
 	private Date userJoin;
-	private Date userBirth;
+	private String userBirth;
 	private Date userEdit;
 	private Date userLogin;
 	private int userPoint;
+	
+	private String userImgLink;
 }
