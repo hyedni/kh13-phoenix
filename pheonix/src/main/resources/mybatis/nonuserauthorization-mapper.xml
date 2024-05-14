@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nonUserAuthorization">
+ 	<!--저장-->
+ 	<insert id="insert">
+ 		insert into non_user_authorization(non_user_id, token)
+ 		values(#{nonUserId}, #{token})
+ 	</insert>
+ 	
+ 	<!-- userId가 있는지 확인 -->
+ 	<select id="selectOne" resultType="NonUserAuthorizationDto">
+ 		select * from non_user_authorization where non_user_id = #{nonUserId}
+ 	</select>
+ 	
+ 	<!-- 만료시간 삭제-->
+ 	<select id="deleteExpiredAuth">
+	DELETE FROM non_user_authorization
+	WHERE non_user_id IN (
+	SELECT nua.non_user_id
+	FROM non_user_authorization nua
+	JOIN non_user nu ON nua.non_user_id = nu.non_user_email
+	WHERE nu.non_user_out <![CDATA[ < ]]> SYSDATE
+	)
+ 	</select> 
+
+</mapper>
