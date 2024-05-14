@@ -40,4 +40,11 @@
         values (personal_seq.NEXTVAL, #{personalId}, #{personalTitle}, #{personalContent})
     </insert>
     
+    <!-- 마이페이지 나의 문의내역 -->
+<select id="mypersonal" resultType="personalDto">
+    select * from personal where personal_id = #{personalId} order by personal_no asc
+</select>
+
+    
+    
 </mapper>

@@ -45,10 +45,6 @@ public class PersonalRestController {
 		
 	}
 	
-	
-	
-	
-	
 	@PutMapping("/")//전체수정
 	public boolean edit(@RequestBody PersonalDto personalDto) {
 		boolean result = personalDao.update(personalDto);
@@ -72,4 +68,9 @@ public class PersonalRestController {
 		
 	}
 	
+	@GetMapping("/mypersonal/{personalId}") // 마이페이지 나의문의내역
+    public List<PersonalDto> mypersonal(@PathVariable String personalId) {
+        return personalDao.myPersonal(personalId);
+    }
 }
+
