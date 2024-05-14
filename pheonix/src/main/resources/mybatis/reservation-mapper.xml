@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reservation">
+
+	<select id="sequence" resultType="int">
+		select reservation_seq.nextval
+		from
+		dual
+	</select>
+
+	<select id="ticketPriceCalculator" parameterType="map" resultType="int">
+		SELECT 
+		(mp.price + dbp.price_adjustment +
+		tbp.price_adjustment + sp.price +
+		memp.price) AS total_price
+		FROM
+		MEMBER_PRICING memp
+		JOIN movie_schedule ms ON ms.MOVIE_SCHEDULE_NO =
+		#{movieScheduleNo}
+		JOIN DATE_BASED_PRICING dbp ON
+		ms.movie_schedule_date_disc = dbp.DATE_TYPE
+		JOIN TIME_BASED_PRICING tbp
+		ON ms.MOVIE_SCHEDULE_TIME_DISC =
+		tbp.TIME_TYPE
+		JOIN movie m ON
+		ms.MOVIE_NO = m.MOVIE_NO
+		JOIN MOVIE_PRICING mp ON m.MOVIE_SCREEN_TYPE =
+		mp.MOVIE_TYPE
+		JOIN SEAT_TYPES st ON st.SEAT_TYPES_NO =#{seatTypesNo}
+		JOIN SEAT_PRICING sp ON sp.SEAT_TYPES = st.SEAT_TYPE
+		WHERE
+		memp.MEMBER_TYPE = #{memberType}
+	</select>
+
+	<insert id="insert">
+		INSERT INTO reservation (reservation_no, movie_schedule_no, user_id,
+		PAYMENT_STATUS, TOTAL_PRICE, PAYMENT_METHOD)
+		VALUES
+		(#{reservationNo},#{movieScheduleNo},#{userId},'결제완료',#{totalPrice},#{paymentMethod})
+	</insert>
+	
+	<insert id="insertSeat">
+	insert into seat_reservation(seat_reservation_no, movie_schedule_no, seat_types_no, reservation_no,member_type, reservation_status)
+	 values(seat_reservation_seq.nextval, #{movieScheduleNo}, #{seatTypesNo}, #{reservationNo}, #{memberType},'예약완료')
+	</insert>
+</mapper>
