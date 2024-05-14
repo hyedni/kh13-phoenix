@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.dao.ProductDao;
+import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.ProductDto;
 import com.kh.pheonix.kakaoPayVO.FlashInfoRequestVO;
 import com.kh.pheonix.kakaoPayVO.FlashInfoVO;
@@ -23,6 +24,7 @@ import com.kh.pheonix.kakaoPayVO.KakaoPayApproveRequestVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayApproveResponseVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayReadyRequestVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayReadyResponseVO;
+import com.kh.pheonix.kakaoPayVO.PurchasePointVO;
 import com.kh.pheonix.kakaoPayVO.PurchaseVO;
 import com.kh.pheonix.service.JwtService;
 import com.kh.pheonix.service.KakaoPayService;
@@ -44,13 +46,17 @@ public class PurchaseRestController {
 	@Autowired
 	private JwtService jwtService;
 	
+	@Autowired
+	private UserDao userDao;
+	
 
 ///////////////구매(QR 화면 띄우기 및 정보 전달)
 	@PostMapping("/")
-	public FlashInfoVO purchase(@RequestBody List<PurchaseVO> list, @RequestHeader("Authorization") String refreshToken)
+	public FlashInfoVO purchase(@RequestBody PurchasePointVO purchasePointVO, @RequestHeader("Authorization") String refreshToken)
 			throws URISyntaxException {
 		UserLoginVO loginVO = jwtService.parse(refreshToken);
 
+		List<PurchaseVO> list = purchasePointVO.getVo();
 		log.debug("size = {}", list.size());
 		log.debug("list = {}", list);
 		//vo의 purchase 목록을 이용하여 결제 정보를 생성하는 코드
@@ -64,9 +70,12 @@ public class PurchaseRestController {
 			}
 			totalAmount += (productDto.getProductPrice() 
 					- Math.ceil( productDto.getProductPrice() * productDto.getProductDiscount() / 100) 
-					) * purchaseVO.getQty(); // total += 이 상품에 대한 구매 금액(가격*수량)
+					) * purchaseVO.getQty() - purchasePointVO.getUsedPoint(); // total += 이 상품에 대한 구매 금액(가격*수량)
 			
 		}
+		
+		//사용포인트 차감
+		userDao.usedPoint(loginVO.getUserId(), purchasePointVO.getUsedPoint());
 
 		//구매목록이 2개 이상이라면 "외 N건" 이라는 글자를 추가
 		if (list.size() >= 2) {
