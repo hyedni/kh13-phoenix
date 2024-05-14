@@ -12,5 +12,5 @@ public class TheaterDto {
 	private int cinemaNo;
 	private String theaterName;
 	private Integer theaterTotalSeats;
-	
+	//a
 }

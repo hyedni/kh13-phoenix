@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.pheonix.Vo.BookingListByDateVo;
 import com.kh.pheonix.Vo.BookingListVo;
+import com.kh.pheonix.Vo.BookingTheaterVo;
 import com.kh.pheonix.Vo.MovieListVo;
+import com.kh.pheonix.dto.SeatTypesDto;
 
 @Repository
 public class BookingListDao {
@@ -47,6 +49,27 @@ public class BookingListDao {
 	
 	public List<String> theaterList (int movieNo) {
 		return sqlSession.selectList("bookingList.theaterList", movieNo);
+	}
+	
+	public BookingListVo scheduleDetail (int scheduleNo) {
+		return sqlSession.selectOne("bookingList.scheduleDetail", scheduleNo);
+	}
+
+	//김민구 임시사용
+	public List<SeatTypesDto> seatTypes(int aaa) {
+		
+		return sqlSession.selectList("bookingList.seatTypes", aaa);
+	}
+	
+	public int count (int movieNo, String cinemaName) {
+		Map <String, Object> data = new HashMap<>();
+		data.put("movieNo", movieNo);
+		data.put("cinemaName", cinemaName);
+		return sqlSession.selectOne("bookingList.count", data);
+	}
+	
+	public List<BookingTheaterVo> theaterDistinct (String cinemaName) {
+		return sqlSession.selectList("bookingList.theaterDistinct", cinemaName);
 	}
 	
 }

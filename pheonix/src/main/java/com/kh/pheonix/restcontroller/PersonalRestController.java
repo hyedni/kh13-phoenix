@@ -31,7 +31,11 @@ public class PersonalRestController {
 	
 	@PostMapping("/")//등록
 	public void insert(@RequestBody PersonalDto personalDto) {
+		int sequence = personalDao.sequence();
+		personalDto.setPersonalNo(sequence);
+		System.out.println(personalDto);
 		personalDao.insert(personalDto);
+		
 	}
 	
 	@PutMapping("/")//전체수정

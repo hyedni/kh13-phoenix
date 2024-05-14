@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="review">
+	
+	<select id="sequence" resultType="int">
+		select review_seq.nextval from dual
+	</select>
+	<insert id="insert">
+		insert into review (
+			review_no, review_content, review_writer, 
+			review_date, user_booking_no, review_reputation
+		) values (
+			#{reviewNo}, #{reviewContent}, #{reviewWriter}, 
+			#{reviewDate}, #{userBookingNo}, #{reviewReputation}
+		)
+	</insert>
+	
+	<!-- 리뷰 작성여부 검색 -->
+	<select id="findReview" resultType="ReviewDto">
+		select * from review
+		where user_booking_no = #{userBookinNo}
+	</select>
+	
+	<!-- 영화에 따른 리뷰 목록 + 회원 정보 -->
+	<select id="reviewListByMovie" resultType="UserReviewVO">
+		SELECT r.*, u.* 
+		FROM review r
+		LEFT OUTER JOIN USER_BOOKING ub ON ub.USER_BOOKING_NO = r.USER_BOOKING_NO
+		LEFT OUTER JOIN MOVIE_SCHEDULE ms ON ms.MOVIE_SCHEDULE_NO = ub.MOVIE_SEHCEDULE_NO
+		LEFT OUTER JOIN users u ON r.REVIEW_WRITER = u.USER_ID
+		LEFT OUTER JOIN movie m ON ms.movie_no = m.movie_no
+		where ms.MOVIE_NO = #{movieNo}
+	</select>
+
+	<!-- 삭제 -->
+	<delete id="delete">
+		delete review where review_no = #{reviewNo}
+	</delete>
+	
+	
+	<!-- 좋아요 -->
+	<!-- 좋아요 등록 -->
+	<insert id="likeInsert">
+		INSERT INTO review_like(user_id, review_no) VALUES(#{userId}, #{reviewNo})
+	</insert>
+	<!-- 좋아요 삭제 -->
+	<delete id="likeDelete">
+		delete review_like where user_id = #{userId} and review_no = #{reviewNo}
+	</delete>
+	<!-- 좋아요 여부 확인 -->
+	<select id="likeCheck" resultType="int">
+		select count(*) from review_like where user_id = #{userId} and review_no = #{reviewNo}
+	</select>
+	<!-- 특정 리뷰에 대한 좋아요 개수 확인 -->
+	<select id="likeCount" resultType="int">
+		select count(*) from review_like where review_no = #{reviewNo}
+	</select>
+	
+</mapper>

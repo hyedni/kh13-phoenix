@@ -49,19 +49,21 @@ public class LostRestController {
 
 	
 	@PostMapping("/") // 등록
-	public LostDto insert(@ModelAttribute LostDto lostDto, @RequestParam("attach") MultipartFile attach) 
-	        throws IllegalStateException, IOException {
+	public LostDto insert(@ModelAttribute LostDto lostDto, @RequestParam(value = "attach", required = false) MultipartFile attach)
+	        
+			throws IllegalStateException, IOException {
 	    try {
 	        int sequence = lostDao.sequence();
 	        lostDto.setLostNo(sequence);
+	        System.out.println(lostDto);
 	        lostDao.insert(lostDto);
 	        
-	        if(!attach.isEmpty()) {
+	        if(attach != null && !attach.isEmpty()) {
 	            int attachNo = attachService.save(attach);
 	            lostDao.connect(lostDto.getLostNo(), attachNo);
 	        }
 	        System.out.println("성공이용ㅋ");
-	        return lostDao.find(sequence);
+	        return lostDao.selectOne(sequence);
 	    } catch(Exception e) {
 	        System.out.println("실패용ㅋ " + e.getMessage()); 
 	        throw e; 

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="movieSchedule">
+
+	
+	<select id ="scheduleFind" resultType="MovieScheduleVo">
+	select
+		m.movie_no, m.movie_title, m.MOVIE_RUNNING_TIME, m.MOVIE_OPEN_DATE ,
+		m.MOVIE_CLOSE_DATE ,
+		m.MOVIE_AGE ,m.MOVIE_ON, m.MOVIE_SCREEN_TYPE,
+		ms.MOVIE_SCHEDULE_NO ,ms.START_DATE , ms.END_DATE , ms.START_TIME , ms.END_TIME ,
+		ms.REMAINING_SEATS , ms.MOVIE_SCHEDULE_DATE_DISC ,
+		ms.MOVIE_SCHEDULE_TIME_DISC ,
+		c.CINEMA_NAME, c.CINEMA_NO ,
+		t.THEATER_NO , t.THEATER_NAME , t.THEATER_TOTAL_SEATS
+		from movie_schedule ms
+		join
+		theater t on ms.theater_no = t.theater_no join cinema c on
+		t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
+		where ms.MOVIE_SCHEDULE_NO = #{movieScheduleNo}
+	</select>
+
+	<select id="list" resultType="MovieScheduleVo">
+		select
+		m.movie_no, m.movie_title, m.MOVIE_RUNNING_TIME, m.MOVIE_OPEN_DATE ,
+		m.MOVIE_CLOSE_DATE ,
+		m.MOVIE_AGE ,m.MOVIE_ON, m.MOVIE_SCREEN_TYPE,
+		ms.MOVIE_SCHEDULE_NO ,ms.START_DATE , ms.END_DATE , ms.START_TIME , ms.END_TIME ,
+		ms.REMAINING_SEATS , ms.MOVIE_SCHEDULE_DATE_DISC ,
+		ms.MOVIE_SCHEDULE_TIME_DISC ,
+		c.CINEMA_NAME, c.CINEMA_NO ,
+		t.THEATER_NO , t.THEATER_NAME , t.THEATER_TOTAL_SEATS
+		from movie_schedule ms
+		join
+		theater t on ms.theater_no = t.theater_no join cinema c on
+		t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
+		<where>
+			<if test="cinemaName != null">
+				and instr(cinema_name, #{cinemaName}) > 0
+			</if>
+			<if test="movieTitle != null">
+				and instr(movie_title, #{movieTitle}) > 0
+			</if>
+			<if test="startDate != null">
+				and instr(start_date, #{startDate}) > 0
+			</if>
+		</where>
+		order by
+		c.cinema_name asc , m.MOVIE_OPEN_DATE asc, ms.MOVIE_SCHEDULE_NO asc
+	</select>
+	
+	<select id="movieList" resultType="map">
+		select movie_title, MOVIE_NO  from movie where movie_on = 'Y' order by movie_title asc
+	</select>
+	
+	<select id="cinemaList" resultType="map">
+		select cinema_name, cinema_no from cinema order by cinema_name asc
+	</select>
+	
+	<select id="theaterList" resultType="map">
+		select theater_name, theater_no from theater where cinema_no = #{cinemaNo}
+		order by theater_name asc 
+	</select>
+	
+	<select id="seats" resultType="int">
+		select theater_total_seats from theater where theater_no = #{theaterNo}
+	</select>
+	
+	<select id="seq" resultType="int">
+		select movie_schedule_seq.nextval from dual
+	</select>
+	
+	<insert id="insert">
+		insert into movie_schedule (movie_schedule_no, movie_no, theater_no, start_date, end_date, 
+		start_time, end_time,
+		remaining_seats, movie_schedule_date_disc, movie_schedule_time_disc)
+		values(#{movieScheduleNo}, #{movieNo}, #{theaterNo}, 
+		#{startDate}, #{endDate}, #{startTime}, #{endTime}, 
+		#{remainingSeats}, #{movieScheduleDateDisc}, #{movieScheduleTimeDisc})
+	</insert>	
+	
+	<delete id="delete">
+		delete movie_schedule where movie_schedule_no = #{movieScheduleNo}
+	</delete>
+	
+	<update id="edit">
+		update movie_schedule 
+		<set>
+			
+			<if test="startDate != null"> start_date= #{startDate}, </if>
+			<if test="endDate != null"> end_date= #{endDate}, </if>
+			<if test="startTime != null"> start_time= #{startTime}, </if>
+			<if test="endTime != null"> end_time= #{endTime}, </if>
+			<if test="remainingSeats != null"> remaining_seats= #{remainingSeats}, </if>
+			<if test="movieScheduleDateDisc != null"> movie_schedule_date_disc= #{movieScheduleDateDisc}, </if>
+			<if test="movieScheduleTimeDisc != null"> movie_schedule_time_disc= #{movieScheduleTimeDisc} </if>
+		</set>
+		where movie_schedule_no = #{movieScheduleNo}
+	</update>
+	
+	<select id="find" resultType="MovieScheduleDto">
+		select * from movie_schedule where movie_schedule_no = #{movieScheduleNo}
+	</select>
+	
+	<select id="getRunningTime" resultType="int">
+		select movie_running_time from movie where movie_no = #{movieNo}
+	</select>
+
+	<!-- 상단 -->
+	<sql id="top-n-header">
+		<if test="beginRow !=null and endRow !=null">
+			select * from (
+			select rownum rn, TMP.* from (
+		</if>
+	</sql>
+
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+		<if test="beginRow !=null and endRow !=null">
+			)TMP
+			) where rn between #{beginRow} and #{endRow}
+		</if>
+	</sql>
+
+
+</mapper>

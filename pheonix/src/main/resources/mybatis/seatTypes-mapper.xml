@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="seatTypes">
+
+	<insert id="insert" parameterType="SeatTypesDto">
+    insert into seat_types (
+        theater_no,
+        seat_types_no,
+        cell_x,
+        cell_y
+        <if test="seatX != null">, seat_x</if>
+        <if test="seatY != null">, seat_y</if>
+        <if test="seatType != null">, seat_type</if>
+        , cell_active
+        <if test="seatActive != null">, seat_active</if>
+    ) values (
+        #{theaterNo},
+       	seat_types_seq.nextval,
+        #{cellX},
+        #{cellY}
+        <if test="seatX != null">, #{seatX}</if>
+        <if test="seatY != null">, #{seatY}</if>
+        <if test="seatType != null">, #{seatType}</if>
+        , #{cellActive}
+        <if test="seatActive != null">, #{seatActive}</if>
+    )
+</insert>
+	
+	<select id="sequence" resultType="int">
+		select seat_types_seq.nextval from
+		dual
+	</select>
+
+
+</mapper>

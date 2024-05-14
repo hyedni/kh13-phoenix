@@ -58,7 +58,7 @@
 		order by
 		m.movie_title asc
 	</select>
-
+	
 	<select id="listByDate" resultType="BookingListVo">
 		select m.movie_title,
 			m.movie_no, c.cinema_name, c.cinema_region, t.theater_name,
@@ -71,16 +71,16 @@
 			t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
 		where 
 			m.movie_no= #{movieNo} and cinema_name = #{cinemaName} and start_date = #{startDate}
-		order by m.movie_title asc
+		order by start_time asc
 	</select>
 	
 	<select id="movieTitle" resultType="MovieListVo">
-		SELECT MIN(m.movie_title) AS movie_title, m.movie_no
+		SELECT MIN(m.movie_title) AS movie_title, m.movie_no, m.movie_age 
 		FROM movie_schedule ms
 		JOIN theater t ON ms.theater_no = t.theater_no 
 		JOIN cinema c ON t.cinema_no = c.cinema_no 
 		JOIN movie m ON m.movie_no = ms.movie_no
-		GROUP BY m.movie_no
+		GROUP BY m.movie_no, m.movie_age
 		ORDER BY MIN(c.cinema_name) ASC
 	</select>
 	
@@ -92,6 +92,36 @@
 		JOIN movie m ON m.movie_no = ms.movie_no
 		where m.movie_no = #{movieNo}  
 		ORDER BY c.cinema_name ASC
+	</select>
+	
+
+	<select id="scheduleDetail" resultType="BookingListVo">
+		select 
+			m.movie_title,
+			m.movie_no, c.cinema_name, c.cinema_region, t.theater_name,
+			t.theater_total_seats,
+			start_date, end_date, start_time, end_time, remaining_seats,
+			movie_schedule_date_disc, movie_schedule_time_disc, movie_schedule_no
+		from movie_schedule ms
+		join
+			theater t on ms.theater_no = t.theater_no join cinema c on
+			t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
+		where
+			ms.MOVIE_SCHEDULE_NO = #{movieScheduleNo}
+	</select>
+	
+	
+	
+	
+	<select id="seatTypes" resultType="SeatTypesDto">
+	SELECT * FROM seat_types WHERE theater_no = #{aaa}
+	</select>
+
+	<select id="theaterDistinct" resultType="BookingTheaterVo">
+		select t.theater_no, t.theater_name 
+		from theater t join cinema c on c.cinema_no = t.cinema_no 
+		where c.cinema_name = #{cinemaName}
+
 	</select>
 
 </mapper>

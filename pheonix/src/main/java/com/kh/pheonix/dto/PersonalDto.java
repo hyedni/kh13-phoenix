@@ -15,6 +15,5 @@ public class PersonalDto {
 	private String personalContent;
 	private String personalWrite;
 	private String personalEdit;
-		
 	
 }

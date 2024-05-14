@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.CartProductVO;
 import com.kh.pheonix.dao.CartDao;
+import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.CartDto;
 import com.kh.pheonix.dto.ProductDto;
+import com.kh.pheonix.dto.UserDto;
 import com.kh.pheonix.service.ImageService;
 
 @CrossOrigin
@@ -28,6 +30,9 @@ public class CartRestController {
 	
 	@Autowired
 	private CartDao cartDao;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@Autowired
 	private ImageService imageService;
@@ -62,6 +67,12 @@ public class CartRestController {
 		List<CartProductVO> list = cartDao.cartProductList(CartUserId);
 		List<CartProductVO> imageSetUpList = imageService.cartProductPhotoUrlSetUp(list);
 		return imageSetUpList;
+	}
+	
+	//회원 테이블의 회원 정보 조회
+	@GetMapping("/user/{userId}")
+	public UserDto complex(@PathVariable String userId) {
+		return cartDao.selectOneUser(userId);
 	}
 	
 	//상품 수정

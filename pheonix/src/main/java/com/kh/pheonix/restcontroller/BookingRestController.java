@@ -1,5 +1,6 @@
 package com.kh.pheonix.restcontroller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.BookingListByDateVo;
 import com.kh.pheonix.Vo.BookingListVo;
+import com.kh.pheonix.Vo.BookingTheaterVo;
 import com.kh.pheonix.Vo.MovieListVo;
 import com.kh.pheonix.dao.BookingListDao;
+import com.kh.pheonix.dto.SeatTypesDto;
 
 @CrossOrigin
 @RestController
@@ -26,6 +28,7 @@ public class BookingRestController {
 	
 	@Autowired
 	private BookingListDao bookingListDao;	
+	
 	
 	//빈 문자열을 null로 처리하는 도구 설정 
 	@InitBinder
@@ -47,15 +50,30 @@ public class BookingRestController {
 	public List<String> listByMovie (@PathVariable int movieNo) {
 		return bookingListDao.theaterList(movieNo);
 	}
-	
-	@GetMapping("/cinema")
-	public List<BookingListVo> listByCinema (@RequestBody BookingListVo vo) {
-		return bookingListDao.listByCinema(vo.getMovieNo(), vo.getCinemaName());
-	}
-	
+		
 	@PostMapping("/date")
 	public List<BookingListVo> listByDate (@RequestBody BookingListVo vo) {
 		return bookingListDao.listByDate(vo.getMovieNo(), vo.getCinemaName(), vo.getStartDate());
+	}
+	
+	@GetMapping("/detail/{scheduleNo}")
+	public BookingListVo scheduleDetail (@PathVariable int scheduleNo) {
+		return bookingListDao.scheduleDetail(scheduleNo);
+	}
+	
+	//김민구 임시사용
+	@GetMapping("/seatReservationStatus/{movieScheduleNo}")
+	public List<SeatTypesDto> asd(@PathVariable int movieScheduleNo){
+		List<SeatTypesDto> list = new ArrayList<>();
+		int aaa = 100; //상영관번호 임시
+		list = bookingListDao.seatTypes(121);
+		
+		return list;
+	}
+	@GetMapping("/theaterdistinct/{cinemaName}" )
+	public List<BookingTheaterVo> theaterDistinct (@PathVariable String cinemaName) {
+		return bookingListDao.theaterDistinct(cinemaName);
+
 	}
 
 }

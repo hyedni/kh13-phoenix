@@ -28,13 +28,6 @@ public class CinemaRestController {
 	@Autowired
 	private CinemaDao cinemaDao;
 	
-//	//영화관명 리스트 
-//	@GetMapping("/{cinemaRegion}")
-//	public List<String> nameList (@PathVariable String cinemaRegion) {
-//		System.out.println(cinemaDao.names(cinemaRegion));
-//		return cinemaDao.names(cinemaRegion);
-//	}
-	
 	
 	@GetMapping("/")
 	public List<CinemaDto> list () {
@@ -49,17 +42,7 @@ public class CinemaRestController {
 		cinemaDao.insert(cinemaDto);
 		return cinemaDao.findByNo(seq);
 	}
-	
-	//영화관 상세조회
-//	@GetMapping("/{cinemaName}")
-//	public ResponseEntity<CinemaDto> find (@PathVariable String cinemaName) {
-//		CinemaDto cinemaDto = cinemaDao.find(cinemaName);
-//		if (cinemaDto == null) {
-//			return ResponseEntity.status(404).build();
-//		}
-//		return ResponseEntity.status(200).body(cinemaDto);
-//	}
-	
+		
 	//영화관 상세조회
 	@GetMapping("/{cinemaNo}")
 	public ResponseEntity<CinemaDto> find (@PathVariable int cinemaNo) {
