@@ -8,7 +8,7 @@
 
 	<!-- 등록 -->
 	<insert id="input">
-		insert into users 
+	insert into users 
 		(user_id, user_pw, user_nick, user_name, user_contact, user_email) 
 		values 
 		(#{userId}, #{userPw}, #{userNick}, #{userName}, #{userContact}, #{userEmail})
@@ -36,7 +36,21 @@
 	<select id="find" resultType="userDto">
 		select * from users where user_id = #{userId}
 	</select>
-
+	<!-- 출력 -->
+	<select id="list" resultType="userDto">
+		select * from users order by user_id
+	</select>
+	
+	<!-- 이미지 연결 -->
+	<insert id="connect" >
+		insert into user_attach(user_id, attach_no) values(#{userId}, #{attachNo})
+	</insert>
+	
+	<!-- 첨부파일 번호 찾기 -->
+	<select id="findAttachNo" resultType="int">
+		select attach_no from user_attach where user_id = #{userId}
+	</select>
+	
 
 	<!-- 복잡한 검색 -->
 	<select id="complex" resultType="UserDto">

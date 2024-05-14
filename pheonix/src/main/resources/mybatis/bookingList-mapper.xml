@@ -59,15 +59,6 @@
 		m.movie_title asc
 	</select>
 	
-	<select id="count" resultType="int">
-		select count (*) from (
-			select m.movie_title, m.movie_no, c.cinema_name, t.theater_name   
-			from movie_schedule  ms
-			join theater t on ms.theater_no = t.theater_no join cinema c on t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
-			where m.movie_no = #{movieNo} and cinema_name= #{cinemaName} 
-			)
-	</select>
-
 	<select id="listByDate" resultType="BookingListVo">
 		select m.movie_title,
 			m.movie_no, c.cinema_name, c.cinema_region, t.theater_name,
@@ -104,7 +95,20 @@
 	</select>
 	
 
-	
+	<select id="scheduleDetail" resultType="BookingListVo">
+		select 
+			m.movie_title,
+			m.movie_no, c.cinema_name, c.cinema_region, t.theater_name,
+			t.theater_total_seats,
+			start_date, end_date, start_time, end_time, remaining_seats,
+			movie_schedule_date_disc, movie_schedule_time_disc, movie_schedule_no
+		from movie_schedule ms
+		join
+			theater t on ms.theater_no = t.theater_no join cinema c on
+			t.cinema_no=c.cinema_no join movie m on m.movie_no= ms.movie_no
+		where
+			ms.MOVIE_SCHEDULE_NO = #{movieScheduleNo}
+	</select>
 	
 	
 	

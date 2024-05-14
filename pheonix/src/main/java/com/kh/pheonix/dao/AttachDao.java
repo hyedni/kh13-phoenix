@@ -27,5 +27,9 @@ public class AttachDao {
 	public boolean delete (int attachNo) {
 		return sqlSession.delete("attach.delete", attachNo) > 0;
 	}
+	
+	public int findAttachNo (String userId) {
+		return sqlSession.selectOne("product.findAttachNo", userId);
+	}
 
 }

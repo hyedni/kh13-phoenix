@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="nonUser">
+
+<insert id="input">
+    insert into non_user (non_user_email, non_user_birth, non_user_pw)
+    values(#{nonUserEmail}, #{nonUserBirth}, #{nonUserPw})
+</insert>
+
+<delete id="delete">
+    delete non_user where non_user_email = #{nonUserEmail}
+</delete>
+
+<!-- 아이디 검색 -->
+    <select id="find" resultType="nonUserDto">
+        select * from non_user where non_user_email = #{nonUserEmail}
+    </select>
+
+    <!-- 출력 -->
+    <select id="list" resultType="nonUserDto">
+        select * from non_user order by non_user_email
+    </select>
+
+
+</mapper>
