@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="nonUserCert">
+    
+    <insert id="insert">
+        insert into non_user_cert(non_user_cert_email, non_user_cert_code)
+        values(#{nonUserCertEmail}, #{nonUserCertCode})
+    </insert>
+    
+    <delete id="delete">
+        delete from non_user_cert where non_user_cert_email = #{nonUserCertEmail}
+    </delete>
+    
+    <select id="selectOne" resultType="NonUserCertDto">
+        select * from non_user_cert where non_user_cert_email = #{nonUserCertEmail}
+    </select>
+    
+    <select id="checkValid" resultType = "NonUserCertDto">
+        select * from non_user_cert where
+        non_user_cert_email = #{nonUserCertEmail}
+        and non_user_cert_code = #{nonUserCertCode}
+        and non_user_cert_time <![CDATA[ > ]]>= SYSDATE
+    </select>
+    
+    <select id="deleteExpiredCert">
+        delete from non_user_cert where non_user_cert_time <![CDATA[ < ]]> SYSDATE
+    </select>
+    
+    
+</mapper>

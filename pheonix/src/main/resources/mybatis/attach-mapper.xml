@@ -23,4 +23,8 @@
 		delete attach where attach_no = #{attachNo}
 	</delete>
 	
+	<select id="findAttachNo" resultType="AttachDto">
+		select attach_no from user_id where user_id = #{userId}
+	</select>
+	
 </mapper>

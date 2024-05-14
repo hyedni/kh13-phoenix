@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.pheonix.Vo.CartProductVO;
-import com.kh.pheonix.Vo.UserReviewVO;
 import com.kh.pheonix.dao.LostDao;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dao.ProductDao;
+import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.LostDto;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.ProductDto;
+import com.kh.pheonix.dto.UserDto;
 
 @Service
 public class ImageService {
@@ -25,6 +26,9 @@ public class ImageService {
 	
 	@Autowired
 	private LostDao lostDao;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	//영화
 	//이미지에 url주소 부여 
@@ -147,16 +151,33 @@ public class ImageService {
 		return dto;
 	}
 	
-	
-	//리뷰 게시판
-	//회원 프로필 뽑기 (유정이 코드 들어오면 추가 수정)
-//	public List<UserReviewVO> userReviewPhotoUrlSetUp(List<UserReviewVO> userReviewVO) {
-//		List<UserReviewVO> list = userReviewVO;
-//		
-//		for (UserReviewVO vo : list) {
-//			String userReviewImgLink = getUserImgLink(vo.getUserId());
-//			vo.setUserImgLink(userReviewImgLink);
+	//이미지에 url주소부여
+		public String getUserImgLink(String userId) {
+			try {
+				int attachNo = userDao.findAttachNo(userId);
+				return "http://localhost:8080/download?attachNo=" + attachNo;
+			} catch (Exception e) {
+				return "http://localhost:8080/image/userNullImg.png";
+			}
+		}
+	//1건 상세 조회 시 해당 상품 이미지 출력 (이미지 단일 조회)
+		public UserDto UserImgbyOne(UserDto userDto) {
+			UserDto findDto = userDto;
+			String userImgLink = getUserImgLink(findDto.getUserId());
+			findDto.setUserImgLink(userImgLink);
+			return findDto;
+		}
+		
+		//리뷰 게시판
+		//회원 프로필 뽑기 (유정이 코드 들어오면 추가 수정)
+//		public List<UserReviewVO> userReviewPhotoUrlSetUp(List<UserReviewVO> userReviewVO) {
+//			List<UserReviewVO> list = userReviewVO;
+//			
+//			for (UserReviewVO vo : list) {
+//				String userReviewImgLink = getUserImgLink(vo.getUserId());
+//				vo.setUserImgLink(userReviewImgLink);
+//			}
+//			return list;
 //		}
-//		return list;
-//	}
+	
 }
