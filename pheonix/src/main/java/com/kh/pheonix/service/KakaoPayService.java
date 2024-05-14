@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,6 +19,7 @@ import com.kh.pheonix.configuration.KakaoPayProperties;
 import com.kh.pheonix.dao.CartDao;
 import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
+import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.PaymentDetailDto;
 import com.kh.pheonix.dto.PaymentDto;
 import com.kh.pheonix.dto.ProductDto;
@@ -45,6 +48,8 @@ public class KakaoPayService {
 	private PaymentDao paymentDao;
 	@Autowired
 	private CartDao cartDao;
+	@Autowired
+	private UserDao userDao;
 	
 	//준비요청 메소드(Ready)
 	public KakaoPayReadyResponseVO ready(KakaoPayReadyRequestVO requestVO) throws URISyntaxException {
@@ -132,13 +137,113 @@ public class KakaoPayService {
 			paymentDao.insertPaymentDetail(paymentDetailDto);//등록
 		}
 		
+		//장바구니 비우기 및 포인트인 경우 충전
+		Pattern pattern = Pattern.compile("\\d+");
 		for (PurchaseVO purchaseVO : list) {
-			System.out.println(list);
-			System.out.println(purchaseVO.getNo());
-			System.out.println(responseVO.getPartnerUserId());
+			ProductDto productDto = productDao.selectOne(purchaseVO.getNo());//상품정보 조회
+			if(productDto.getProductType().equals("포인트")) {
+				Matcher matcher = pattern.matcher(productDto.getProductContent());
+				int number = 0;
+				while (matcher.find()) {
+					String numberStr = matcher.group(); // 매칭된 숫자 문자열
+		            number = Integer.parseInt(numberStr); // 문자열을 정수로 변환
+		        }
+				userDao.editPoint(number, responseVO.getPartnerUserId());
+			}
 	        cartDao.delete(purchaseVO.getNo(), responseVO.getPartnerUserId());
 	    }
+		
 	}
+	
+	//단건 처리
+	@Transactional
+	public void insertOnePayment(PurchaseVO list,
+						KakaoPayApproveResponseVO responseVO) {
+		//DB에 결제 완료된 내역을 저장
+		//- 결제 대표 정보(payment) = 번호생성 후 등록
+		int paymentNo = paymentDao.paymentSequence();//번호생성
+		PaymentDto paymentDto = PaymentDto.builder()
+					.paymentNo(paymentNo)//시퀀스
+					.paymentName(responseVO.getItemName())//대표결제명
+					.paymentTotal(responseVO.getAmount().getTotal())//결제총금액
+					.paymentRemain(responseVO.getAmount().getTotal())//잔여금액 - 결제총금액과 동일(첫 구매엔 취소가 없음.)
+					.memberId(responseVO.getPartnerUserId())//구매자ID
+					.paymentTid(responseVO.getTid())//거래번호
+				.build();
+		paymentDao.insertPayment(paymentDto);
+		
+		//- 결제 상세 내역(payment_detail) - 목록 개수만큼 반복적으로 등록
+		ProductDto productDto = productDao.selectOne(list.getNo());//상품정보 조회
+		
+		int paymentDetailNo = paymentDao.paymentDetailSequence();
+		PaymentDetailDto paymentDetailDto = PaymentDetailDto.builder()
+					.paymentDetailNo(paymentDetailNo)//시퀀스
+					.paymentDetailProduct(productDto.getProductNo())//상품번호
+					.paymentDetailQty(list.getQty())//수량
+					.paymentDetailName(productDto.getProductName())//상품명
+					.paymentDetailPrice(productDto.getProductPrice())//상품가격
+					.paymentDetailStatus("승인")//결제상태
+					.paymentNo(paymentNo)//결제대표번호
+				.build();
+		paymentDao.insertPaymentDetail(paymentDetailDto);//등록
+	
+		//장바구니 비우기 및 포인트인 경우 충전
+		Pattern pattern = Pattern.compile("\\d+");
+		if(productDto.getProductType().equals("포인트")) {
+			Matcher matcher = pattern.matcher(productDto.getProductContent());
+			int number = 0;
+			while (matcher.find()) {
+				String numberStr = matcher.group(); // 매칭된 숫자 문자열
+	            number = Integer.parseInt(numberStr); // 문자열을 정수로 변환
+	        }
+			userDao.editPoint(number, responseVO.getPartnerUserId());
+		}
+	    
+	}
+	
+	//0원 결제
+	public void insertZero(PaymentDto paymentDto) {
+		//DB에 결제 완료된 내역을 저장
+		paymentDto = PaymentDto.builder()
+					.paymentNo(paymentDto.getPaymentNo())//시퀀스
+					.paymentName(paymentDto.getPaymentName())//대표결제명
+					.paymentTotal(paymentDto.getPaymentTotal())//결제총금액
+					.paymentRemain(paymentDto.getPaymentRemain())//잔여금액 - 결제총금액과 동일(첫 구매엔 취소가 없음.)
+					.memberId(paymentDto.getMemberId())//구매자ID
+					.paymentTid(paymentDto.getPaymentTid())//거래번호
+				.build();
+		paymentDao.insertPayment(paymentDto);
+		
+		//- 결제 상세 내역(payment_detail) - 목록 개수만큼 반복적으로 등록
+		ProductDto productDto = productDao.selectOne(paymentDto.getNo());//상품정보 조회
+		
+		int paymentDetailNo = paymentDao.paymentDetailSequence();
+		PaymentDetailDto paymentDetailDto = PaymentDetailDto.builder()
+					.paymentDetailNo(paymentDetailNo)//시퀀스
+					.paymentDetailProduct(productDto.getProductNo())//상품번호
+					.paymentDetailQty(paymentDto.getQty())//수량
+					.paymentDetailName(productDto.getProductName())//상품명
+					.paymentDetailPrice(productDto.getProductPrice())//상품가격
+					.paymentDetailStatus("승인")//결제상태
+					.paymentNo(paymentDto.getPaymentNo())//결제대표번호
+				.build();
+		paymentDao.insertPaymentDetail(paymentDetailDto);//등록
+	
+		//장바구니 비우기 및 포인트인 경우 충전
+		Pattern pattern = Pattern.compile("\\d+");
+		if(productDto.getProductType().equals("포인트")) {
+			Matcher matcher = pattern.matcher(productDto.getProductContent());
+			int number = 0;
+			while (matcher.find()) {
+				String numberStr = matcher.group(); // 매칭된 숫자 문자열
+	            number = Integer.parseInt(numberStr); // 문자열을 정수로 변환
+	        }
+			userDao.editPoint(number, paymentDto.getMemberId());
+		}
+	    
+	}
+	
+	
 	
 	//주문조회(상세조회 메소드)
 	public KakaoPayOrderResponseVO order(KakaoPayOrderRequestVO requestVO) throws URISyntaxException {
