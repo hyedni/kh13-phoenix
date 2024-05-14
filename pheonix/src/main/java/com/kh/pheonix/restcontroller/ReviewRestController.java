@@ -9,14 +9,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.Vo.UserReviewVO;
 import com.kh.pheonix.dao.ReviewDao;
 import com.kh.pheonix.dao.ReviewLikeDao;
 import com.kh.pheonix.dto.ReviewDto;
 import com.kh.pheonix.service.ImageService;
+import com.kh.pheonix.service.JwtService;
 import com.kh.pheonix.service.LikeService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -38,10 +41,13 @@ public class ReviewRestController {
 	@Autowired
 	private LikeService likeService;
 	
+	@Autowired
+	private JwtService jwtService;
+	
 	//리뷰등록
 	@PostMapping("/")
 	public ResponseEntity<?> insert(@RequestBody ReviewDto reviewDto) {
-		boolean isValid = reviewDao.findReview(reviewDto.getUserBookingNo());
+		boolean isValid = reviewDao.findReview(reviewDto.getReservationNo());
 		if(isValid) {
 			int sequence = reviewDao.sequence();
 			reviewDto.setReviewNo(sequence);
@@ -53,10 +59,15 @@ public class ReviewRestController {
 	
 	//영화별 리뷰 및 회원 정보
 	@GetMapping("/{movieNo}")
-	public List<UserReviewVO> reviewListByMovie(@PathVariable int movieNo) {
+	public List<UserReviewVO> reviewListByMovie(@PathVariable int movieNo, @RequestHeader("Authorization") String refreshToken) {
 		List<UserReviewVO> list = reviewDao.listByMovie(movieNo);
 //		List<UserReviewVO> imageSetUpList = imageService.userReviewPhotoUrlSetUp(list);
 //		return imageSetUpList;
+		
+		UserLoginVO loginVO = jwtService.parse(refreshToken);
+		for(UserReviewVO vo : list) {
+			vo.setUserId(loginVO.getUserId());
+		}
 		
 		List<UserReviewVO> fin = likeService.check(list);
 		return fin;

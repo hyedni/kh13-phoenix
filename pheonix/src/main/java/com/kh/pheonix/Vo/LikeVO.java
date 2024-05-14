@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 public class LikeVO { //리뷰 좋아요
 	private boolean state;
 	private int count;
+	private int reviewNo;
 }

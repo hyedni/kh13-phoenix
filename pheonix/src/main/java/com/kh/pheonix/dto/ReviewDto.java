@@ -13,6 +13,6 @@ public class ReviewDto {
 	private String reviewContent;
 	private String reviewWriter;
 	private Date reviewDate;
-	private int userBookingNo;
+	private int reservationNo;
 	private String reviewReputation;
 }

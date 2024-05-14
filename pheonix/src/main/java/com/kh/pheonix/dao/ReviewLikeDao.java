@@ -36,7 +36,7 @@ public class ReviewLikeDao {
 		data.put("userId", userId);
 		data.put("reviewNo", reviewNo);
 		int isValid = sqlSession.selectOne("review.likeCheck", data);
-		if(isValid >= 1) return true;
+		if(isValid > 0) return true;
 		return false;
 	}
 	

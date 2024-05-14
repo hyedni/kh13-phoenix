@@ -23,6 +23,7 @@ public class ReviewLikeRestController {
 	
 	@GetMapping("/")
 	public LikeVO toggle(@RequestBody LikeInfoVO info) {
+		System.out.println(info);
 		LikeVO likeVO = new LikeVO();
 		
 		if(reviewLikeDao.check(info.getUserId(), info.getReviewNo())) { //좋아요 누른 적 있음
@@ -34,7 +35,8 @@ public class ReviewLikeRestController {
 			likeVO.setState(true);
 		}
 		likeVO.setCount(reviewLikeDao.count(info.getReviewNo()));
-		
+		likeVO.setReviewNo(info.getReviewNo());
+		System.out.println(likeVO);
 		return likeVO;
 	}
 	
