@@ -15,7 +15,7 @@
 	</insert>
 
 	<select id="list" resultType="lostDto">
-		select * from  lost order by lost_no asc
+		select * from  lost order by lost_no desc
 	</select>
 	
 	<select id="find" resultType="lostDto">
