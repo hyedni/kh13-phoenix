@@ -171,16 +171,6 @@ public class UserRestController {
 		return result;
 	}
 	
-//	@Autowired
-//	private SocialLoginDao socialLoginDao;
-	
-//	//토큰 저장
-//	@GetMapping("/saveToken")
-//	public ResponseEntity<?> saveToken(@RequestBody GoogleInfResponse googleResponse) {
-//		//클라이언트부터 값이 들어오면 저장
-//		socialLoginDao.insert(googleResponse);
-//	ㅁㅁㅁ
-//	}
 	
 	@Autowired
 	private NonUserDao nonUserDao;
@@ -235,6 +225,7 @@ public class UserRestController {
 			emailService.nonUserSendCert(nonUserCertEmail);
 		}
 	}
+	
 	@PostMapping("/nonUserCheck")
 	public ResponseEntity<String> nonUserCheck(@RequestBody NonUserCertDto nonUserCertDto){
 		System.out.println(nonUserCertDto);
@@ -246,6 +237,29 @@ public class UserRestController {
 			return ResponseEntity.badRequest().body("유효하지 않은 인증번호입니다.");
 		}
 	}
+	
+	@PostMapping("/token")
+	public ResponseEntity<NonUserAuthorizationDto> token(@RequestHeader("NonAuth") String token) {
+	    try {
+	        // 클라이언트가 보낸 토큰을 사용하여 비회원 정보를 가져옴
+	        NonUserDto nonUserDto = nonUserDao.tokenFind(token);
+	        
+	        // 비회원 정보가 존재하지 않으면 예외 발생
+	        if (nonUserDto == null) {
+	            throw new Exception("존재하지 않는 nonUser");
+	        }
+	        
+	        // 비회원 정보가 유효한 경우에는 해당 정보를 클라이언트에게 응답으로 보냄
+	        NonUserAuthorizationDto authorizationDto = new NonUserAuthorizationDto();
+	        // 비회원 정보를 NonUserAuthorizationDto에 매핑
+	        
+	        return ResponseEntity.ok().body(authorizationDto);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(401).build(); // 예외 발생 시 401 에러 응답
+	    }
+	}
+	
 	
 	
 	

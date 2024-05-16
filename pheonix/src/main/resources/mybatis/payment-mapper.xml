@@ -47,7 +47,7 @@
 	
 	<!-- 결제 정보 조회 -->
 	<select id="paymentList" resultType="PaymentDto">
-		select * from payment order by payment_no desc
+		select * from payment where member_id = #{userId} order by payment_no desc
 	</select>
 	<select id="paymentFind" resultType="PaymentDto">
 		select * from payment where payment_no = #{paymentNo}
