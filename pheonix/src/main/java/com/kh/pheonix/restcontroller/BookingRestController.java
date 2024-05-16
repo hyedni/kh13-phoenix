@@ -68,8 +68,11 @@ public class BookingRestController {
 	public int count(@RequestBody BookingListVo vo) {
 		return bookingListDao.count(vo.getMovieNo(), vo.getCinemaName());
 	}
-
-
+	
+	@GetMapping("/detail/{scheduleNo}")
+	public BookingListVo scheduleDetail (@PathVariable int scheduleNo) {
+		return bookingListDao.scheduleDetail(scheduleNo);
+	}
 		
 
 	@PostMapping("/date")
