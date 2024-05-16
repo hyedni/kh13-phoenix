@@ -77,5 +77,16 @@
 	<select id="findAttach" resultType="int">
 		select attach_no from product_attach where product_no = #{productNo}
 	</select>
+	
+	<select id="listbyHome" resultType="ProductDto">
+			SELECT * FROM (
+		    SELECT * 
+		    FROM product 
+		    WHERE product_type = #{productType}
+		    ORDER BY product_no DESC
+		) 
+		<![CDATA[ WHERE ROWNUM <= 4]]>
+		
+	</select>
 
 </mapper>

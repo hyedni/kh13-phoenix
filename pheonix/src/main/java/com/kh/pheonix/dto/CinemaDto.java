@@ -16,7 +16,6 @@ public class CinemaDto {
 	private String cinemaAddress1;
 	private String cinemaAddress2;
 	private String cinemaManager;
-	private String cinemaManagerCall;
 	private String cinemaCall;
 	
 }

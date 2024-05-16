@@ -13,10 +13,10 @@
 	<insert id="insert">
 		insert into cinema (cinema_no, cinema_name, cinema_total_theater, 
 		cinema_region, cinema_post, cinema_address1, cinema_address2, 
-		cinema_manager, cinema_manager_call, cinema_call) 
+		cinema_manager, cinema_call) 
 		values (#{cinemaNo}, #{cinemaName}, #{cinemaTotalTheater}, #{cinemaRegion}, 
 		#{cinemaPost}, #{cinemaAddress1}, #{cinemaAddress2}, 
-		#{cinemaManager}, #{cinemaManagerCall}, #{cinemaCall})
+		#{cinemaManager}, #{cinemaCall})
 	</insert>
 	
 	<select id="findName" resultType="String">
@@ -59,9 +59,6 @@
 			<if test="cinemaManager != null">
 				cinema_manager = #{cinemaManager},
 			</if>
-			<if test="cinemaManagerCall != null">
-				cinema_manager_call = #{cinemaManagerCall},
-			</if>
 			<if test="cinemaCall != null">
 				cinema_call = #{cinemaCall},
 			</if>
@@ -72,6 +69,10 @@
 	<delete id="delete">
 		delete cinema where cinema_no = #{cinemaNo}
 	</delete>
+	
+	<select id="theaterCnt" resultType="int">
+		select count(*) from theater where cinema_no = #{cinemaNo}
+	</select>
 	
 
 </mapper>

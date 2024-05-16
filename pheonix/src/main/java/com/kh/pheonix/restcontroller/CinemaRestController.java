@@ -72,6 +72,11 @@ public class CinemaRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping("/theaterCnt/{cinemaNo}")
+	public int theaterCnt (@PathVariable int cinemaNo) {
+		return cinemaDao.theaterCnt(cinemaNo);
+	}
 }
 
 
