@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -219,8 +221,7 @@ public class PurchaseRestController {
 		
 		return true;
 	}
-	
-	
+		
 	//0원 결제(장바구니에서)
 	@PostMapping("/zeroList")
 	public void purchaseZeroList(@RequestBody PurchaseAllPointVO purchaseAllPointVO, @RequestHeader("Authorization") String refreshToken)
@@ -353,4 +354,20 @@ public class PurchaseRestController {
 //		kakaoPayService.insertZero(paymentDto);
 	}
 	
+	
+	//마이페이지
+	//구매 내역 조회
+	@GetMapping("/myPurchaseList")
+	public List<PaymentDto> myPurchaseList(@RequestHeader("Authorization") String refreshToken) {
+		UserLoginVO loginVO = jwtService.parse(refreshToken);
+		return paymentDao.paymentList(loginVO.getUserId());
+	}
+	//구매 내역 상세
+	@GetMapping("/myPurchaseDetailList/{paymentNo}")
+	public List<PaymentDetailDto> myPurchaseDetailList(@PathVariable int paymentNo, @RequestHeader("Authorization") String refreshToken) {
+		UserLoginVO loginVO = jwtService.parse(refreshToken);
+		return paymentDao.paymentDetailList(paymentNo);
+	}
+
+
 }

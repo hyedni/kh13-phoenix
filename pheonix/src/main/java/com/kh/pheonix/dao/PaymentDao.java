@@ -35,8 +35,8 @@ public class PaymentDao {
 	
 	
 	//주문조회와 관련된 메소드
-	public List<PaymentDto> paymentList(){
-		return sqlSession.selectList("payment.paymentList");
+	public List<PaymentDto> paymentList(String userId){
+		return sqlSession.selectList("payment.paymentList", userId);
 	}
 	public List<PaymentDetailDto> paymentDetailList(int paymentNo){
 		return sqlSession.selectList("payment.paymentDetailList", paymentNo);
