@@ -24,6 +24,13 @@
     <select id="list" resultType="nonUserDto">
         select * from non_user order by non_user_email
     </select>
+    
+    <!-- nonUserAuth 토큰검색 -->
+    <select id="tokenFind" resultType="nonUserDto">
+    	SELECT token
+		FROM non_user_authorization
+		WHERE non_user_id = (SELECT non_user_email FROM non_user WHERE non_user_email = #{nonUserEmail});
+    </select>
 
 
 </mapper>
