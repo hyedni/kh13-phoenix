@@ -56,9 +56,13 @@ public class BookingListDao {
 	}
 
 	//김민구 임시사용
-	public List<SeatTypesDto> seatTypes(int aaa) {
+	public List<SeatTypesDto> seatTypes(int theaterNo, int movieScheduleNo) {
 		
-		return sqlSession.selectList("bookingList.seatTypes", aaa);
+		Map <String, Object> data = new HashMap<>();
+		data.put("theaterNo", theaterNo);
+		data.put("movieScheduleNo", movieScheduleNo);
+		
+		return sqlSession.selectList("bookingList.seatTypes", data);
 	}
 	
 	public int count (int movieNo, String cinemaName) {

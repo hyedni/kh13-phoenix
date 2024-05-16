@@ -52,5 +52,14 @@
 	update theater set theater_total_seats = #{totalSeats}
 	 where theater_no = #{theaterNo}
 	</update>
+	
+	<select id="findTheaterNo" resultType="int">
+	select theater_no from movie_schedule where movie_schedule_no = #{movieScheduleNo}
+	</select>
+	
+	<update id="updateRemainingSeats">
+		UPDATE MOVIE_SCHEDULE SET remaining_seats = remaining_seats -1
+		WHERE movie_schedule_no =#{movieScheduleNo}
+	</update>
 
 </mapper>
