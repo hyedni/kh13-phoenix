@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.pheonix.Vo.UserLoginVO;
+import com.kh.pheonix.dao.CartDao;
 import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
 import com.kh.pheonix.dao.UserDao;
@@ -29,6 +30,7 @@ import com.kh.pheonix.kakaoPayVO.KakaoPayApproveRequestVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayApproveResponseVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayReadyRequestVO;
 import com.kh.pheonix.kakaoPayVO.KakaoPayReadyResponseVO;
+import com.kh.pheonix.kakaoPayVO.PurchaseAllPointVO;
 import com.kh.pheonix.kakaoPayVO.PurchaseOnePointVO;
 import com.kh.pheonix.kakaoPayVO.PurchasePointVO;
 import com.kh.pheonix.kakaoPayVO.PurchaseVO;
@@ -57,6 +59,9 @@ public class PurchaseRestController {
 	
 	@Autowired
 	private PaymentDao paymentDao;
+	
+	@Autowired
+	private CartDao cartDao;
 
 ///////////////구매(QR 화면 띄우기 및 정보 전달)
 	@PostMapping("/")
@@ -215,6 +220,85 @@ public class PurchaseRestController {
 		return true;
 	}
 	
+	
+	//0원 결제(장바구니에서)
+	@PostMapping("/zeroList")
+	public void purchaseZeroList(@RequestBody PurchaseAllPointVO purchaseAllPointVO, @RequestHeader("Authorization") String refreshToken)
+			throws URISyntaxException {
+		UserLoginVO loginVO = jwtService.parse(refreshToken);
+
+		List<PurchaseVO> list = purchaseAllPointVO.getVo();
+		//vo의 purchase 목록을 이용하여 결제 정보를 생성하는 코드
+		StringBuffer itemName = new StringBuffer();
+		int totalAmount = 0;
+		for (int i = 0; i < list.size(); i++) {
+			PurchaseVO purchaseVO = list.get(i);
+			ProductDto productDto = productDao.selectOne(purchaseVO.getNo());// 상품정보 조회
+			if (i == 0) {
+				itemName.append(productDto.getProductName());// 이름(한 번만, i==0)
+			}
+			totalAmount = 0; // total += 이 상품에 대한 구매 금액(가격*수량)
+		}
+		
+		//사용포인트 차감
+		userDao.usedPoint(loginVO.getUserId(), purchaseAllPointVO.getUsedPoint());
+
+		//구매목록이 2개 이상이라면 "외 N건" 이라는 글자를 추가
+		if (list.size() >= 2) {
+			itemName.append(" 외 ");
+			itemName.append(list.size() - 1);
+			itemName.append("건");
+		}
+		
+		int paymentNo = paymentDao.paymentSequence();//번호생성
+		PaymentDto paymentDto = PaymentDto.builder()
+				.paymentNo(paymentNo)//시퀀스
+				.paymentName(itemName.toString())//대표결제명
+				.paymentTotal(purchaseAllPointVO.getPaymentTotal())//결제총금액
+				.paymentRemain(purchaseAllPointVO.getPaymentRemain())//잔여금액 - 결제총금액과 동일(첫 구매엔 취소가 없음.)
+				.memberId(purchaseAllPointVO.getMemberId())//구매자ID
+				.paymentTid(purchaseAllPointVO.getPaymentTid())//거래번호
+			.build();
+		paymentDao.insertPayment(paymentDto);
+		
+		//- 결제 상세 내역(payment_detail) - 목록 개수만큼 반복적으로 등록
+		for(PurchaseVO purchaseVO : list) {
+			
+			ProductDto productDto = productDao.selectOne(purchaseVO.getNo());//상품정보 조회
+			
+			int paymentDetailNo = paymentDao.paymentDetailSequence();
+			PaymentDetailDto paymentDetailDto = PaymentDetailDto.builder()
+						.paymentDetailNo(paymentDetailNo)//시퀀스
+						.paymentDetailProduct(productDto.getProductNo())//상품번호
+						.paymentDetailQty(paymentDto.getQty())//수량
+						.paymentDetailName(productDto.getProductName())//상품명
+						.paymentDetailPrice(productDto.getProductPrice())//상품가격
+						.paymentDetailStatus("승인")//결제상태
+						.paymentNo(paymentDto.getPaymentNo())//결제대표번호
+					.build();
+			paymentDao.insertPaymentDetail(paymentDetailDto);//등록
+		
+		}
+
+		
+		//장바구니 비우기 및 포인트인 경우 충전
+		Pattern pattern = Pattern.compile("\\d+");
+		for (PurchaseVO purchaseVO : list) {
+			ProductDto productDto = productDao.selectOne(purchaseVO.getNo());//상품정보 조회
+			if(productDto.getProductType().equals("포인트")) {
+				Matcher matcher = pattern.matcher(productDto.getProductContent());
+				int number = 0;
+				while (matcher.find()) {
+					String numberStr = matcher.group(); // 매칭된 숫자 문자열
+		            number = Integer.parseInt(numberStr); // 문자열을 정수로 변환
+		        }
+				userDao.editPoint(number, purchaseAllPointVO.getMemberId());
+			}
+	        cartDao.delete(purchaseVO.getNo(), purchaseAllPointVO.getMemberId());
+	    }
+		
+	}
+	
 	//0원 결제(단건)
 	@PostMapping("/zero")
 	public void purchaseZero(@RequestBody PaymentDto paymentDto, @RequestHeader("Authorization") String refreshToken)
@@ -229,9 +313,9 @@ public class PurchaseRestController {
 		userDao.usedPoint(loginVO.getUserId(), paymentDto.getUsedPoint());
 		
 		int paymentNo = paymentDao.paymentSequence();//번호생성
-		paymentDto.setPaymentNo(paymentNo);
+		//paymentDto.setPaymentNo(paymentNo);
 		paymentDto = PaymentDto.builder()
-				.paymentNo(paymentDto.getPaymentNo())//시퀀스
+				.paymentNo(paymentNo)//시퀀스
 				.paymentName(paymentDto.getPaymentName())//대표결제명
 				.paymentTotal(paymentDto.getPaymentTotal())//결제총금액
 				.paymentRemain(paymentDto.getPaymentRemain())//잔여금액 - 결제총금액과 동일(첫 구매엔 취소가 없음.)
