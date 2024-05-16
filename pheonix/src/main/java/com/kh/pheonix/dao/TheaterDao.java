@@ -51,4 +51,15 @@ public class TheaterDao {
 	    params.put("totalSeats", totalSeats);
 		sqlSession.update("theater.totalSeatsUpdate", params);
 	}
+
+	public int findtheaterNo(int movieScheduleNo) {
+		
+		return sqlSession.selectOne("theater.findTheaterNo", movieScheduleNo);
+	}
+	
+public void updateRemainingSeats(int movieScheduleNo) {
+		
+		sqlSession.update("theater.updateRemainingSeats", movieScheduleNo);
+		
+	}
 }

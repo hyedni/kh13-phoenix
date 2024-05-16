@@ -41,4 +41,6 @@ public class ReservationDao {
 		sqlSession.insert("reservation.insertSeat", dto);
 	}
 
+	
+
 }

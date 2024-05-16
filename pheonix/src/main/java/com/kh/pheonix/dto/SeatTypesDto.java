@@ -17,4 +17,6 @@ public class SeatTypesDto {
 	private String seatType;
 	private String cellActive; 
 	private String seatActive;
+	private String reservationStatus;
+	
 }
