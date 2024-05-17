@@ -47,7 +47,7 @@ public class ReviewRestController {
 	//리뷰등록
 	@PostMapping("/")
 	public ResponseEntity<?> insert(@RequestBody ReviewDto reviewDto) {
-		boolean isValid = reviewDao.findReview(reviewDto.getReservationNo());
+		boolean isValid = reviewDao.findReview(reviewDto.getMovieNo());
 		if(isValid) {
 			int sequence = reviewDao.sequence();
 			reviewDto.setReviewNo(sequence);
@@ -61,15 +61,15 @@ public class ReviewRestController {
 	@GetMapping("/{movieNo}")
 	public List<UserReviewVO> reviewListByMovie(@PathVariable int movieNo, @RequestHeader("Authorization") String refreshToken) {
 		List<UserReviewVO> list = reviewDao.listByMovie(movieNo);
-//		List<UserReviewVO> imageSetUpList = imageService.userReviewPhotoUrlSetUp(list);
+		List<UserReviewVO> imageSetUpList = imageService.userReviewPhotoUrlSetUp(list);
 //		return imageSetUpList;
 		
-		UserLoginVO loginVO = jwtService.parse(refreshToken);
-		for(UserReviewVO vo : list) {
-			vo.setUserId(loginVO.getUserId());
-		}
+		UserLoginVO loginVO = jwtService.parse(refreshToken);	
+		String userId = loginVO.getUserId();
+
+		//좋아요 수검색하는메서드 (imageSetUpList,userId)
 		
-		List<UserReviewVO> fin = likeService.check(list);
+		List<UserReviewVO> fin = likeService.check(imageSetUpList, userId);
 		return fin;
 	}
 	

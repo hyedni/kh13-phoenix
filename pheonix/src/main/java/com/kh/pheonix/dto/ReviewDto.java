@@ -14,5 +14,5 @@ public class ReviewDto {
 	private String reviewWriter;
 	private Date reviewDate;
 	private int reservationNo;
-	private String reviewReputation;
+	private int movieNo;
 }

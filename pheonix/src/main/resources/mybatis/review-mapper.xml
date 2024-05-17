@@ -12,28 +12,25 @@
 	<insert id="insert">
 		insert into review (
 			review_no, review_content, review_writer, 
-			review_date, reservation_no, review_reputation
+			review_date, movie_no
 		) values (
 			#{reviewNo}, #{reviewContent}, #{reviewWriter}, 
-			#{reviewDate}, #{reservationNo}, #{reviewReputation}
+			#{reviewDate}, #{movieNo}
 		)
 	</insert>
 	
 	<!-- 리뷰 작성여부 검색 -->
 	<select id="findReview" resultType="ReviewDto">
 		select * from review
-		where reservation_no = #{reservationNo}
+		where movie_no = #{movieNo}
 	</select>
+	
 	
 	<!-- 영화에 따른 리뷰 목록 + 회원 정보 -->
 	<select id="reviewListByMovie" resultType="UserReviewVO">
-		SELECT r.*, u.* 
-		FROM review r
-		LEFT OUTER JOIN reservation ub ON ub.reservation_no = r.reservation_no
-		LEFT OUTER JOIN MOVIE_SCHEDULE ms ON ms.MOVIE_SCHEDULE_NO = ub.MOVIE_SEHCEDULE_NO
-		LEFT OUTER JOIN users u ON r.REVIEW_WRITER = u.USER_ID
-		LEFT OUTER JOIN movie m ON ms.movie_no = m.movie_no
-		where ms.MOVIE_NO = #{movieNo}
+		select *
+		from review
+		where movie_no = #{movieNo}
 	</select>
 
 	<!-- 삭제 -->
