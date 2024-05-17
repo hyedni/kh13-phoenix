@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.pheonix.Vo.MovieRankingVo;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.ReserveStatsDto;
@@ -47,6 +48,14 @@ public class MovieRestController {
 	public List<MovieDto> list () {
 		List<MovieDto> list = movieDao.list();
 		List<MovieDto> imageSetUpList = imageService.moviePhotoUrlSetUp(list);
+		return imageSetUpList;
+	}
+	
+	//랭크순
+	@GetMapping("/rank/{reserveStatsDate}")
+	public List<MovieRankingVo> rankList (@PathVariable String reserveStatsDate) {
+		List<MovieRankingVo> list = movieDao.rankList(reserveStatsDate);
+		List<MovieRankingVo> imageSetUpList = imageService.movieRankUrlSetUp(list);
 		return imageSetUpList;
 	}
 	

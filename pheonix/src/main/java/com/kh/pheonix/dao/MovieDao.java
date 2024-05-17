@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.pheonix.Vo.MovieRankingVo;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.ReserveStatsDto;
 import com.kh.pheonix.dto.ReserveStatsStringDto;
@@ -74,6 +75,10 @@ public class MovieDao {
 		data.put("reserveStatsDate", reserveStatsDate);
 		data.put("movieNo", movieNo);
 		return sqlSession.selectOne("movie.findReserveStats", data);
+	}
+	
+	public List<MovieRankingVo> rankList (String reserveStatsDate) {
+		return sqlSession.selectList("movie.rankList", reserveStatsDate);
 	}
 }
 

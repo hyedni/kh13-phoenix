@@ -22,7 +22,7 @@
 	</insert>
 
 	<select id="list" resultType="MovieDto">
-		select * from movie where movie_on = 'Y' order by movie_open_date asc
+		select * from movie where movie_on = 'Y' order by movie_open_date desc
 	</select>
 	
 	<select id="onList" resultType="MovieDto">
@@ -107,5 +107,24 @@
 	<select id="findReserveStats" resultType="ReserveStatsStringDto">
 		select * from reserve_stats where to_char(reserve_stats_date, 'YYYY-MM-DD') = #{reserveStatsDate} and movie_no = #{movieNo}
 	</select>
-
+	
+	<select id="rankList" resultType="MovieRankingVo">
+		SELECT *
+		FROM (
+		    SELECT m.MOVIE_NO,
+		           m.MOVIE_TITLE,
+		           m.MOVIE_OPEN_DATE,
+		           m.MOVIE_AGE,
+		           m.MOVIE_ON,
+		           rs.reserve_stats_rate,
+		           ROWNUM AS rnum
+		    FROM movie m
+		    JOIN reserve_stats rs ON m.movie_no = rs.movie_no
+		    WHERE TO_CHAR(rs.reserve_stats_date, 'YYYY-MM-DD') = #{reserveStatsDate}
+		    ORDER BY rs.reserve_stats_rate DESC
+		)
+		<![CDATA[ WHERE rnum <= 4]]>
+	</select>
+	
+	
 </mapper>
