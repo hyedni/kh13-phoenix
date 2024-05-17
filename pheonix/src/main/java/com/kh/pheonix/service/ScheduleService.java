@@ -43,7 +43,7 @@ public class ScheduleService {
 		nonUserCertDao.deleteExpiredCert();
 	}
 	
-	@Scheduled(cron = "0 0 * * * *")
+	@Scheduled(cron = "0 * * * * *")
 	public void clearToken() {
 		System.out.println("비회원 토큰 삭제합니다");
 		nonUserAuthorizationDao.deleteExpiredAuth();
