@@ -29,9 +29,13 @@ public class NonUserDao {
             return sqlSession.selectOne("nonUser.find", nonUserEmail);
         }
         
-      //nonUserAuth token 있는지 검색
-        public NonUserDto tokenFind(String nonUserEmail) {
-        	return sqlSession.selectOne("nonUser.tokenFind" ,nonUserEmail);
+      //token으로 이메일 있는지 확인
+        public NonUserDto tokenFind(String token) {
+        	return sqlSession.selectOne("nonUser.tokenFind" ,token);
+        }
+        //token으로 모든 정보 확인
+        public NonUserDto allFind(String token) {
+        	return sqlSession.selectOne("nonUser.allFind", token);
         }
         
     //조회

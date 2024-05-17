@@ -182,8 +182,9 @@ public class UserRestController {
 	private NonUserAuthorizationDao nonUserAuthorizationDao;
 	
 	@PostMapping("/nonUserJoin")
-	public ResponseEntity<String> nonUserJoin(@RequestBody NonUserDto nonUserDto) {
+	public ResponseEntity<NonUserDto> nonUserJoin(@RequestBody NonUserDto nonUserDto) {
 		// 비회원 정보 저장
+		
 	    nonUserDao.insert(nonUserDto);
 		
 	    //토큰 생성
@@ -191,12 +192,17 @@ public class UserRestController {
 	    NonUserAuthorizationDto nonUserAuthorizationDto = new NonUserAuthorizationDto();
 		nonUserAuthorizationDto.setToken(token);
 		nonUserAuthorizationDto.setNonUserId(nonUserDto.getNonUserEmail()); // 생성된 non_user_id 설정
+		
 		System.out.print("의심병 = " + nonUserAuthorizationDto);
+		
 		nonUserAuthorizationDao.insert(nonUserAuthorizationDto);
+		
+		//정보 다 가져오기
+		nonUserDto = nonUserDao.allFind(token);
 
-	    return ResponseEntity.ok("비회원 정보가 저장되었습니다.");
-	    
+	    return ResponseEntity.ok().body(nonUserDto);
 	}
+
 	
 	@PostMapping("/verifyToken")
 	public ResponseEntity<String> verifyToken(@RequestBody NonUserAuthorizationDto nonUserAuthorizationDto) {
@@ -238,11 +244,15 @@ public class UserRestController {
 		}
 	}
 	
-	@PostMapping("/token")
-	public ResponseEntity<NonUserAuthorizationDto> token(@RequestHeader("NonAuth") String token) {
+	
+	//비회원로그인 상태 확인
+	@GetMapping("/token")
+	public ResponseEntity<NonUserAuthorizationDto> token(@RequestHeader("NonUserAuth") String token) {
+		System.out.println("의심병0 = " +token);
 	    try {
-	        // 클라이언트가 보낸 토큰을 사용하여 비회원 정보를 가져옴
-	        NonUserDto nonUserDto = nonUserDao.tokenFind(token);
+	        // 클라이언트가 보낸 토큰을 사용하여 비회원 정보(이메일)를 가져옴
+	        NonUserDto nonUserDto = nonUserDao.allFind(token);
+	        System.out.println("의심병1 = " +nonUserDto);
 	        
 	        // 비회원 정보가 존재하지 않으면 예외 발생
 	        if (nonUserDto == null) {
@@ -252,6 +262,10 @@ public class UserRestController {
 	        // 비회원 정보가 유효한 경우에는 해당 정보를 클라이언트에게 응답으로 보냄
 	        NonUserAuthorizationDto authorizationDto = new NonUserAuthorizationDto();
 	        // 비회원 정보를 NonUserAuthorizationDto에 매핑
+	        authorizationDto.setNonUserId(nonUserDto.getNonUserEmail());
+	        authorizationDto.setToken(nonUserDto.getToken());
+	        System.out.println("의심병2 = " +authorizationDto);
+	        
 	        
 	        return ResponseEntity.ok().body(authorizationDto);
 	    } catch (Exception e) {
@@ -259,6 +273,7 @@ public class UserRestController {
 	        return ResponseEntity.status(401).build(); // 예외 발생 시 401 에러 응답
 	    }
 	}
+	
 	
 	
 	
