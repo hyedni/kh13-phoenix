@@ -50,8 +50,16 @@
 	
 	<!-- 회원에 대한 예약내역 조회 -->
 	<!-- 전체 조회 -->
-	<select id="reservationList" resultType="ReservationDto">
-		select * from reservation where user_id = #{userId} order by reservation_date desc
+	<select id="reservationList" resultType="ReservationDetailDto">
+		SELECT R.RESERVATION_NO, M.MOVIE_TITLE,
+		MS.MOVIE_SCHEDULE_NO, M.MOVIE_SCREEN_TYPE,
+		R.TOTAL_PRICE, R.PAYMENT_STATUS 
+		
+		FROM RESERVATION R
+		JOIN MOVIE_SCHEDULE MS ON MS.MOVIE_SCHEDULE_NO = R.MOVIE_SCHEDULE_NO
+		JOIN MOVIE M ON MS.MOVIE_NO = M.MOVIE_NO
+		WHERE USER_ID = #{userId}
+		ORDER BY R.RESERVATION_DATE DESC
 	</select>
 	
 	<!-- 상세 조회 -->

@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.pheonix.dto.ReservationDetailDto;
 import com.kh.pheonix.dto.ReservationDto;
 import com.kh.pheonix.dto.SeatReservationDto;
 
@@ -44,11 +45,11 @@ public class ReservationDao {
 	
 	
 //	데이터 조회
-	public List<ReservationDto> selectList(String userId) {
+	public List<ReservationDetailDto> selectList(String userId) {
 		return sqlSession.selectList("reservation.reservationList", userId);
 	}
 	
-	public ReservationDto selectOne(String userId, int reservationNo) {
+	public ReservationDetailDto selectOne(String userId, int reservationNo) {
 		Map<String, Object> data = new HashMap<>();
 		data.put("userId", userId);
 		data.put("reservationNo", reservationNo);
