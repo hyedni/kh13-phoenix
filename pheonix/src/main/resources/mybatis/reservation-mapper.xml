@@ -55,7 +55,7 @@
 	</select>
 	
 	<!-- 상세 조회 -->
-	<select id="reservationDetail" resultType="RservationDto">
+	<select id="reservationDetail" resultType="ReservationDto">
 		select * from reservation where user_id = #{userId} and reservation_no = #{reservationNo}
 	</select>
 
