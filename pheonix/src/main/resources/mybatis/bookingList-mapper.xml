@@ -91,7 +91,7 @@
 
 	<select id="movieTitle" resultType="MovieListVo">
 		SELECT MIN(m.movie_title) AS
-		movie_title, m.movie_no, m.movie_age
+		movie_title, m.movie_no, m.movie_age, m.movie_screen_type 
 		FROM movie_schedule ms
 		JOIN theater
 		t ON ms.theater_no = t.theater_no
@@ -99,7 +99,7 @@
 		c.cinema_no
 		JOIN movie m ON m.movie_no = ms.movie_no
 		GROUP BY
-		m.movie_no, m.movie_age
+		m.movie_no, m.movie_age, m.movie_screen_type 
 		ORDER BY MIN(c.cinema_name) ASC
 	</select>
 
