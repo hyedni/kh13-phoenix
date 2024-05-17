@@ -127,9 +127,6 @@ public class MovieRestController {
 	//예매율조회
 	@PostMapping("/stats")
 	public ReserveStatsStringDto reserveStats (@RequestBody ReserveStatsStringDto dto) {
-		System.out.println("dto.getMovieNo() : " + dto.getMovieNo());
-		System.out.println("dto.getReserveStatsDate() : " + dto.getReserveStatsDate());
-		System.out.println("결과" + movieDao.reserveStats(dto.getMovieNo(), dto.getReserveStatsDate()));
 		return movieDao.reserveStats(dto.getMovieNo(), dto.getReserveStatsDate());
 	}
 }

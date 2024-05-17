@@ -45,6 +45,10 @@ public class CinemaDao {
 	public boolean delete (int cinemaNo) {
 		return sqlSession.delete("cinema.delete", cinemaNo) > 0;
 	}
+	
+	public int theaterCnt (int cinemaNo) {
+		return sqlSession.selectOne("cinema.theaterCnt", cinemaNo);
+	}
 
 	
 	

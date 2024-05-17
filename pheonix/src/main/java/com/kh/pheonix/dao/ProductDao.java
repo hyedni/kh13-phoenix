@@ -60,6 +60,10 @@ public class ProductDao {
 	public int findAttach (int productNo) {
 		return sqlSession.selectOne("product.findAttach", productNo);
 	}
+	
+	public List<ProductDto> listbyHome (String productType) {
+		return sqlSession.selectList("product.listbyHome", productType);
+	}
 
 	
 }
