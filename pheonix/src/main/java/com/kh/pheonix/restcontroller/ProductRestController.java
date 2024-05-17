@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.pheonix.dao.ProductDao;
+import com.kh.pheonix.dao.UserDao;
 import com.kh.pheonix.dto.ProductDto;
 import com.kh.pheonix.service.AttachService;
 import com.kh.pheonix.service.ImageService;
@@ -44,6 +45,8 @@ public class ProductRestController {
 	@Autowired
 	private ImageService imageService;
 	
+	@Autowired
+	private UserDao userDao;
 	
 	//상품 전체 조회
 	@GetMapping("/")
@@ -131,7 +134,7 @@ public class ProductRestController {
 	}
 
 	//상품 등록
-	@PostMapping("/")
+	@PostMapping("/add")
 	public ProductDto insert(@ModelAttribute ProductDto productDto
 			,@RequestParam(value = "attach", required = false) MultipartFile attach) 
 			throws IllegalStateException, IOException {
@@ -156,7 +159,20 @@ public class ProductRestController {
 		return ResponseEntity.ok().build();
 	}
 	
-	//상품 삭제
+	//첨부파일수정
+	@PostMapping("/{productNo}")
+	public ResponseEntity<?> editPoster(@PathVariable int productNo, @RequestParam("attach") MultipartFile attach) throws IllegalStateException, IOException {
+		if (!attach.isEmpty()) {
+			int attachNo = productDao.findAttach(productNo);
+			attachService.remove(attachNo);
+			int editAttachNo = attachService.save(attach);
+			productDao.connect(productNo, editAttachNo);
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.status(404).build();
+	}
+	
+	//kk상품 삭제
 	@DeleteMapping("/{productNo}")
 	public ResponseEntity<?> delete(@PathVariable int productNo) {
 		boolean result = productDao.delete(productNo);
@@ -165,8 +181,5 @@ public class ProductRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
-
-	
-	
 	
 }
