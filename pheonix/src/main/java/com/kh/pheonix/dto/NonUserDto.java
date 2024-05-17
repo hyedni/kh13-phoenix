@@ -14,4 +14,6 @@ public class NonUserDto {
     private String nonUserPw;
     private String nonUserLogin;
     private String nonUserOut;
+    
+    private String token;
 }

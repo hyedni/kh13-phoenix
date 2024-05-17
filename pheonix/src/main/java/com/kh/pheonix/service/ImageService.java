@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.pheonix.Vo.CartProductVO;
+import com.kh.pheonix.Vo.MovieRankingVo;
 import com.kh.pheonix.dao.LostDao;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dao.ProductDao;
@@ -48,6 +49,16 @@ public class ImageService {
 		for (MovieDto dto : list) {
 			String movieImgLink = getMovieImgLink(dto.getMovieNo());
 			dto.setMovieImgLink(movieImgLink);
+		}
+		return list;
+	}
+	
+	//랭크순 조회 
+	public List<MovieRankingVo> movieRankUrlSetUp (List<MovieRankingVo> movieRankDto) {
+		List<MovieRankingVo> list = movieRankDto;
+		for (MovieRankingVo vo : list) {
+			String movieImgLink = getMovieImgLink(vo.getMovieNo());
+			vo.setMovieImgLink(movieImgLink);
 		}
 		return list;
 	}

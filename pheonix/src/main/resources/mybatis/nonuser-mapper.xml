@@ -25,12 +25,34 @@
         select * from non_user order by non_user_email
     </select>
     
-    <!-- nonUserAuth 토큰검색 -->
-    <select id="tokenFind" resultType="nonUserDto">
-    	SELECT token
+    <!-- 토큰으로 userEmail 찾기 -->
+	<select id="tokenFind" resultType="nonUserDto">
+		SELECT non_user_email
+		FROM non_user
+		WHERE non_user_email = (
+		SELECT non_user_id
 		FROM non_user_authorization
-		WHERE non_user_id = (SELECT non_user_email FROM non_user WHERE non_user_email = #{nonUserEmail});
-    </select>
+		WHERE token = #{token})
+	</select>
+	
+	<!-- 토큰으로 nonUser모든 정보 찾기 -->
+	<select id="allFind" resultType="NonUserDto">
+	    SELECT
+	        non_user_email AS nonUserEmail,
+	        non_user_birth AS nonUserBirth,
+	        non_user_pw AS nonUserPw,
+	        non_user_login AS nonUserLogin,
+	        non_user_out AS nonUserOut,
+	        a.token AS token
+	    FROM
+	        non_user u
+	    JOIN
+	        non_user_authorization a
+	    ON
+	        u.non_user_email = a.non_user_id
+	    WHERE
+	        a.token = #{token}
+	</select>
 
 
 </mapper>
