@@ -49,6 +49,7 @@
 	<select id="find" resultType="userDto">
 		select * from users where user_id = #{userId}
 	</select>
+	
 	<!-- 출력 -->
 	<select id="list" resultType="userDto">
 		select * from users order by user_id

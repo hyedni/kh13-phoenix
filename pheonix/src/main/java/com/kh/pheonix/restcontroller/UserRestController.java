@@ -165,11 +165,17 @@ public class UserRestController {
 	
 	
 	//변경
-	@PatchMapping("/mypage")
-	public boolean edit(UserDto userDto) {
+	@PatchMapping("/edit")
+	public ResponseEntity<?> edit(@RequestBody UserDto userDto) {
 		boolean result = userDao.edit(userDto);
-		return result;
+		if(result == false) {
+			return ResponseEntity.status(404).build();
+		}
+		return ResponseEntity.ok().build();
 	}
+	
+	//삭제
+	
 	
 	
 	@Autowired
