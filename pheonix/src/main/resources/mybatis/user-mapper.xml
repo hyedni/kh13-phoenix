@@ -18,11 +18,11 @@
 	<update id="edit">
 		update users
 		<set>
-			<if test="userName != null">user_name = #{userName}</if>
-			<if test="userNick != null">user_nick = #{userNick}</if>
-			<if test="userContact != null">user_contact = #{userContact}</if>
-			<if test="userEmail !=null">user_email = #{userEmail}</if>
-			<if test="userBirth !=null">user_birth = #{userBirth}</if>
+			<if test="userName != null">user_name = #{userName},</if>
+			<if test="userNick != null">user_nick = #{userNick},</if>
+			<if test="userContact != null">user_contact = #{userContact},</if>
+			<if test="userEmail !=null">user_email = #{userEmail},</if>
+			<if test="userBirth !=null">user_birth = #{userBirth},</if>
 		</set>
 		where user_id = #{userId}
 	</update>
