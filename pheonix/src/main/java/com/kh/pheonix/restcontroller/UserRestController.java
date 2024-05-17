@@ -5,9 +5,11 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -174,8 +176,29 @@ public class UserRestController {
 		return ResponseEntity.ok().build();
 	}
 	
-	//삭제
+	//이미지 변경
+	@PostMapping("/editFile")
+	public ResponseEntity<?> editFile(@ModelAttribute UserDto userDto, @RequestParam(value = "attach", required = false) MultipartFile attach)
+			throws IllegalStateException, IOException {
+		if (!attach.isEmpty()) {
+			int attachNo = userDao.findAttachNo(userDto.getUserId());
+			attachService.remove(attachNo);
+			int editAttachNo = attachService.save(attach);
+			userDao.connect(userDto.getUserId(), editAttachNo);
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.status(404).build();
+	}
 	
+	//삭제
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+		boolean result = userDao.delete(userId);
+		if(!result) {
+			return ResponseEntity.status(404).build();
+		}
+		return ResponseEntity.ok().build();
+	}
 	
 	
 	@Autowired
