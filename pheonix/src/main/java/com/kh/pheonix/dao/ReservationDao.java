@@ -1,6 +1,7 @@
 package com.kh.pheonix.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -39,6 +40,19 @@ public class ReservationDao {
 	public void insertSeat(SeatReservationDto dto) {
 		
 		sqlSession.insert("reservation.insertSeat", dto);
+	}
+	
+	
+//	데이터 조회
+	public List<ReservationDto> selectList(String userId) {
+		return sqlSession.selectList("reservation.reservationList", userId);
+	}
+	
+	public ReservationDto selectOne(String userId, int reservationNo) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("userId", userId);
+		data.put("reservationNo", reservationNo);
+		return sqlSession.selectOne("reservation.reservationDetail", data);
 	}
 
 	
