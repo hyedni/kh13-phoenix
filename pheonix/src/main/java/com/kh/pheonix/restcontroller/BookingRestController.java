@@ -107,6 +107,8 @@ public class BookingRestController {
 		return bookingService.bookingAdd(bookingVo);
 	}
 	
+	
+	
 	@PostMapping("/price")
 	public int bookingPrice(@RequestBody BookingVO bookingVo) {
 		System.out.println("의심병1");
