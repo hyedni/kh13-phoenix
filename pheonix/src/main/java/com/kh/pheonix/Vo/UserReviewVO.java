@@ -13,14 +13,15 @@ public class UserReviewVO {
 	private String reviewContent;
 	private String reviewWriter;
 	private Date reviewDate;
-	private int userBookingNo;
-	private String reviewReputation;
+	private int reservationNo;
+	private int movieNo;
 	
-	private String userId;
-	private String userNick;
+//	private String userId;
+//	private String userNick;
 	
 	private String userImgLink;
 	
 	private boolean state;
 	private int count;
+
 }

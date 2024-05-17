@@ -23,8 +23,8 @@ public class ReviewDao {
 	}
 	
 	//리뷰 작성 여부 판별
-	public boolean findReview (int userBookingNo) {
-		ReviewDto result = sqlSession.selectOne("review.findReview", userBookingNo);
+	public boolean findReview (int movieNo) {
+		ReviewDto result = sqlSession.selectOne("review.findReview", movieNo);
 		if(result == null) {
 			return true;
 		}

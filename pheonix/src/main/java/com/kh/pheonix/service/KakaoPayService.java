@@ -142,7 +142,7 @@ public class KakaoPayService {
 		for (PurchaseVO purchaseVO : list) {
 			ProductDto productDto = productDao.selectOne(purchaseVO.getNo());//상품정보 조회
 			if(productDto.getProductType().equals("포인트")) {
-				Matcher matcher = pattern.matcher(productDto.getProductContent());
+				Matcher matcher = pattern.matcher(productDto.getProductName());
 				int number = 0;
 				while (matcher.find()) {
 					String numberStr = matcher.group(); // 매칭된 숫자 문자열
@@ -190,7 +190,7 @@ public class KakaoPayService {
 		//장바구니 비우기 및 포인트인 경우 충전
 		Pattern pattern = Pattern.compile("\\d+");
 		if(productDto.getProductType().equals("포인트")) {
-			Matcher matcher = pattern.matcher(productDto.getProductContent());
+			Matcher matcher = pattern.matcher(productDto.getProductName());
 			int number = 0;
 			while (matcher.find()) {
 				String numberStr = matcher.group(); // 매칭된 숫자 문자열

@@ -14,13 +14,13 @@ public class LikeService {
 	@Autowired
 	private ReviewLikeDao reviewLikeDao;
 	
-	public List<UserReviewVO> check (List<UserReviewVO> userReviewVO) {
-		List<UserReviewVO> list = userReviewVO;
+	public List<UserReviewVO> check (List<UserReviewVO> userReviewVO, String userId) {
+//		List<UserReviewVO> list = userReviewVO;
 		
-		for(UserReviewVO vo : list) {
-			vo.setState(reviewLikeDao.check(vo.getUserId(), vo.getReviewNo()));
+		for(UserReviewVO vo : userReviewVO) {
+			vo.setState(reviewLikeDao.check(userId, vo.getReviewNo()));
 			vo.setCount(reviewLikeDao.count(vo.getReviewNo()));
 		}
-		return list;
+		return userReviewVO;
 	}
 }
