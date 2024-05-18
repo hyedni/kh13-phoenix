@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.pheonix.Vo.ReservationListForReviewVo;
 import com.kh.pheonix.dto.ReservationDetailDto;
 import com.kh.pheonix.dto.ReservationDto;
 import com.kh.pheonix.dto.SeatReservationDto;
@@ -56,6 +57,9 @@ public class ReservationDao {
 		return sqlSession.selectOne("reservation.reservationDetail", data);
 	}
 
-	
+	// 데이터 조회 (혜진)
+	public List<ReservationListForReviewVo> listForReview (String userId) {
+		return sqlSession.selectList("reservation.reservationDetailForReview", userId);
+	}
 
 }

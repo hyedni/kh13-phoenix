@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.pheonix.Vo.ReservationListForReviewVo;
 import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.dao.ReservationDao;
 import com.kh.pheonix.dto.ReservationDetailDto;
-import com.kh.pheonix.dto.ReservationDto;
 import com.kh.pheonix.service.JwtService;
 
 @CrossOrigin
@@ -36,6 +36,12 @@ public class ReservationRestController {
 			@RequestHeader("Authorization") String refreshToken) {
 		UserLoginVO loginVO = jwtService.parse(refreshToken);
 		return reservationDao.selectOne(loginVO.getUserId(), reservationNo);
+	}
+	
+	//혜진
+	@GetMapping("/listBy/{userId}")
+	public List<ReservationListForReviewVo> listForReview (@PathVariable String userId) {
+		return reservationDao.listForReview(userId);
 	}
 	
 	

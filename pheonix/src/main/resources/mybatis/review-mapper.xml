@@ -12,17 +12,17 @@
 	<insert id="insert">
 		insert into review (
 			review_no, review_content, review_writer, 
-			review_date, movie_no
+			review_date, reservation_no, movie_no
 		) values (
 			#{reviewNo}, #{reviewContent}, #{reviewWriter}, 
-			#{reviewDate}, #{movieNo}
+			to_date(to_char(#{reviewDate}, 'YYYY-MM-DD')), #{reservationNo}, #{movieNo}
 		)
 	</insert>
 	
 	<!-- 리뷰 작성여부 검색 -->
 	<select id="findReview" resultType="ReviewDto">
 		select * from review
-		where movie_no = #{movieNo}
+		where movie_no = #{movieNo} and review_writer = #{reviewWriter}
 	</select>
 	
 	
@@ -56,5 +56,10 @@
 	<select id="likeCount" resultType="int">
 		select count(*) from review_like where review_no = #{reviewNo}
 	</select>
+	
+	<!--리뷰쓰면 포인트주기 -->
+	<update id="updatePoint">
+		update users set user_point = user_point + 500 where user_id = #{userId}
+	</update>
 	
 </mapper>

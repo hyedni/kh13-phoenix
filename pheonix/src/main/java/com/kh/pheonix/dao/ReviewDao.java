@@ -1,6 +1,8 @@
 package com.kh.pheonix.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,11 @@ public class ReviewDao {
 	}
 	
 	//리뷰 작성 여부 판별
-	public boolean findReview (int movieNo) {
-		ReviewDto result = sqlSession.selectOne("review.findReview", movieNo);
+	public boolean findReview (int movieNo, String reviewWriter) {
+		Map <String, Object> data = new HashMap<>();
+		data.put("reviewWriter", reviewWriter);
+		data.put("movieNo", movieNo);
+		ReviewDto result = sqlSession.selectOne("review.findReview", data);
 		if(result == null) {
 			return true;
 		}
@@ -37,5 +42,10 @@ public class ReviewDao {
 	
 	public void delete(int reviewNo) {
 		sqlSession.delete("review.delete", reviewNo);
+	}
+	
+	//포인트주기
+	public void updatePoint (String userId) {
+		sqlSession.update("review.updatePoint", userId);
 	}
 }
