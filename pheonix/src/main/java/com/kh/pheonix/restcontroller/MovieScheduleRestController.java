@@ -89,6 +89,10 @@ public class MovieScheduleRestController {
 		return movieScheduleDao.scheduleFind(movieScheduleNo);
 	}
 	
+	@GetMapping("/reserveCnt/{movieScheduleNo}")
+	public boolean reserveCntByMS (@PathVariable int movieScheduleNo) {
+		return movieScheduleDao.reserveCntByMS(movieScheduleNo) > 0;
+	}
 }
 
 

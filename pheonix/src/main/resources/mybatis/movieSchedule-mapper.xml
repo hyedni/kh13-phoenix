@@ -109,22 +109,9 @@
 	<select id="getRunningTime" resultType="int">
 		select movie_running_time from movie where movie_no = #{movieNo}
 	</select>
-
-	<!-- 상단 -->
-	<sql id="top-n-header">
-		<if test="beginRow !=null and endRow !=null">
-			select * from (
-			select rownum rn, TMP.* from (
-		</if>
-	</sql>
-
-	<!-- 하단 -->
-	<sql id="top-n-footer">
-		<if test="beginRow !=null and endRow !=null">
-			)TMP
-			) where rn between #{beginRow} and #{endRow}
-		</if>
-	</sql>
-
+	
+	<select id="reserveCntByMS" resultType="int">
+		select count(*) from reservation where movie_schedule_no = #{movieScheduleNo}
+	</select>
 
 </mapper>

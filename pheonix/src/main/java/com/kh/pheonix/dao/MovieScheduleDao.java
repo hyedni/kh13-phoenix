@@ -65,4 +65,8 @@ public class MovieScheduleDao {
 		return sqlSession.selectOne("movieSchedule.scheduleFind", movieScheduleNo);
 	}
 	
+	public int reserveCntByMS (int movieScheduleNo) {
+		return sqlSession.selectOne("movieSchedule.reserveCntByMS", movieScheduleNo);
+	}
+	
 }
