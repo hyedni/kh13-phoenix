@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +22,6 @@ import com.kh.pheonix.dto.ReviewDto;
 import com.kh.pheonix.service.ImageService;
 import com.kh.pheonix.service.JwtService;
 import com.kh.pheonix.service.LikeService;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @CrossOrigin
 @RestController
@@ -44,17 +43,20 @@ public class ReviewRestController {
 	@Autowired
 	private JwtService jwtService;
 	
-	//리뷰등록
+	//이미 등록된 후기인지 검사하는걸 따로 빼서 검사하고, 프론트에서 alert띄움 
+	@PostMapping("/valid")
+	public boolean valid (@RequestBody ReviewDto reviewDto) {
+		boolean isValid =  reviewDao.findReview(reviewDto.getMovieNo(), reviewDto.getReviewWriter());
+		return isValid;
+	}
+	
+	//리뷰등록+500포인트지급
 	@PostMapping("/")
-	public ResponseEntity<?> insert(@RequestBody ReviewDto reviewDto) {
-		boolean isValid = reviewDao.findReview(reviewDto.getMovieNo());
-		if(isValid) {
-			int sequence = reviewDao.sequence();
-			reviewDto.setReviewNo(sequence);
-			reviewDao.insert(reviewDto); //관람한 영화에 대한 첫 리뷰인 경우에만 등록
-			return ResponseEntity.ok().build();
-		}
-		return ResponseEntity.notFound().build();
+	public void insert(@RequestBody ReviewDto reviewDto) {
+		int sequence = reviewDao.sequence();
+		reviewDto.setReviewNo(sequence);
+		reviewDao.insert(reviewDto); 
+		reviewDao.updatePoint(reviewDto.getReviewWriter());
 	}
 	
 	//영화별 리뷰 및 회원 정보

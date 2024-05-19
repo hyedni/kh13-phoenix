@@ -66,5 +66,15 @@
 	<select id="reservationDetail" resultType="ReservationDto">
 		select * from reservation where user_id = #{userId} and reservation_no = #{reservationNo}
 	</select>
-
+	
+	<!-- 상세조회, 혜진 -->
+	<select id="reservationDetailForReview" resultType="ReservationListForReviewVo">
+		select r.*, ms.movie_no, ms.end_time, ms.START_DATE ,
+		m.MOVIE_TITLE , m.MOVIE_SCREEN_TYPE 
+		from reservation r join MOVIE_SCHEDULE ms 
+		on ms.MOVIE_SCHEDULE_NO = r.MOVIE_SCHEDULE_NO 
+		join movie m on m.MOVIE_NO = ms.MOVIE_NO 
+		where user_id = #{userId} 
+		ORDER BY R.RESERVATION_DATE DESC
+	</select>
 </mapper>

@@ -109,21 +109,21 @@
 	</select>
 	
 	<select id="rankList" resultType="MovieRankingVo">
-		SELECT *
+	select * from (SELECT RANK() OVER(ORDER BY a.reserve_stats_rate DESC) rank, a.*
 		FROM (
 		    SELECT m.MOVIE_NO,
 		           m.MOVIE_TITLE,
 		           m.MOVIE_OPEN_DATE,
 		           m.MOVIE_AGE,
 		           m.MOVIE_ON,
-		           rs.reserve_stats_rate,
-		           ROWNUM AS rnum
+		           rs.reserve_stats_rate
 		    FROM movie m
 		    JOIN reserve_stats rs ON m.movie_no = rs.movie_no
 		    WHERE TO_CHAR(rs.reserve_stats_date, 'YYYY-MM-DD') = #{reserveStatsDate}
 		    ORDER BY rs.reserve_stats_rate DESC
-		)
-		<![CDATA[ WHERE rnum <= 4]]>
+		)a )
+		 <![CDATA[ WHERE rank <= 4]]>
+		
 	</select>
 	
 	
