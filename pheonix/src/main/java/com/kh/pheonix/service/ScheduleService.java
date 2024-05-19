@@ -66,7 +66,7 @@ public class ScheduleService {
 		System.out.println(formattedDate + "상영종료");
 	}
 	
-	@Scheduled(cron ="0 0 12 * * *") //11시
+	@Scheduled(cron ="0 0 0 * * ?") 
 	public void reserveStats () {
 			ReserveStatsDto reserveStatsDto = new ReserveStatsDto();
 			List<Map<String, Object>> resultList = service.countsByMovie();
