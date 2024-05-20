@@ -37,9 +37,9 @@ public class ImageService {
 	public String getMovieImgLink(int movieNo) {
 		try {
 			int attachNo = movieDao.findAttach(movieNo);
-			return "http://localhost:8080/download?attachNo=" + attachNo;
+			return "http://192.168.30.37:8080/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "http://localhost:8080/image/attachNull.png";
+			return "http://192.168.30.37:8080/image/attachNull.png";
 		}
 	}
 	
@@ -74,12 +74,21 @@ public class ImageService {
 	
 	//스토어
 	//이미지에 url 주소 부여
+//	public String getProductImgLink(int productNo) {
+//		try {
+//			int attachNo = productDao.findAttach(productNo);
+//			return "http://localhost:8080/download?attachNo=" + attachNo;
+//		} catch (Exception e) {
+//			return "http://localhost:8080/image/productNullImg.png";
+//		}
+//	}
+	
 	public String getProductImgLink(int productNo) {
 		try {
 			int attachNo = productDao.findAttach(productNo);
-			return "http://localhost:8080/download?attachNo=" + attachNo;
+			return "http://192.168.30.37:8080/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "http://localhost:8080/image/productNullImg.png";
+			return "http://192.168.30.37:8080/image/productNullImg.png";
 		}
 	}
 	
@@ -107,9 +116,9 @@ public class ImageService {
 	public String getCartProductImgLink(int productNo) {
 		try {
 			int attachNo = productDao.findAttach(productNo);
-			return "http://localhost:8080/download?attachNo=" + attachNo;
+			return "http://192.168.30.37:8080/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "http://localhost:8080/image/productNullImg.png";
+			return "http://192.168.30.37:8080/image/productNullImg.png";
 		}
 	}
 	
@@ -138,9 +147,9 @@ public class ImageService {
 	public String getLostImgLink(int lostNo) {
 		try {
 			int attachNo = lostDao.findAttach(lostNo);
-			return "http://localhost:8080/download?attachNo=" + attachNo;
+			return "http://192.168.30.37:8080/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "http://localhost:8080/image/lostNullImg.png";
+			return "http://192.168.30.37:8080/image/lostNullImg.png";
 		}
 	}
 	
@@ -167,9 +176,9 @@ public class ImageService {
 		public String getUserImgLink(String userId) {
 			try {
 				int attachNo = userDao.findAttachNo(userId);
-				return "http://localhost:8080/download?attachNo=" + attachNo;
+				return "http://192.168.30.37:8080/download?attachNo=" + attachNo;
 			} catch (Exception e) {
-				return "http://localhost:8080/image/userNullImg.png";
+				return "http://192.168.30.37:8080/image/userNullImg.png";
 			}
 		}
 	//1건 상세 조회 시 해당 상품 이미지 출력 (이미지 단일 조회)
