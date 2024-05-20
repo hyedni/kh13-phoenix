@@ -22,6 +22,5 @@ public class NonUserTokenService {
     public static void main(String[] args) {
         NonUserTokenService tokenService = new NonUserTokenService();
         String randomToken = tokenService.generateRandomToken();
-        System.out.println("Random Token: " + randomToken);
     }
 }

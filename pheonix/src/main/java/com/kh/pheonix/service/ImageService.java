@@ -77,9 +77,9 @@ public class ImageService {
 	public String getProductImgLink(int productNo) {
 		try {
 			int attachNo = productDao.findAttach(productNo);
-			return "http://localhost:8080/download?attachNo=" + attachNo;
+			return "http://192.168.30.37:8080/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "http://localhost:8080/image/productNullImg.png";
+			return "http://192.168.30.37:8080/image/productNullImg.png";
 		}
 	}
 	

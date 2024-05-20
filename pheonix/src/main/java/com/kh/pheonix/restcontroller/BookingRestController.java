@@ -89,7 +89,6 @@ public class BookingRestController {
 		
 		int theaterNo = theaterDao.findtheaterNo(movieScheduleNo);
 		
-		System.out.println("상영관번호확인" + theaterNo);
 		List<SeatTypesDto> list = new ArrayList<>();
 		list = bookingListDao.seatTypes(theaterNo,movieScheduleNo);
 
@@ -111,21 +110,17 @@ public class BookingRestController {
 	
 	@PostMapping("/price")
 	public int bookingPrice(@RequestBody BookingVO bookingVo) {
-		System.out.println("의심병1");
 		int total = 0;
 		List<SeatReservationDto> seatReservation = bookingVo.getSeatReservationDto();
 		int movieScheduleNo = bookingVo.getBookingStatusVO().getMovieScheduleNo();
-		System.out.println("의심병1");
+		
 		for (SeatReservationDto dto : seatReservation) {
 			int seatTypesNo = dto.getSeatTypesNo();
 			String memberType = dto.getMemberType();
-			System.out.println("의심병2");
 			int price = reservationDao.ticketPriceCalculator(seatTypesNo, movieScheduleNo, memberType);
-			System.out.println("의심병3");
 			total += price;
 		}
 		//asa
-		System.out.println("의심병4");
 		return total;
 	}
 

@@ -41,7 +41,6 @@ public class MovieScheduleDao {
 	}
 	
 	public void insert (MovieScheduleDto dto) {
-		System.out.println(dto);
 		sqlSession.insert("movieSchedule.insert", dto);
 	}
 	
