@@ -68,16 +68,11 @@ public class UserRestController {
 		throws IllegalStateException, IOException {
 
 		boolean isRegistered = userService.registerUser(userDto);//저장됨
-		System.out.println(userDto);
 		
 		// 회원으로부터 첨부파일을 받으면 attach 파일에 저장해
 		if (attach != null && !attach.isEmpty()) {
 			int attachNo = attachService.save(attach); // 파일저장 + DB저장
-			System.out.print("의심병1 =" + attachNo);
-			System.out.print("의심병2 =" + userDto.getUserId());
-
 			userDao.connect(userDto.getUserId(), attachNo); // 연결
-
 		}
 		
 		if (isRegistered) {	
@@ -100,7 +95,6 @@ public class UserRestController {
 
 	@PostMapping("/checkCert")
 	public ResponseEntity<String> checkCert(@RequestBody UserCertDto userCertDto) {
-		System.out.println(userCertDto);
 		boolean isValid = userCertDao.checkValid(userCertDto.getCertEmail(), userCertDto.getCertCode());
 		if (isValid) { // 인증 성공 시 인증번호 삭제
 			userCertDao.delete(userCertDto.getCertEmail());
@@ -222,8 +216,6 @@ public class UserRestController {
 		nonUserAuthorizationDto.setToken(token);
 		nonUserAuthorizationDto.setNonUserId(nonUserDto.getNonUserEmail()); // 생성된 non_user_id 설정
 		
-		System.out.print("의심병 = " + nonUserAuthorizationDto);
-		
 		nonUserAuthorizationDao.insert(nonUserAuthorizationDto);
 		
 		//정보 다 가져오기
@@ -237,13 +229,10 @@ public class UserRestController {
 	public ResponseEntity<String> verifyToken(@RequestBody NonUserAuthorizationDto nonUserAuthorizationDto) {
 	    // NonUserAuthorizationDto에 저장된 나의 email이 있는지
 	    NonUserAuthorizationDto check = nonUserAuthorizationDao.selectOne(nonUserAuthorizationDto.getNonUserId());
-	    System.out.print("의심병2 = " + check.getNonUserId());
-	    
 	    
 	    // 비회원 정보 조회
         NonUserDto nonUserDto = nonUserDao.selectOne(check.getNonUserId());
         
-	    System.out.print("의심병3 = " + nonUserDto.getNonUserEmail());
 	    // 비회원 이메일과 저장된 이메일이 일치하는지 확인
 	    if (check != null && check.getNonUserId().equals(nonUserDto.getNonUserEmail())) {
 	        return ResponseEntity.ok("성공");
@@ -263,7 +252,6 @@ public class UserRestController {
 	
 	@PostMapping("/nonUserCheck")
 	public ResponseEntity<String> nonUserCheck(@RequestBody NonUserCertDto nonUserCertDto){
-		System.out.println(nonUserCertDto);
 		boolean isValid = nonUserCertDao.checkValid(nonUserCertDto.getNonUserCertEmail(), nonUserCertDto.getNonUserCertCode());
 		if(isValid) {
 			nonUserCertDao.delete(nonUserCertDto.getNonUserCertEmail());
@@ -277,11 +265,9 @@ public class UserRestController {
 	//비회원로그인 상태 확인
 	@GetMapping("/token")
 	public ResponseEntity<NonUserAuthorizationDto> token(@RequestHeader("NonUserAuth") String token) {
-		System.out.println("의심병0 = " +token);
 	    try {
 	        // 클라이언트가 보낸 토큰을 사용하여 비회원 정보(이메일)를 가져옴
 	        NonUserDto nonUserDto = nonUserDao.allFind(token);
-	        System.out.println("의심병1 = " +nonUserDto);
 	        
 	        // 비회원 정보가 존재하지 않으면 예외 발생
 	        if (nonUserDto == null) {
@@ -292,9 +278,7 @@ public class UserRestController {
 	        NonUserAuthorizationDto authorizationDto = new NonUserAuthorizationDto();
 	        // 비회원 정보를 NonUserAuthorizationDto에 매핑
 	        authorizationDto.setNonUserId(nonUserDto.getNonUserEmail());
-	        authorizationDto.setToken(nonUserDto.getToken());
-	        System.out.println("의심병2 = " +authorizationDto);
-	        
+	        authorizationDto.setToken(nonUserDto.getToken());	        
 	        
 	        return ResponseEntity.ok().body(authorizationDto);
 	    } catch (Exception e) {
@@ -302,17 +286,6 @@ public class UserRestController {
 	        return ResponseEntity.status(401).build(); // 예외 발생 시 401 에러 응답
 	    }
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 }

@@ -97,8 +97,6 @@ public class PurchaseRestController {
 			itemName.append("건");
 		}
 
-		log.debug("결제 이름 = {}", itemName);
-		log.debug("결제금액 = {}", totalAmount);
 
 		//결제 준비 요청 - KakaoPayReadyRequestVO, kakaoPayReadyResponseVO
 		KakaoPayReadyRequestVO requestVO = KakaoPayReadyRequestVO.builder()
@@ -304,7 +302,6 @@ public class PurchaseRestController {
 	@PostMapping("/zero")
 	public void purchaseZero(@RequestBody PaymentDto paymentDto, @RequestHeader("Authorization") String refreshToken)
 			throws URISyntaxException {
-		System.out.println(paymentDto);
 		UserLoginVO loginVO = jwtService.parse(refreshToken);
 
 		ProductDto productDto = productDao.selectOne(paymentDto.getNo());// 상품정보 조회

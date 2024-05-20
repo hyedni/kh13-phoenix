@@ -30,7 +30,6 @@ public class BookingService {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonString = "";
 		jsonString = objectMapper.writeValueAsString(bookingVo);
-		System.out.println("데이터 확인용----" + (jsonString));
 		// 위 테스트 용 아래부터 시작
 
 		try {
@@ -38,40 +37,28 @@ public class BookingService {
 			int reservationNo = reservationDao.sequence();
 			ReservationDto reservationDto = new ReservationDto();
 			reservationDto.setReservationNo(reservationNo);
-			System.out.println("의심 1");
 			// 상영번호 받은거에서 뽑고 세팅
 			int movieScheduleNo = bookingVo.getBookingStatusVO().getMovieScheduleNo();
-			System.out.println("의심 1-1");
 			reservationDto.setMovieScheduleNo(movieScheduleNo);
-			System.out.println("의심 1-2");
 			reservationDto.setUserId(bookingVo.getBookingStatusVO().getUserId());
-			System.out.println("의심 1-3");
 			reservationDto.setPaymentMethod(bookingVo.getBookingStatusVO().getPaymentMethod());
-			System.out.println("의심 2");
 
 			// 예매 총가격 해야함
 			List<SeatReservationDto> seatReservation = bookingVo.getSeatReservationDto();
-			System.out.println("의심 2-1");
 			int total = 0;
-			System.out.println("의심 2-2");
 
 			for (SeatReservationDto dto : seatReservation) {
 				int seatTypesNo = dto.getSeatTypesNo();
 				String memberType = dto.getMemberType();
 
-				System.out.println("의심병 /" + seatTypesNo + "//" + movieScheduleNo + "//" + memberType);
 				int price = reservationDao.ticketPriceCalculator(seatTypesNo, movieScheduleNo, memberType);
 
-				System.out.println("의심병::::" + price);
 				total += price;
 			}
-			System.out.println("의심 2-3::::" + total);
 
 			// 다하고 예매 등록
 			reservationDto.setTotalPrice(total);
-
 			reservationDao.insert(reservationDto);
-			System.out.println("의심 3");
 
 			// 여기서부터좌석예매 반복문
 
@@ -83,8 +70,6 @@ public class BookingService {
 				theaterDao.updateRemainingSeats(movieScheduleNo);
 
 			}
-			System.out.println("성공성공성공성공");
-
 			return "주님할렐루야할렐루야";
 		} catch (DuplicateKeyException e) {
 			System.err.println("DuplicateKeyException 발생: " + e.getMessage());

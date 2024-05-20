@@ -39,7 +39,6 @@ public class PersonalRestController {
 	public void insert(@RequestBody PersonalDto personalDto) {
 		int sequence = personalDao.sequence();
 		personalDto.setPersonalNo(sequence);
-		System.out.println(personalDto);
 		personalDao.insert(personalDto);
 		
 	}
