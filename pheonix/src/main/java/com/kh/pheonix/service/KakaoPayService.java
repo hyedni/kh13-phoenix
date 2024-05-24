@@ -71,7 +71,7 @@ public class KakaoPayService {
 		//String page = ServletUriComponentsBuilder
 		//						.fromCurrentRequestUri().build().toUriString();//현재페이지 구하기
 		//현재페이지에 주소를 붙여 결제 결과에 따른 페이지를 각각 만들 수 있음.
-		String page = "http://localhost:3000/#/purchase/";
+		String page = "${pageContext.request.contextPath}/purchase/";
 		body.put("approval_url", page + "success");
 		body.put("cancel_url", page + "cancel");
 		body.put("fail_url", page + "fail");

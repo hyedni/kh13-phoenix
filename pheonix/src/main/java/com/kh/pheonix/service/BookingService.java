@@ -72,11 +72,9 @@ public class BookingService {
 			}
 			return "주님할렐루야할렐루야";
 		} catch (DuplicateKeyException e) {
-			System.err.println("DuplicateKeyException 발생: " + e.getMessage());
 			throw new CustomDatabaseException("이미예약된 좌석입니다. 다시선택해주세요.", e);
 
 		} catch (Exception e) {
-			System.err.println("일반적인 오류 발생: " + e.getMessage());
 			throw new CustomDatabaseException("일반적인 데이터베이스 오류가 발생했습니다.", e);
 		}
 	}
