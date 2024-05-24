@@ -63,7 +63,6 @@ public class LostRestController {
 	        }
 	        return lostDao.selectOne(sequence);
 	    } catch(Exception e) {
-	        System.out.println("실패용ㅋ " + e.getMessage()); 
 	        throw e; 
 	    }
 	}
