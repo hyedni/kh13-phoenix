@@ -62,7 +62,7 @@ public class ScheduleService {
 		if(!result) return;
 	}
 	
-//	@Scheduled(cron ="0 0 0 * * ?") 
+	@Scheduled(cron ="0 0 0 * * ?") 
 	public void reserveStats () {
 			ReserveStatsDto reserveStatsDto = new ReserveStatsDto();
 			List<Map<String, Object>> resultList = service.countsByMovie();
