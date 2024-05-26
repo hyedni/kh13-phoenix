@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.pheonix.dao.AttachDao;
 import com.kh.pheonix.dto.AttachDto;
+import com.kh.pheonix.service.AttachProperties;
 
 @CrossOrigin
 @Controller
@@ -33,6 +34,9 @@ public class FileDownloadController {
 	
 	@Autowired
 	private AttachDao attachDao;
+	
+	@Autowired
+	private AttachProperties attachProperties;
 	
 	// 여태까지 모든 controller에서는 사용자가 볼 화면을 반환했다 (String)
 	// 이 매핑은 그렇지않다는걸 표시 (@ResponseBody) : 화면을 주지 않을거다
@@ -53,7 +57,7 @@ public class FileDownloadController {
 		}
 		
 		// [3] 실제 파일을 불러온다 (apache commons io, apache commons fileupload)
-		File dir = new File (System.getProperty("user.home"), "upload");
+		File dir = new File (attachProperties.getPath(), "upload");
 		File target = new File (dir, String.valueOf(attachDto.getAttachNo()));
 
 		byte[] data = FileUtils.readFileToByteArray(target); 
