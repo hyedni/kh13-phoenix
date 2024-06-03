@@ -17,11 +17,14 @@ public class AttachService {
 	@Autowired
 	private AttachDao attachDao;
 	
+	@Autowired
+	private AttachProperties attachProperties;
+	
 	//파일저장 + DB저장 
 	public int save(MultipartFile attach) throws IllegalStateException, IOException {
 		
 		int attachNo = attachDao.sequence(); //첨부파일에 시퀀스생성
-		File dir = new File (System.getProperty("user.home"), "upload");
+		File dir = new File (attachProperties.getPath(), "upload");
 		dir.mkdir(); //폴더가 없다면 생성 (있으면 pass)
 		File target = new File (dir, String.valueOf(attachNo));
 		attach.transferTo(target); //위에만들어준 폴더에 실물파일저장 
@@ -37,7 +40,7 @@ public class AttachService {
 	}
 	//파일삭제 + DB삭제
 	public void remove (int attachNo) {
-		File dir = new File (System.getProperty("user.home"), "upload");
+		File dir = new File (attachProperties.getPath(), "upload");
 		File target = new File (dir, String.valueOf(attachNo));
 		target.delete();
 		attachDao.delete(attachNo);

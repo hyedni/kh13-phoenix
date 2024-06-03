@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.ReserveStatsListVo;
 import com.kh.pheonix.dao.ReserveStatsDao;
+import com.kh.pheonix.vo.ReserveStatsListVo;
 
 @CrossOrigin
 @RestController

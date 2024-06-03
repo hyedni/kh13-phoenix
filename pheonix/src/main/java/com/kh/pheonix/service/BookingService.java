@@ -9,12 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kh.pheonix.Vo.BookingVO;
 import com.kh.pheonix.dao.ReservationDao;
 import com.kh.pheonix.dao.TheaterDao;
 import com.kh.pheonix.dto.ReservationDto;
 import com.kh.pheonix.dto.SeatReservationDto;
 import com.kh.pheonix.error.CustomDatabaseException;
+import com.kh.pheonix.vo.BookingVO;
 
 @Service
 public class BookingService {

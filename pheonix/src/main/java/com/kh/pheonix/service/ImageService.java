@@ -5,9 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kh.pheonix.Vo.CartProductVO;
-import com.kh.pheonix.Vo.MovieRankingVo;
-import com.kh.pheonix.Vo.UserReviewVO;
 import com.kh.pheonix.dao.LostDao;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dao.ProductDao;
@@ -16,6 +13,9 @@ import com.kh.pheonix.dto.LostDto;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.ProductDto;
 import com.kh.pheonix.dto.UserDto;
+import com.kh.pheonix.vo.CartProductVO;
+import com.kh.pheonix.vo.MovieRankingVo;
+import com.kh.pheonix.vo.UserReviewVO;
 
 @Service
 public class ImageService {
@@ -37,9 +37,9 @@ public class ImageService {
 	public String getMovieImgLink(int movieNo) {
 		try {
 			int attachNo = movieDao.findAttach(movieNo);
-			return "${pageContext.request.contextPath}/download?attachNo=" + attachNo;
+			return "/phoenix/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "${pageContext.request.contextPath}/image/attachNull.png";
+			return "/phoenix/image/attachNull.png";
 		}
 	}
 	
@@ -86,9 +86,9 @@ public class ImageService {
 	public String getProductImgLink(int productNo) {
 		try {
 			int attachNo = productDao.findAttach(productNo);
-			return "${pageContext.request.contextPath}/download?attachNo=" + attachNo;
+			return "/phoenix/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "${pageContext.request.contextPath}/image/productNullImg.png";
+			return "/phoenix/image/productNullImg.png";
 		}
 	}
 	
@@ -116,9 +116,9 @@ public class ImageService {
 	public String getCartProductImgLink(int productNo) {
 		try {
 			int attachNo = productDao.findAttach(productNo);
-			return "${pageContext.request.contextPath}/download?attachNo=" + attachNo;
+			return "/phoenix/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "${pageContext.request.contextPath}/image/productNullImg.png";
+			return "/phoenix/image/productNullImg.png";
 		}
 	}
 	
@@ -147,9 +147,9 @@ public class ImageService {
 	public String getLostImgLink(int lostNo) {
 		try {
 			int attachNo = lostDao.findAttach(lostNo);
-			return "${pageContext.request.contextPath}/download?attachNo=" + attachNo;
+			return "/phoenix/download?attachNo=" + attachNo;
 		} catch (Exception e) {
-			return "${pageContext.request.contextPath}/image/lostNullImg.png";
+			return "/phoenix/image/lostNullImg.png";
 		}
 	}
 	
@@ -176,9 +176,9 @@ public class ImageService {
 		public String getUserImgLink(String userId) {
 			try {
 				int attachNo = userDao.findAttachNo(userId);
-				return "${pageContext.request.contextPath}/download?attachNo=" + attachNo;
+				return "/phoenix/download?attachNo=" + attachNo;
 			} catch (Exception e) {
-				return "${pageContext.request.contextPath}/image/userNullImg.png";
+				return "/phoenix/image/userNullImg.png";
 			}
 		}
 	//1건 상세 조회 시 해당 상품 이미지 출력 (이미지 단일 조회)

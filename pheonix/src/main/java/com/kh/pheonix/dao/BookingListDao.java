@@ -8,11 +8,11 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.pheonix.Vo.BookingListByDateVo;
-import com.kh.pheonix.Vo.BookingListVo;
-import com.kh.pheonix.Vo.BookingTheaterVo;
-import com.kh.pheonix.Vo.MovieListVo;
 import com.kh.pheonix.dto.SeatTypesDto;
+import com.kh.pheonix.vo.BookingListByDateVo;
+import com.kh.pheonix.vo.BookingListVO;
+import com.kh.pheonix.vo.BookingTheaterVo;
+import com.kh.pheonix.vo.MovieListVo;
 
 @Repository
 public class BookingListDao {
@@ -20,22 +20,22 @@ public class BookingListDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<BookingListVo> listAll () {
+	public List<BookingListVO> listAll () {
 		return sqlSession.selectList("bookingList.listAll");
 	}
 	
-	public List<BookingListVo> listByMovie (int movieNo) {
+	public List<BookingListVO> listByMovie (int movieNo) {
 		return sqlSession.selectList("bookingList.listByMovie", movieNo);
 	}
 	
-	public List<BookingListVo> listByCinema (int movieNo, String cinemaName) {
+	public List<BookingListVO> listByCinema (int movieNo, String cinemaName) {
 		Map <String, Object> data = new HashMap<>();
 		data.put("movieNo", movieNo);
 		data.put("cinemaName", cinemaName);
 		return sqlSession.selectList("bookingList.listByCinema", data);
 	}
 	
-	public List<BookingListVo> listByDate (int movieNo, String cinemaName, String startDate) {
+	public List<BookingListVO> listByDate (int movieNo, String cinemaName, String startDate) {
 		Map <String, Object> data = new HashMap<>();
 		data.put("movieNo", movieNo);
 		data.put("cinemaName", cinemaName);
@@ -51,7 +51,7 @@ public class BookingListDao {
 		return sqlSession.selectList("bookingList.theaterList", movieNo);
 	}
 	
-	public BookingListVo scheduleDetail (int scheduleNo) {
+	public BookingListVO scheduleDetail (int scheduleNo) {
 		return sqlSession.selectOne("bookingList.scheduleDetail", scheduleNo);
 	}
 

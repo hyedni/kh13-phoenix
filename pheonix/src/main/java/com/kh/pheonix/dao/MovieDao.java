@@ -9,10 +9,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.pheonix.Vo.MovieRankingVo;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.ReserveStatsDto;
 import com.kh.pheonix.dto.ReserveStatsStringDto;
+import com.kh.pheonix.vo.MovieRankingVo;
 
 @Repository
 public class MovieDao {

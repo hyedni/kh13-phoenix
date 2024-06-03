@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.service.JwtService;
+import com.kh.pheonix.vo.UserLoginVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

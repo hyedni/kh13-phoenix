@@ -7,8 +7,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.pheonix.Vo.MovieScheduleVo;
 import com.kh.pheonix.dto.MovieScheduleDto;
+import com.kh.pheonix.vo.MovieScheduleVo;
 
 @Repository
 public class MovieScheduleDao {

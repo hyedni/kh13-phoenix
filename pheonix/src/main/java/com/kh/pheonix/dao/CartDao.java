@@ -8,10 +8,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.pheonix.Vo.CartProductVO;
 import com.kh.pheonix.dto.CartDto;
 import com.kh.pheonix.dto.ProductDto;
 import com.kh.pheonix.dto.UserDto;
+import com.kh.pheonix.vo.CartProductVO;
 
 @Repository
 public class CartDao {

@@ -8,10 +8,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.pheonix.Vo.ReservationListForReviewVo;
 import com.kh.pheonix.dto.ReservationDetailDto;
 import com.kh.pheonix.dto.ReservationDto;
 import com.kh.pheonix.dto.SeatReservationDto;
+import com.kh.pheonix.vo.ReservationListForReviewVo;
 
 @Repository
 public class ReservationDao {
