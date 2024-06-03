@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.ReservationHistory;
 import com.kh.pheonix.dto.ReservationDetailDto;
 import com.kh.pheonix.dto.SeatReservationInfo;
+import com.kh.pheonix.vo.ReservationHistory;
 
 @CrossOrigin
 @RestController

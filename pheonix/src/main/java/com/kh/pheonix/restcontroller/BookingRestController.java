@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.kh.pheonix.Vo.BookingListVo;
-import com.kh.pheonix.Vo.BookingTheaterVo;
-import com.kh.pheonix.Vo.BookingVO;
-import com.kh.pheonix.Vo.MovieListVo;
 import com.kh.pheonix.dao.BookingListDao;
 import com.kh.pheonix.dao.ReservationDao;
 import com.kh.pheonix.dao.TheaterDao;
 import com.kh.pheonix.dto.SeatReservationDto;
 import com.kh.pheonix.dto.SeatTypesDto;
 import com.kh.pheonix.service.BookingService;
+import com.kh.pheonix.vo.BookingListVO;
+import com.kh.pheonix.vo.BookingTheaterVo;
+import com.kh.pheonix.vo.BookingVO;
+import com.kh.pheonix.vo.MovieListVo;
 
 @CrossOrigin
 @RestController
@@ -53,7 +53,7 @@ public class BookingRestController {
 	}
 
 	@GetMapping("/")
-	public List<BookingListVo> listAll() {
+	public List<BookingListVO> listAll() {
 		return bookingListDao.listAll();
 	}
 
@@ -69,18 +69,18 @@ public class BookingRestController {
 
 
 	@PostMapping("/count")
-	public int count(@RequestBody BookingListVo vo) {
+	public int count(@RequestBody BookingListVO vo) {
 		return bookingListDao.count(vo.getMovieNo(), vo.getCinemaName());
 	}
 	
 	@GetMapping("/detail/{scheduleNo}")
-	public BookingListVo scheduleDetail (@PathVariable int scheduleNo) {
+	public BookingListVO scheduleDetail (@PathVariable int scheduleNo) {
 		return bookingListDao.scheduleDetail(scheduleNo);
 	}
 		
 
 	@PostMapping("/date")
-	public List<BookingListVo> listByDate(@RequestBody BookingListVo vo) {
+	public List<BookingListVO> listByDate(@RequestBody BookingListVO vo) {
 		return bookingListDao.listByDate(vo.getMovieNo(), vo.getCinemaName(), vo.getStartDate());
 	}
 

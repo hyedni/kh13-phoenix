@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.TheaterPayLoadVo;
 import com.kh.pheonix.dao.SeatTypesDao;
 import com.kh.pheonix.dao.TheaterDao;
 import com.kh.pheonix.dto.SeatTypesDto;
 import com.kh.pheonix.dto.TheaterDto;
+import com.kh.pheonix.vo.TheaterPayLoadVo;
 
 @CrossOrigin
 @RestController

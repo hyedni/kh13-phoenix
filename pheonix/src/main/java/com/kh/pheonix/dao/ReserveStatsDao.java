@@ -6,8 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.pheonix.Vo.ReserveStatsListVo;
 import com.kh.pheonix.dto.ReserveStatsDto;
+import com.kh.pheonix.vo.ReserveStatsListVo;
 
 @Repository
 public class ReserveStatsDao {

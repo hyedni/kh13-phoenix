@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/static/css/main.98ee8f30.css",
-    "main.js": "/static/js/main.7662a09f.js",
-    "static/js/453.07597da4.chunk.js": "/static/js/453.07597da4.chunk.js",
-    "static/media/bird.png": "/static/media/bird.de93a1cc5cc39ff85b2c.png",
-    "static/media/egg.png": "/static/media/egg.5b60bfa82a8bee11e2a5.png",
-    "static/media/bg_nutritionFacts.png": "/static/media/bg_nutritionFacts.1e58d75314f8acb02d4d.png",
-    "static/media/kakaopay.png": "/static/media/kakaopay.c4973444fa8362bdbd03.png",
-    "index.html": "/index.html",
-    "main.98ee8f30.css.map": "/static/css/main.98ee8f30.css.map",
-    "main.7662a09f.js.map": "/static/js/main.7662a09f.js.map",
-    "453.07597da4.chunk.js.map": "/static/js/453.07597da4.chunk.js.map"
+    "main.css": "./static/css/main.98ee8f30.css",
+    "main.js": "./static/js/main.61db1449.js",
+    "static/js/453.07597da4.chunk.js": "./static/js/453.07597da4.chunk.js",
+    "static/media/bird.png": "./static/media/bird.de93a1cc5cc39ff85b2c.png",
+    "static/media/egg.png": "./static/media/egg.5b60bfa82a8bee11e2a5.png",
+    "static/media/bg_nutritionFacts.png": "./static/media/bg_nutritionFacts.1e58d75314f8acb02d4d.png",
+    "static/media/kakaopay.png": "./static/media/kakaopay.c4973444fa8362bdbd03.png",
+    "index.html": "./index.html",
+    "main.98ee8f30.css.map": "./static/css/main.98ee8f30.css.map",
+    "main.61db1449.js.map": "./static/js/main.61db1449.js.map",
+    "453.07597da4.chunk.js.map": "./static/js/453.07597da4.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.98ee8f30.css",
-    "static/js/main.7662a09f.js"
+    "static/js/main.61db1449.js"
   ]
 }

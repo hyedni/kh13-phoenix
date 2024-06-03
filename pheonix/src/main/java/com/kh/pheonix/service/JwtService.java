@@ -9,10 +9,10 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.configuration.JwtProperties;
 import com.kh.pheonix.dto.SocialUserDto;
 import com.kh.pheonix.dto.UserDto;
+import com.kh.pheonix.vo.UserLoginVO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

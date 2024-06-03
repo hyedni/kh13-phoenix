@@ -7,7 +7,7 @@
 
 <mapper namespace="bookingList">
 
-	<select id="listAll" resultType="BookingListVo">
+	<select id="listAll" resultType="BookingListVO">
 		select
 		m.movie_title, m.movie_no,
 		c.cinema_name, c.cinema_region, t.theater_name,
@@ -24,7 +24,7 @@
 		order by m.movie_title asc
 	</select>
 
-	<select id="listByMovie" resultType="BookingListVo">
+	<select id="listByMovie" resultType="BookingListVO">
 		select
 		m.movie_title,
 		m.movie_no, c.cinema_name, c.cinema_region,
@@ -47,7 +47,7 @@
 		asc
 	</select>
 
-	<select id="listByCinema" resultType="BookingListVo">
+	<select id="listByCinema" resultType="BookingListVO">
 		select m.movie_title,
 		m.movie_no, c.cinema_name, c.cinema_region, t.theater_name,
 		t.theater_total_seats,
@@ -68,7 +68,7 @@
 		m.movie_title asc
 	</select>
 
-	<select id="listByDate" resultType="BookingListVo">
+	<select id="listByDate" resultType="BookingListVO">
 		select m.movie_title,
 		m.movie_no, c.cinema_name, c.cinema_region, t.theater_name,
 		t.theater_total_seats,
@@ -118,7 +118,7 @@
 	</select>
 
 
-	<select id="scheduleDetail" resultType="BookingListVo">
+	<select id="scheduleDetail" resultType="BookingListVO">
 		select
 		m.movie_title,
 		m.movie_no, c.cinema_name, c.cinema_region, t.theater_name,

@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.ReservationListForReviewVo;
-import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.dao.ReservationDao;
 import com.kh.pheonix.dto.ReservationDetailDto;
 import com.kh.pheonix.service.JwtService;
+import com.kh.pheonix.vo.ReservationListForReviewVo;
+import com.kh.pheonix.vo.UserLoginVO;
 
 @CrossOrigin
 @RestController

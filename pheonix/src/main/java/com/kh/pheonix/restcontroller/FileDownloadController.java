@@ -57,7 +57,7 @@ public class FileDownloadController {
 		}
 		
 		// [3] 실제 파일을 불러온다 (apache commons io, apache commons fileupload)
-		File dir = new File (attachProperties.getPath(), "upload");
+		File dir = new File (attachProperties.getPath());
 		File target = new File (dir, String.valueOf(attachDto.getAttachNo()));
 
 		byte[] data = FileUtils.readFileToByteArray(target); 

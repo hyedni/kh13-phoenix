@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.MovieScheduleVo;
 import com.kh.pheonix.dao.MovieScheduleDao;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.MovieScheduleDto;
+import com.kh.pheonix.vo.MovieScheduleVo;
 
 @CrossOrigin
 @RestController

@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.dao.NonUserAuthorizationDao;
 import com.kh.pheonix.dao.NonUserCertDao;
 import com.kh.pheonix.dao.NonUserDao;
@@ -36,6 +35,7 @@ import com.kh.pheonix.service.ImageService;
 import com.kh.pheonix.service.JwtService;
 import com.kh.pheonix.service.NonUserTokenService;
 import com.kh.pheonix.service.UserService;
+import com.kh.pheonix.vo.UserLoginVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 

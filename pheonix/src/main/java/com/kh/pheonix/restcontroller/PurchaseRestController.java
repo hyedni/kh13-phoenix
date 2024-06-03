@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.UserLoginVO;
 import com.kh.pheonix.dao.CartDao;
 import com.kh.pheonix.dao.PaymentDao;
 import com.kh.pheonix.dao.ProductDao;
@@ -38,6 +37,7 @@ import com.kh.pheonix.kakaoPayVO.PurchasePointVO;
 import com.kh.pheonix.kakaoPayVO.PurchaseVO;
 import com.kh.pheonix.service.JwtService;
 import com.kh.pheonix.service.KakaoPayService;
+import com.kh.pheonix.vo.UserLoginVO;
 
 import lombok.extern.slf4j.Slf4j;
 

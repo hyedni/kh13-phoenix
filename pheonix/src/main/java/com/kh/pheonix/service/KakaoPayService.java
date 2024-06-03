@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.kh.pheonix.configuration.KakaoPayProperties;
 import com.kh.pheonix.dao.CartDao;
@@ -71,7 +72,7 @@ public class KakaoPayService {
 		//String page = ServletUriComponentsBuilder
 		//						.fromCurrentRequestUri().build().toUriString();//현재페이지 구하기
 		//현재페이지에 주소를 붙여 결제 결과에 따른 페이지를 각각 만들 수 있음.
-		String page = "ServletUriComponentsBuilder.currentContextPath().path('/purchase/').toURIString();";
+		String page = ServletUriComponentsBuilder.fromCurrentContextPath().path("/purchase/").toUriString();
 		body.put("approval_url", page + "success");
 		body.put("cancel_url", page + "cancel");
 		body.put("fail_url", page + "fail");

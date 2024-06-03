@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.LikeInfoVO;
-import com.kh.pheonix.Vo.LikeVO;
 import com.kh.pheonix.dao.ReviewLikeDao;
+import com.kh.pheonix.vo.LikeInfoVO;
+import com.kh.pheonix.vo.LikeVO;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 

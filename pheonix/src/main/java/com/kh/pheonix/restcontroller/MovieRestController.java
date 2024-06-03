@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.kh.pheonix.Vo.MovieRankingVo;
 import com.kh.pheonix.dao.MovieDao;
 import com.kh.pheonix.dto.MovieDto;
 import com.kh.pheonix.dto.ReserveStatsDto;
 import com.kh.pheonix.dto.ReserveStatsStringDto;
 import com.kh.pheonix.service.AttachService;
 import com.kh.pheonix.service.ImageService;
+import com.kh.pheonix.vo.MovieRankingVo;
 
 import lombok.extern.slf4j.Slf4j;
 

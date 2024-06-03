@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kh.pheonix.Vo.UserLoginVO;
-import com.kh.pheonix.Vo.UserReviewVO;
 import com.kh.pheonix.dao.ReviewDao;
 import com.kh.pheonix.dao.ReviewLikeDao;
 import com.kh.pheonix.dto.ReviewDto;
 import com.kh.pheonix.service.ImageService;
 import com.kh.pheonix.service.JwtService;
 import com.kh.pheonix.service.LikeService;
+import com.kh.pheonix.vo.UserLoginVO;
+import com.kh.pheonix.vo.UserReviewVO;
 
 @CrossOrigin
 @RestController
